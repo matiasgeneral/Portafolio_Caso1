@@ -1,28 +1,40 @@
-.table-header {
-    font-weight: bold;
-    color: #ffffffce;
-    padding: 10px 0;
-  }
-  
-  .table-row {
-    border-bottom: 1px solid #2c2c2c;
-    padding: 10px 0;
-  }
-  
-  ion-card {
-    margin: 20px;
-  }
-  
-  ion-card-title {
-    font-size: 1.4rem;
-    font-weight: 600;
-    color: #333;
-  }
-  
+.custom-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
 
-  ion-card-title{
-    font-size: 1.4rem;
-    font-weight: 600;
-    color: #f3f3f34d;
+.custom-card {
+  margin-top: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  background-color: #2a2a2a; /* Para que el fondo oscuro sea más atractivo */
+}
+
+.table-header {
+  font-weight: bold;
+  background-color: #444; /* Color para distinguir encabezado */
+  color: #fff;
+  padding: 10px;
+}
+
+.table-row {
+  padding: 10px 0;
+  border-bottom: 1px solid #555;
+  color: #ccc; /* Color del texto para que destaque más */
+}
+
+ion-button {
+  --border-radius: 50%;
+  --padding-start: 0;
+  --padding-end: 0;
+}
+
+ion-col {
+  text-align: center; /* Alinea el contenido en el centro */
+}
+
+@media (min-width: 768px) {
+  ion-grid {
+    padding: 0 20px;
   }
-  
+}

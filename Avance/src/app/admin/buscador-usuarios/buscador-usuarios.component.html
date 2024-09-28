@@ -1,5 +1,5 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
@@ -7,30 +7,29 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <ion-card>
+<ion-content class="ion-padding custom-content">
+  <ion-card class="custom-card">
     <ion-card-header>
       <ion-card-title>Lista de Usuarios</ion-card-title>
     </ion-card-header>
-    
+
     <ion-card-content>
       <ion-grid>
         <ion-row class="table-header">
-          <ion-col size="4">Nombre</ion-col>
-          <ion-col size="4">Apellido Paterno</ion-col>
-          <ion-col size="4">Apellido Materno</ion-col>
-          <ion-col size="3">RUT</ion-col>
+          <ion-col size="3">Nombre</ion-col>
+          <ion-col size="3">Apellido Paterno</ion-col>
+          <ion-col size="3">Apellido Materno</ion-col>
+          <ion-col size="2">RUT</ion-col>
           <ion-col size="1">Ver</ion-col>
         </ion-row>
 
         <ion-row *ngFor="let user of users" class="table-row">
-          <ion-col size="4">{{ user.nombre.charAt(0).toUpperCase() + user.nombre.slice(1).toLowerCase() }}</ion-col>
-          <ion-col size="4">{{ user.apellidoPaterno.charAt(0).toUpperCase() + user.apellidoPaterno.slice(1).toLowerCase() }}</ion-col>
-          <ion-col size="4">{{ user.apellidoMaterno.charAt(0).toUpperCase() + user.apellidoMaterno.slice(1).toLowerCase() }}</ion-col>
-          <ion-col size="3">{{ user.rut }}</ion-col>
-          
+          <ion-col size="3">{{ user.nombre | titlecase }}</ion-col>
+          <ion-col size="3">{{ user.apellidoPaterno | titlecase }}</ion-col>
+          <ion-col size="3">{{ user.apellidoMaterno | titlecase }}</ion-col>
+          <ion-col size="2">{{ user.rut }}</ion-col>
           <ion-col size="1">
-            <ion-button (click)="verDetalles(user)" fill="clear">
+            <ion-button (click)="verDetalles(user)" fill="clear" color="primary">
               <ion-icon slot="icon-only" name="eye"></ion-icon>
             </ion-button>
           </ion-col>
