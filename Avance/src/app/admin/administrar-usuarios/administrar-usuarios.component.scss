@@ -1,0 +1,17 @@
+.media-previews {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem; /* Espaciado entre las tarjetas */
+  }
+  
+  .preview-card {
+    width: 100%; /* Ajusta el ancho según sea necesario */
+    max-width: 300px; /* Ajusta el tamaño máximo del contenedor */
+  }
+  
+  .media-image {
+    width: 100%; /* Asegura que la imagen se ajuste al contenedor */
+    height: auto; /* Mantiene la proporción de la imagen */
+    border-radius: 8px; /* Bordes redondeados para un mejor estilo */
+  }
+  
