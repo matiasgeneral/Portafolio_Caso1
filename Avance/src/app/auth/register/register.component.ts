@@ -22,7 +22,8 @@ export class RegisterComponent {
   ) {
     this.signup = this.fb.group({
       nombre: ['', Validators.required],
-      apellido: ['', Validators.required],
+      apellidoPaterno: ['', Validators.required],
+      apellidoMaterno: ['', Validators.required],
       rut: ['', Validators.required],
       direccion: ['', Validators.required],
       telefono: ['', [Validators.required, Validators.pattern(/^\d{9}$/)]], // Validar que tenga 9 dígitos
@@ -36,7 +37,7 @@ export class RegisterComponent {
 
   async onSubmit() {
     if (this.signup.valid) {
-      const { nombre, apellido, rut, direccion, telefono, email, password, password2, fotoCarnetUrl, documentoResidenciaUrl } = this.signup.value;
+      const { nombre, apellidoPaterno, apellidoMaterno, rut, direccion, telefono, email, password, password2, fotoCarnetUrl, documentoResidenciaUrl } = this.signup.value;
 
       if (this.passwordsDontMatch()) {
         this.interaction.presentToast('Las contraseñas no coinciden');
@@ -66,7 +67,8 @@ export class RegisterComponent {
 
         const data = {
           nombre,
-          apellido,
+          apellidoPaterno,
+          apellidoMaterno,
           rut,
           direccion,
           telefono,
@@ -74,7 +76,8 @@ export class RegisterComponent {
           uid,
           foto: fotoCarnetUrl,
           documento: documentoResidenciaUrl,
-          tipo: 'usuario'
+          tipo: 'usuario',
+          estado: 'pendiente' // Agregar estado pendiente para que el administrador lo apruebe
         };
 
         await this.database.createDoc(data, path, uid);

@@ -12,7 +12,8 @@
     <h1>Bienvenido/a</h1>
     <p>
       Registra tus datos y obtén todos los beneficios que te otorga tu junta de vecinos.
-      <br> Ten presente que el registro no será automático, pues un funcionario deberá aprobar previamente tu solicitud de registro.
+      <br> Ten presente que el registro no será automático, pues un funcionario deberá aprobar previamente tu solicitud
+      de registro.
     </p>
 
     <form [formGroup]="signup" (ngSubmit)="onSubmit()">
@@ -25,15 +26,22 @@
         <p>El nombre es requerido</p>
       </ion-text>
 
-      <!-- Apellido -->
+      <!-- Apellido PATERNO-->
       <ion-item>
-        <ion-label position="floating">Apellido</ion-label>
-        <ion-input formControlName="apellido"></ion-input>
+        <ion-label position="floating">Apellido Paterno</ion-label>
+        <ion-input formControlName="apellidoPaterno"></ion-input>
       </ion-item>
-      <ion-text color="danger" *ngIf="signup.get('apellido')?.invalid && signup.get('apellido')?.touched">
+      <ion-text color="danger" *ngIf="signup.get('apellidoPaterno')?.invalid && signup.get('apellidoPaterno')?.touched">
         <p>El apellido es requerido</p>
       </ion-text>
-
+      <!-- Apellido materno-->
+      <ion-item>
+        <ion-label position="floating">Apellido Materno</ion-label>
+        <ion-input formControlName="apellidoMaterno"></ion-input>
+      </ion-item>
+      <ion-text color="danger" *ngIf="signup.get('apellidoMaterno')?.invalid && signup.get('apellidoMaterno')?.touched">
+        <p>El apellido es requerido</p>
+      </ion-text>
       <!-- RUT -->
       <ion-item>
         <ion-label position="floating">RUT</ion-label>

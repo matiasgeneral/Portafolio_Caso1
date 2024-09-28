@@ -12,18 +12,21 @@
     <ion-card-header>
       <ion-card-title>
         {{ userDetails.nombre.charAt(0).toUpperCase() + userDetails.nombre.slice(1).toLowerCase() }} 
-        {{ userDetails.apellido.charAt(0).toUpperCase() + userDetails.apellido.slice(1).toLowerCase() }}
+        {{ userDetails.apellidoPaterno.charAt(0).toUpperCase() + userDetails.apellidoPaterno.slice(1).toLowerCase() }}
+        {{ userDetails.apellidoMaterno.charAt(0).toUpperCase() + userDetails.apellidoMaterno.slice(1).toLowerCase() }}
       </ion-card-title>
     </ion-card-header>
 
     <ion-card-content>
       <p><strong>Nombre:</strong> {{ userDetails.nombre.charAt(0).toUpperCase() + userDetails.nombre.slice(1).toLowerCase() }}</p>
-      <p><strong>Apellido:</strong> {{ userDetails.apellido.charAt(0).toUpperCase() + userDetails.apellido.slice(1).toLowerCase() }}</p>
+      <p><strong>Apellido Paterno:</strong> {{ userDetails.apellidoPaterno.charAt(0).toUpperCase() + userDetails.apellidoPaterno.slice(1).toLowerCase() }}</p>
+      <p><strong>Apellido Materno:</strong> {{ userDetails.apellidoMaterno.charAt(0).toUpperCase() + userDetails.apellidoMaterno.slice(1).toLowerCase() }}</p>
       <p><strong>RUT:</strong> {{ userDetails.rut }}</p>
       <p><strong>Correo Electrónico:</strong> {{ userDetails.email }}</p>
       <p><strong>Dirección:</strong> {{ userDetails.direccion }}</p>
       <p><strong>Teléfono:</strong> {{ userDetails.telefono }}</p>
       <p><strong>Rol:</strong> {{ userDetails.tipo.charAt(0).toUpperCase() + userDetails.tipo.slice(1).toLowerCase() }}</p>
+      <p><strong>Estado:</strong> {{ userDetails.estado.charAt(0).toUpperCase() + userDetails.estado.slice(1).toLowerCase() }}</p>
 
       <div class="media-previews">
         <ion-card class="preview-card">

@@ -17,14 +17,16 @@
       <ion-grid>
         <ion-row class="table-header">
           <ion-col size="4">Nombre</ion-col>
-          <ion-col size="4">Apellido</ion-col>
+          <ion-col size="4">Apellido Paterno</ion-col>
+          <ion-col size="4">Apellido Materno</ion-col>
           <ion-col size="3">RUT</ion-col>
           <ion-col size="1">Ver</ion-col>
         </ion-row>
 
         <ion-row *ngFor="let user of users" class="table-row">
           <ion-col size="4">{{ user.nombre.charAt(0).toUpperCase() + user.nombre.slice(1).toLowerCase() }}</ion-col>
-          <ion-col size="4">{{ user.apellido.charAt(0).toUpperCase() + user.apellido.slice(1).toLowerCase() }}</ion-col>
+          <ion-col size="4">{{ user.apellidoPaterno.charAt(0).toUpperCase() + user.apellidoPaterno.slice(1).toLowerCase() }}</ion-col>
+          <ion-col size="4">{{ user.apellidoMaterno.charAt(0).toUpperCase() + user.apellidoMaterno.slice(1).toLowerCase() }}</ion-col>
           <ion-col size="3">{{ user.rut }}</ion-col>
           
           <ion-col size="1">
