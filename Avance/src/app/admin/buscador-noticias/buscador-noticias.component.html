@@ -19,26 +19,25 @@
     </ion-card-header>
     
     <ion-card-content>
-      <ion-grid>
-        <ion-row class="table-header">
-          <ion-col size="4" size-md="3">Títulos</ion-col>
-          <ion-col size="4" size-md="3">Subtítulo</ion-col>
-          <ion-col size="4" size-md="3">Fecha</ion-col>
-          <ion-col size="2" size-md="1">Administrar</ion-col>
-        </ion-row>
-
+      <ion-list>
         <!-- Mostrar las noticias -->
-        <ion-row *ngFor="let noticia of noticias" class="table-row">
-          <ion-col size="4" size-md="3">{{ noticia.title | titlecase }}</ion-col>
-          <ion-col size="4" size-md="3">{{ noticia.subtitle | titlecase }}</ion-col>
-          <ion-col size="4" size-md="3">{{ noticia.date }}</ion-col>
-          <ion-col size="1" size-md="1">
-            <ion-button (click)="administrarNoticia(noticia)" fill="outline" color="secondary">
-              <ion-icon slot="icon-only" name="settings"></ion-icon>
-            </ion-button>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
+        <ion-item *ngFor="let noticia of noticias">
+          <ion-thumbnail slot="start">
+            <img *ngIf="noticia.image" [src]="noticia.image" alt="Documento" class="media-image"/>
+          </ion-thumbnail>
+
+          <ion-label>
+            <strong>Título:</strong> {{ noticia.title | titlecase }}<br />
+            <strong>Subtítulo:</strong> {{ noticia.subtitle | titlecase }}<br />
+            <strong>Fecha de edicion:</strong> {{ noticia.date }}<br />
+          </ion-label>
+
+          <ion-button (click)="administrarNoticia(noticia)" fill="outline" color="secondary" slot="end">
+            <ion-icon slot="start" name="settings"></ion-icon>
+            Editar
+          </ion-button>
+        </ion-item>
+      </ion-list>
     </ion-card-content>
   </ion-card>
 </ion-content>

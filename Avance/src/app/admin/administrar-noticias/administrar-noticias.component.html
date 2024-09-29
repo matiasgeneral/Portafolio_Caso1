@@ -1,3 +1,48 @@
-<p>
-  administrar-noticias works!
-</p>
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Detalles de la Noticia</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-button expand="full" (click)="goBack()" color="light">
+    Volver a la lista de noticias
+  </ion-button>
+
+  <ion-card *ngIf="noticiaDetails">
+    <ion-card-header>
+      <div class="media-previews">
+        <ion-card class="preview-card">
+          <ion-card-content>
+            <img *ngIf="noticiaDetails.image" [src]="noticiaDetails.image" alt="Imagen de la noticia" class="media-image"/>
+          </ion-card-content>
+        </ion-card>
+      </div>
+
+      <ion-card-title>
+        {{ noticiaDetails.title.charAt(0).toUpperCase() + noticiaDetails.title.slice(1).toLowerCase() }} 
+        {{ noticiaDetails.subtitle.charAt(0).toUpperCase() + noticiaDetails.subtitle.slice(1).toLowerCase() }}
+      </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <p><strong>Titulo:</strong> {{ noticiaDetails.title.charAt(0).toUpperCase() + noticiaDetails.title.slice(1).toLowerCase() }}</p>
+      <p><strong>Subtitulo:</strong> {{ noticiaDetails.subtitle.charAt(0).toUpperCase() + noticiaDetails.subtitle.slice(1).toLowerCase() }}</p>
+      <p><strong>Fecha:</strong> {{ noticiaDetails.date }}</p>
+      <p><strong>Detalles:</strong> {{ noticiaDetails.details }}</p>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-button expand="full" color="danger" (click)="deleteDoc()">
+    Borrar Noticia
+  </ion-button>
+  <ion-button expand="full" color="warning" (click)="deshabilitarDoc()">
+    Deshabilitar Noticia
+  </ion-button>
+  <ion-button expand="full" color="secondary" routerLink="/editar-noticia/{{ noticiaDetails.id }}">
+    Editar Noticia
+  </ion-button><br><br><br>
+</ion-content>

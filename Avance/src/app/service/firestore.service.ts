@@ -32,6 +32,11 @@ export class FirestoreService {
     const collection = this.afs.collection(path);
     return collection.doc(id).delete();
   }
+// Deshabilitar un documento
+deshabilitarDoc(path: string, id: string) {
+  const collection = this.afs.collection(path);
+  return collection.doc(id).update({ disabled: true });
+}
 
   // Listar documentos
   getdocs<tipo>(path: string) {

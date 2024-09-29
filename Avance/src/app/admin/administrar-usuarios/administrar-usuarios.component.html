@@ -8,16 +8,31 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <ion-card *ngIf="userDetails">
-    <ion-card-header>
-      <ion-card-title>
-        {{ userDetails.nombre.charAt(0).toUpperCase() + userDetails.nombre.slice(1).toLowerCase() }} 
-        {{ userDetails.apellidoPaterno.charAt(0).toUpperCase() + userDetails.apellidoPaterno.slice(1).toLowerCase() }}
-        {{ userDetails.apellidoMaterno.charAt(0).toUpperCase() + userDetails.apellidoMaterno.slice(1).toLowerCase() }}
-      </ion-card-title>
-    </ion-card-header>
+  <ion-button expand="full" (click)="goBack()" color="light">
+    Volver a la lista de usuarios
+  </ion-button>
 
+  <ion-card *ngIf="userDetails">
     <ion-card-content>
+      <div class="media-previews">
+        <ion-card class="preview-card">
+          <ion-card-header>
+            <ion-card-title>Foto de Carnet</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <img *ngIf="userDetails.foto" [src]="userDetails.foto" alt="Foto de Carnet" class="media-image"/>
+          </ion-card-content>
+        </ion-card>
+      </div>
+
+      <ion-card-header>
+        <ion-card-title>
+          {{ userDetails.nombre.charAt(0).toUpperCase() + userDetails.nombre.slice(1).toLowerCase() }} 
+          {{ userDetails.apellidoPaterno.charAt(0).toUpperCase() + userDetails.apellidoPaterno.slice(1).toLowerCase() }}
+          {{ userDetails.apellidoMaterno.charAt(0).toUpperCase() + userDetails.apellidoMaterno.slice(1).toLowerCase() }}
+        </ion-card-title>
+      </ion-card-header>
+
       <p><strong>Nombre:</strong> {{ userDetails.nombre.charAt(0).toUpperCase() + userDetails.nombre.slice(1).toLowerCase() }}</p>
       <p><strong>Apellido Paterno:</strong> {{ userDetails.apellidoPaterno.charAt(0).toUpperCase() + userDetails.apellidoPaterno.slice(1).toLowerCase() }}</p>
       <p><strong>Apellido Materno:</strong> {{ userDetails.apellidoMaterno.charAt(0).toUpperCase() + userDetails.apellidoMaterno.slice(1).toLowerCase() }}</p>
@@ -31,15 +46,6 @@
       <div class="media-previews">
         <ion-card class="preview-card">
           <ion-card-header>
-            <ion-card-title>Foto de Carnet</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            <img *ngIf="userDetails.foto" [src]="userDetails.foto" alt="Foto de Carnet" class="media-image"/>
-          </ion-card-content>
-        </ion-card>
-
-        <ion-card class="preview-card">
-          <ion-card-header>
             <ion-card-title>Documento (Boleta)</ion-card-title>
           </ion-card-header>
           <ion-card-content>
@@ -47,9 +53,6 @@
           </ion-card-content>
         </ion-card>
       </div>
-
     </ion-card-content>
   </ion-card>
-
-  <ion-button (click)="goBack()">Volver a la lista de usuarios</ion-button>
 </ion-content>
