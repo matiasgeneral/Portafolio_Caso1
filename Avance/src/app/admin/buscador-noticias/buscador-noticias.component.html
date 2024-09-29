@@ -1,0 +1,62 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Buscador de noticias</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+
+
+  
+  <ion-content class="ion-padding custom-content">
+    <ion-card class="custom-card">
+      <ion-card-header>
+        <ion-card-title>Lista de Noticias</ion-card-title>
+      </ion-card-header>
+  
+      <ion-card-content>
+        <ion-grid>
+          <ion-row class="table-header">
+            <ion-col size="3">Titulo</ion-col>
+            <ion-col size="2">Fecha</ion-col>
+            <ion-col size="1">Ver</ion-col>
+          </ion-row>
+    <!-- Mostrar las noticias filtradas -->
+
+
+
+
+          <ion-row *ngFor="let noticia of noticias" class="table-row">
+            <ion-col size="3">{{ noticia.title | titlecase }}</ion-col>
+            <ion-col size="3">{{ noticia.date  | titlecase }}</ion-col>
+            <ion-col size="1">
+             <!--<ion-button (click)="verDetalles(noticias)" fill="clear" color="primary">
+                <ion-icon slot="icon-only" name="eye"></ion-icon>
+              </ion-button>
+              --> 
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+  </ion-content>
+  
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+</ion-content>

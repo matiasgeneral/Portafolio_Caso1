@@ -1,0 +1,28 @@
+.crear-noticia-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Altura completa de la pantalla */
+    padding: 16px; /* Espaciado interno */
+  }
+  
+  form {
+    width: 100%; /* Ancho completo */
+    max-width: 100%; /* Máximo ancho */
+    border-radius: 8px; /* Bordes redondeados */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Sombra */
+    padding: 20px; /* Espaciado interno */
+  }
+  
+  ion-item {
+    margin-bottom: 16px; /* Margen entre elementos */
+  }
+  
+  .small-datetime {
+    max-width: 30%; /* Ancho máximo del calendario */
+  }
+  
+  .crear-noticia-button {
+    margin-top: 20px; /* Margen superior para el botón */
+  }
+  

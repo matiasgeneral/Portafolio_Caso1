@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { firstValueFrom } from 'rxjs';  // Import para manejar observables como promesas
+import { firstValueFrom, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -42,6 +42,12 @@ export class FirestoreService {
   // Crear ID de documento único
   getId() {
     return this.afs.createId();
+  }
+
+  // Obtener noticias por fecha
+  getNoticiasPorFecha(fecha: string): Observable<any[]> {
+    const collection = this.afs.collection('noticias', ref => ref.where('date', '==', fecha));
+    return collection.valueChanges();
   }
 
   // Verificar si un RUT ya existe en la colección

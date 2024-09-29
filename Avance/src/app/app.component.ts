@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Auth, onAuthStateChanged, signOut } from 'firebase/auth';
 import { Router } from '@angular/router'; // Importa Router
 import { auth } from './firebase-config'; // Asegúrate de ajustar la ruta según tu configuración
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-root',
@@ -20,7 +21,9 @@ export class AppComponent implements OnInit {
     { title: 'Eventos', url: './visualizacion-eventos', icon: 'star' },
     { title: 'Proyectos', url: './visualizacion-proyectos', icon: 'heart' },
     { title: 'Noticias', url: './visualizacion-noticias', icon: 'newspaper' },
-    { title: 'Ver usuarios', url: './buscador-usuarios', icon: 'newspaper' },
+    {title: 'crear noticia', url: './crear-noticias', icon: 'newspaper'},
+    { title: 'Ver usuarios(administrar)', url: './buscador-usuarios', icon: 'newspaper' },
+    {title: 'Buscar noticias(administrar)' , url: './buscador-noticias', icon: 'newspaper'},
    
   ];
 
