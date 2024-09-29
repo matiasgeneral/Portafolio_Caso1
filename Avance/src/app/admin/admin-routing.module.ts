@@ -9,24 +9,30 @@ import { BuscadorEspaciosPublicosComponent } from './buscador-espacios-publicos/
 import { BuscadorProyectosComponent } from './buscador-proyectos/buscador-proyectos.component';
 import { BuscadorUsuariosComponent } from './buscador-usuarios/buscador-usuarios.component';
 import { BuscadorNoticiasComponent } from './buscador-noticias/buscador-noticias.component';
+import { AdministrarNoticiasComponent } from './administrar-noticias/administrar-noticias.component';
 
 const routes: Routes = [
   {
-    path:'administrar-actividades',
+    path: 'administrar-actividades',
     component: AdministrarActividadesComponent,
   },
   {
-    path:'administrar-espacios-publicos',
+    path: 'administrar-espacios-publicos',
     component: AdministrarEspaciosPublicosComponent,
   },
   {
-    path:'administrar-proyectos',
-    component:AdministrarProyectosComponent,
+    path: 'administrar-proyectos',
+    component: AdministrarProyectosComponent,
   },
   {
-  path: 'administrar-usuarios',
-  component: AdministrarUsuariosComponent,
+    path: 'administrar-usuarios',
+    component: AdministrarUsuariosComponent,
   },
+  {
+    path: 'administrar-noticias',
+    component: AdministrarNoticiasComponent,
+  },
+
   {
     path: 'buscador-actividades',
     component: BuscadorActividadesComponent,
@@ -36,7 +42,7 @@ const routes: Routes = [
     component: BuscadorEspaciosPublicosComponent
   },
   {
-    path:'buscador-proyectos',
+    path: 'buscador-proyectos',
     component: BuscadorProyectosComponent
   },
   {

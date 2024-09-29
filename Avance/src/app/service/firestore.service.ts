@@ -61,4 +61,10 @@ export class FirestoreService {
     const collection = this.afs.collection('ventas', ref => ref.where('uidComprador', '==', uid));
     return collection.valueChanges();
   }
-}
+    // Método para crear un documento con ID generado automáticamente
+    createDocWithAutoId(data: any, path: string) {
+      const collection = this.afs.collection(path);
+      return collection.add(data);  // Esto genera automáticamente el ID único
+    }
+  }
+

@@ -1,4 +1,3 @@
-
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FirestoreService } from 'src/app/service/firestore.service';
@@ -9,22 +8,29 @@ import { FirestoreService } from 'src/app/service/firestore.service';
   styleUrls: ['./buscador-noticias.component.scss'],
 })
 export class BuscadorNoticiasComponent implements OnInit {
-  selectedDate: string = '';  // Define la propiedad para almacenar la fecha seleccionada
-  noticias: any[] = [];  // Aquí almacenaremos las noticias
+  selectedDate: string = '';
+  noticias: any[] = [];
 
   constructor(private firestore: FirestoreService, private router: Router) {}
 
   ngOnInit() {
-    // Obtener todos los usuarios de la colección 'Usuario'
     this.firestore.getdocs<any>('noticias').subscribe((data: any[]) => {
-      this.noticias = data;  // Guardar las noticias en la variable 'noticias'
+      console.log('Datos recibidos de Firestore:', data);
+      this.noticias = data.map(noticia => {
+        console.log('Noticia:', noticia);
+        return noticia;
+      });
+      console.log('Noticias después de map:', this.noticias);
     });
   }
 
+  administrarNoticia(noticia: any) {
+    // Aquí puedes redirigir a la ruta correspondiente o abrir un modal
+    this.router.navigate(['/administrar-noticias', { id: noticia.id }]);
+  }
+
+  verNoticia(noticia: any) {
+    // Aquí puedes redirigir a la ruta correspondiente o abrir un modal
+    this.router.navigate(['/visualizacion-noticias', { id: noticia.id }]);
+  }
 }
-
-
-
-
-
-

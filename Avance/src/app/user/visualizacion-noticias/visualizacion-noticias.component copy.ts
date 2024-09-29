@@ -8,27 +8,20 @@ import { FirestoreService } from 'src/app/service/firestore.service';
   styleUrls: ['./visualizacion-noticias.component.scss'],
 })
 export class VisualizacionNoticiasComponent implements OnInit {
-  selectedDate: string = '';
-  noticias: any[] = [];
+  noticia: any;
 
   constructor(
     private route: ActivatedRoute,
     private firestore: FirestoreService
-  ) { }
+  ) {}
 
   ngOnInit() {
-    this.firestore.getdocs<any>('noticias').subscribe((data: any[]) => {
-      console.log('Datos recibidos de Firestore:', data);
-      this.noticias = data.map(noticia => {
-        console.log('Noticia:', noticia);
-        return noticia;
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.firestore.getDoc<any>('noticias', id).subscribe((data) => {
+        this.noticia = data;
+        console.log('Noticia obtenida:', this.noticia);
       });
-      console.log('Noticias después de map:', this.noticias);
-    });
+    }
   }
 }
-
-
-
-
-

@@ -4,28 +4,47 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="crear-noticia-content">
+<ion-content class="crear-noticia-content" padding>
   <form [formGroup]="newsForm" (ngSubmit)="onSubmit()">
+    <!-- Título -->
     <ion-item>
       <ion-label position="floating">Título</ion-label>
       <ion-input formControlName="title" required></ion-input>
     </ion-item>
+    <ion-note *ngIf="newsForm.get('title')?.touched && newsForm.get('title')?.hasError('required')" color="danger">
+      El título es requerido.
+    </ion-note>
 
+    <!-- Subtítulo -->
+    <ion-item>
+      <ion-label position="floating">Subtítulo</ion-label>
+      <ion-input formControlName="subtitle" required></ion-input>
+    </ion-item>
+    <ion-note *ngIf="newsForm.get('subtitle')?.touched && newsForm.get('subtitle')?.hasError('required')" color="danger">
+      El subtítulo es requerido.
+    </ion-note>
+
+    <!-- Detalles -->
     <ion-item>
       <ion-label position="floating">Detalles</ion-label>
       <ion-textarea formControlName="details" required></ion-textarea>
     </ion-item>
+    <ion-note *ngIf="newsForm.get('details')?.touched && newsForm.get('details')?.hasError('required')" color="danger">
+      Los detalles son requeridos.
+    </ion-note>
 
-    <ion-item>
-      <ion-label position="floating">Fecha</ion-label> <br> <br>
-      <ion-datetime formControlName="date" class="small-datetime" required></ion-datetime>
-    </ion-item>
-
+    <!-- Imagen -->
     <ion-item>
       <ion-label>Seleccionar Imagen</ion-label>
       <input type="file" (change)="onImageSelected($event)" accept="image/*" />
     </ion-item>
+    <ion-note *ngIf="!selectedFile" color="danger">
+      Debes seleccionar una imagen.
+    </ion-note>
 
-    <ion-button expand="full" type="submit" class="crear-noticia-button">Crear Noticia</ion-button>
+    <!-- Botón para crear la noticia -->
+    <ion-button expand="full" type="submit" class="crear-noticia-button" [disabled]="!newsForm.valid || !selectedFile">
+      Crear Noticia
+    </ion-button>
   </form>
 </ion-content>

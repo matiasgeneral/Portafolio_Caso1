@@ -12,6 +12,7 @@ import { BuscadorEspaciosPublicosComponent } from './buscador-espacios-publicos/
 import { BuscadorProyectosComponent } from './buscador-proyectos/buscador-proyectos.component';
 import { BuscadorUsuariosComponent } from './buscador-usuarios/buscador-usuarios.component';
 import { BuscadorNoticiasComponent } from './buscador-noticias/buscador-noticias.component';
+import { AdministrarNoticiasComponent } from './administrar-noticias/administrar-noticias.component';
 
 
 @NgModule({
@@ -20,6 +21,7 @@ import { BuscadorNoticiasComponent } from './buscador-noticias/buscador-noticias
     AdministrarEspaciosPublicosComponent,
     AdministrarProyectosComponent,
     AdministrarUsuariosComponent,
+    AdministrarNoticiasComponent,
 
     BuscadorActividadesComponent,
     BuscadorEspaciosPublicosComponent,

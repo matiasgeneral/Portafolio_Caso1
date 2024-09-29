@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FirestoreService } from 'src/app/service/firestore.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AngularFireStorage } from '@angular/fire/compat/storage'; // Importar AngularFireStorage
-import { finalize } from 'rxjs/operators'; // Operador para completar la subida
-import { AlertController } from '@ionic/angular'; // Para mostrar alertas
+import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { finalize } from 'rxjs/operators';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-crear-noticias',
@@ -12,47 +12,50 @@ import { AlertController } from '@ionic/angular'; // Para mostrar alertas
 })
 export class CrearNoticiasComponent implements OnInit {
   newsForm: FormGroup;
-  selectedFile: File | null = null; // Almacena el archivo seleccionado
+  selectedFile: File | null = null;
 
   constructor(
     private firestore: FirestoreService,
     private formBuilder: FormBuilder,
-    private storage: AngularFireStorage, // Servicio de almacenamiento
-    private alertController: AlertController // Controlador de alertas
+    private storage: AngularFireStorage,
+    private alertController: AlertController
   ) {
-    // Inicializa el formulario con los campos necesarios
     this.newsForm = this.formBuilder.group({
       title: ['', Validators.required],
+      subtitle: ['', Validators.required],
       details: ['', Validators.required],
-      image: ['', Validators.required], // Cambiará cuando tengamos la URL de la imagen
-      date: ['', Validators.required],
+      image: ['', Validators.required],
     });
   }
 
   ngOnInit() {}
 
-  // Método para manejar el envío del formulario
   async onSubmit() {
     if (this.newsForm.valid && this.selectedFile) {
       const newsData = this.newsForm.value;
-      console.log('Datos de la noticia:', newsData);
 
-      // Subir la imagen a Firebase Storage antes de guardar en Firestore
-      const filePath = `noticias/${this.selectedFile.name}`; // Ruta en Firebase Storage
+      // Asignar la fecha actual
+      newsData.date = this.getCurrentDate();
+
+      // Generar el UID de la noticia
+      const id = this.firestore.getId();
+      newsData.id = id;  // Añadir el UID a los datos de la noticia
+
+      const filePath = `noticias/${this.selectedFile.name}`;
       const fileRef = this.storage.ref(filePath);
       const uploadTask = this.storage.upload(filePath, this.selectedFile);
 
-      // Esperar a que la imagen se suba y luego obtener la URL de descarga
       uploadTask
         .snapshotChanges()
         .pipe(
-          finalize(() => {
-            fileRef.getDownloadURL().subscribe((url) => {
-              newsData.image = url; // Guardar la URL de la imagen
-              this.createNews(newsData); // Crear la noticia en Firestore
-              this.showSuccessAlert(); // Mostrar alerta de éxito
-              this.resetForm(); // Reiniciar el formulario después de enviar
-            });
+          finalize(async () => {
+            const url = await fileRef.getDownloadURL().toPromise();
+            newsData.image = url;
+
+            // Crear la noticia en Firestore con el UID
+            this.createNews(newsData, id);
+            this.showSuccessAlert();
+            this.resetForm();
           })
         )
         .subscribe();
@@ -61,35 +64,40 @@ export class CrearNoticiasComponent implements OnInit {
     }
   }
 
-  // Método para crear la noticia en Firestore
-  createNews(newsData: any) {
-    const path = 'noticias'; // Cambia el path según tu estructura en Firestore
-    return this.firestore.createDoc(newsData, path, this.firestore.getId());
+  // Método para crear una noticia en Firestore con un UID
+  createNews(newsData: any, id: string) {
+    const path = 'noticias';
+    return this.firestore.createDoc(newsData, path, id);
   }
 
-  // Método para manejar la selección de la imagen
   onImageSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
-      this.selectedFile = file; // Guardar el archivo seleccionado
-      this.newsForm.patchValue({ image: file.name }); // Solo muestra el nombre del archivo
+      this.selectedFile = file;
+      this.newsForm.patchValue({ image: file.name });
     }
   }
 
-  // Método para mostrar alerta de éxito
   async showSuccessAlert() {
     const alert = await this.alertController.create({
       header: 'Éxito',
       message: 'La noticia ha sido creada correctamente.',
-      buttons: ['OK']
+      buttons: ['OK'],
     });
 
     await alert.present();
   }
 
-  // Método para reiniciar el formulario
   resetForm() {
     this.newsForm.reset();
-    this.selectedFile = null; // Reiniciar archivo seleccionado
+    this.selectedFile = null;
+  }
+
+  getCurrentDate(): string {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 }
