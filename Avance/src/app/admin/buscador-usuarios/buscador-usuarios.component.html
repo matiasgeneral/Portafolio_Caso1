@@ -7,34 +7,32 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding custom-content">
+<ion-content>
   <ion-card class="custom-card">
     <ion-card-header>
       <ion-card-title>Lista de Usuarios</ion-card-title>
     </ion-card-header>
 
     <ion-card-content>
-      <ion-grid>
-        <ion-row class="table-header">
-          <ion-col size="3">Nombre</ion-col>
-          <ion-col size="3">Apellido Paterno</ion-col>
-          <ion-col size="3">Apellido Materno</ion-col>
-          <ion-col size="2">RUT</ion-col>
-          <ion-col size="1">Ver</ion-col>
-        </ion-row>
+      <ion-list>
+        <ion-item *ngFor="let user of users">
+          <ion-thumbnail slot="start">
+            <img *ngIf="user.foto" [src]="user.foto" alt="Imagen de {{ user.foto }}" class="media-image" />
+          </ion-thumbnail>
 
-        <ion-row *ngFor="let user of users" class="table-row">
-          <ion-col size="3">{{ user.nombre | titlecase }}</ion-col>
-          <ion-col size="3">{{ user.apellidoPaterno | titlecase }}</ion-col>
-          <ion-col size="3">{{ user.apellidoMaterno | titlecase }}</ion-col>
-          <ion-col size="2">{{ user.rut }}</ion-col>
-          <ion-col size="1">
-            <ion-button (click)="verDetalles(user)" fill="clear" color="primary">
-              <ion-icon slot="icon-only" name="eye"></ion-icon>
-            </ion-button>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
+          <ion-label>
+            <strong>Nombre Completo:</strong> {{ user.nombre | titlecase }} {{ user.apellidoPaterno | titlecase }} {{ user.apellidoMaterno | titlecase }}<br />
+            <strong>RUT:</strong> {{ user.rut }}<br />
+            <strong>Rol:</strong> {{ user.tipo }}<br />
+            <strong>Estado de la cuenta:</strong> {{ user.estado }}<br />
+          </ion-label>
+
+          <ion-button (click)="verDetalles(user)" fill="outline" color="secondary" slot="end">
+            <ion-icon slot="start" name="eye"></ion-icon>
+            Ver
+          </ion-button>
+        </ion-item>
+      </ion-list>
     </ion-card-content>
   </ion-card>
 </ion-content>
