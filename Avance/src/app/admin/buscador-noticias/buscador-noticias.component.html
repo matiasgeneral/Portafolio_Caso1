@@ -11,8 +11,13 @@
   <ion-card class="custom-card">
     <ion-card-header>
       <ion-card-title>Lista de Noticias</ion-card-title>
+      <div class="ion-text-end">
+        <ion-button expand="full" routerLink="/visualizacion-noticias" class="ver-noticias-button">
+          Ver Noticias
+        </ion-button>
+      </div>
     </ion-card-header>
-
+    
     <ion-card-content>
       <ion-grid>
         <ion-row class="table-header">
@@ -20,23 +25,16 @@
           <ion-col size="4" size-md="3">Subtítulo</ion-col>
           <ion-col size="4" size-md="3">Fecha</ion-col>
           <ion-col size="2" size-md="1">Administrar</ion-col>
-          <ion-col size="2" size-md="1">Ver noticia</ion-col>
         </ion-row>
 
         <!-- Mostrar las noticias -->
         <ion-row *ngFor="let noticia of noticias" class="table-row">
           <ion-col size="4" size-md="3">{{ noticia.title | titlecase }}</ion-col>
           <ion-col size="4" size-md="3">{{ noticia.subtitle | titlecase }}</ion-col>
-
           <ion-col size="4" size-md="3">{{ noticia.date }}</ion-col>
           <ion-col size="1" size-md="1">
             <ion-button (click)="administrarNoticia(noticia)" fill="outline" color="secondary">
               <ion-icon slot="icon-only" name="settings"></ion-icon>
-            </ion-button>
-          </ion-col>
-          <ion-col size="1" size-md="1">
-            <ion-button (click)="verNoticia(noticia)" fill="outline" color="secondary">
-              <ion-icon slot="icon-only" name="eye"></ion-icon>
             </ion-button>
           </ion-col>
         </ion-row>

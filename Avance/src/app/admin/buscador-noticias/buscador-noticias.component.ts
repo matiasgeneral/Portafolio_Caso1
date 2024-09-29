@@ -29,8 +29,4 @@ export class BuscadorNoticiasComponent implements OnInit {
     this.router.navigate(['/administrar-noticias', { id: noticia.id }]);
   }
 
-  verNoticia(noticia: any) {
-    // Aquí puedes redirigir a la ruta correspondiente o abrir un modal
-    this.router.navigate(['/visualizacion-noticias', { id: noticia.id }]);
-  }
 }

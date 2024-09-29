@@ -51,4 +51,23 @@ ion-col {
   .table-header, .table-row {
     padding: 3px; /* Manteniendo el padding original en pantallas más grandes */
   }
+ 
+  
+
+/* Estilo para el botón "Ver Noticias" */
+.ver-noticias-button {
+  --background: #3880ff; /* Color de fondo */
+  --color: white; /* Color del texto */
+  --border-radius: 20px; /* Bordes redondeados */
+  margin-top: 10px; /* Espaciado superior opcional */
+  transition: background 0.3s ease; /* Transición suave para el hover */
+
+  &:hover {
+    --background: #3171e0; /* Color al pasar el mouse */
+  }
 }
+
+
+
+}
+
