@@ -14,19 +14,20 @@ export class AppComponent implements OnInit {
   public appPages = [
     //ESTOS SON PARA EL USUARIO NO LOGEADO
     { title: 'Home', url: './home', icon: 'home' },
-    
+
     //ESTOS SON PARA EL USUARIO LOGEADO
     { title: 'Solicitud Certificado Residencia', url: './solicitud-certificado-residencia', icon: 'reader' },
     { title: 'Espacios públicos', url: './visualizacion-espacios-publicos', icon: 'basketball' },
     { title: 'Eventos', url: './visualizacion-eventos', icon: 'star' },
     { title: 'Proyectos', url: './visualizacion-proyectos', icon: 'heart' },
     { title: 'Noticias', url: './visualizacion-noticias', icon: 'newspaper' },
-    {title: 'Crear noticia', url: './crear-noticias', icon: 'newspaper'},
+    { Title: '----------------------------', url: '#', icon: '' },
+    { title: 'Crear noticia', url: './crear-noticias', icon: 'newspaper' },
+    { title: 'Crear actividades', url: './crear-actividades', icon: 'flower' },
     { title: 'Buscar usuarios(administrar)', url: './buscador-usuarios', icon: 'id-card' },
-    {title: 'Buscar noticias(administrar)' , url: './buscador-noticias', icon: 'file-tray-full'},
-    {title: 'Crear evento', url: './crear-actividades', icon: 'flower'},
-    {title: 'buscador actividades(administrar)', url: './buscador-actividades', icon: 'search'},
-   
+    { title: 'Buscar noticias(administrar)', url: './buscador-noticias', icon: 'file-tray-full' },
+    { title: 'buscador actividades(administrar)', url: './buscador-actividades', icon: 'search' },
+
   ];
 
   public accountPages = [
@@ -36,7 +37,7 @@ export class AppComponent implements OnInit {
 
   public accountMenuOpen = false;
 
-  constructor(private router: Router) {} // Inyecta Router
+  constructor(private router: Router) { } // Inyecta Router
 
   ngOnInit() {
     // Monitorea el estado de autenticación del usuario

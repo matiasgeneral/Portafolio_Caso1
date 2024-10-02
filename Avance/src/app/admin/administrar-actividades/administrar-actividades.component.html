@@ -1,3 +1,49 @@
-<p>
-  administrar-actividades works!
-</p>
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Detalles de la Actividad</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-button expand="full" (click)="goBack()" color="light">
+    Volver a la lista de actividades
+  </ion-button>
+
+  <ion-card *ngIf="actividadDetails">
+    <ion-card-header>
+      <div class="media-previews">
+        <ion-card class="preview-card">
+          <ion-card-content>
+            <img *ngIf="actividadDetails.image" [src]="actividadDetails.image" alt="Imagen de la actividad" class="media-image"/>
+          </ion-card-content>
+        </ion-card>
+      </div>
+
+      <ion-card-title>
+        {{ actividadDetails.titulo.charAt(0).toUpperCase() + actividadDetails.titulo.slice(1).toLowerCase() }}
+      </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <p><strong>Título:</strong> {{ actividadDetails.titulo }}</p>
+      <p><strong>Descripción:</strong> {{ actividadDetails.descripcion }}</p>
+      <p><strong>Cantidad Máxima:</strong> {{ actividadDetails.cantidadMax }}</p>
+      <p><strong>Fecha de Creación:</strong> {{ actividadDetails.fechaCreacion }}</p>
+      <p><strong>Fecha del Evento:</strong> {{ actividadDetails.fechaEvento }}</p>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-button expand="full" color="danger" (click)="deleteDoc()">
+    Borrar actividad
+  </ion-button>
+  <ion-button expand="full" color="warning" (click)="deshabilitarDoc()">
+    Deshabilitar actividad
+  </ion-button>
+  <ion-button expand="full" color="secondary" [routerLink]="['/editar-actividad', actividadDetails.id]">
+    Editar actividad
+  </ion-button>
+  <br><br>
+</ion-content>
