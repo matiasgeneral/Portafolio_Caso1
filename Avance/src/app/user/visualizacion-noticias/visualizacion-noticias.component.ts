@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { FirestoreService } from 'src/app/service/firestore.service';
 
 @Component({
@@ -8,27 +7,26 @@ import { FirestoreService } from 'src/app/service/firestore.service';
   styleUrls: ['./visualizacion-noticias.component.scss'],
 })
 export class VisualizacionNoticiasComponent implements OnInit {
-  selectedDate: string = '';
-  noticias: any[] = [];
+  noticias: any[] = []; // Arreglo para almacenar las noticias
 
-  constructor(
-    private route: ActivatedRoute,
-    private firestore: FirestoreService
-  ) { }
+  constructor(private firestoreService: FirestoreService) {}
 
   ngOnInit() {
-    this.firestore.getdocs<any>('noticias').subscribe((data: any[]) => {
-      console.log('Datos recibidos de Firestore:', data);
-      this.noticias = data.map(noticia => {
-        console.log('Noticia:', noticia);
-        return noticia;
-      });
-      console.log('Noticias después de map:', this.noticias);
+    this.cargarNoticias();
+  }
+
+  cargarNoticias() {
+    this.firestoreService.getdocs<any>('noticias').subscribe(noticias => {
+      this.noticias = noticias;
+      console.log('Noticias cargadas:', this.noticias); // Verifica la estructura de datos aquí
     });
   }
+
+  formatDate(date: string): string {
+    if (date) {
+      const [day, month, year] = date.split('/'); // Separa la cadena por "/"
+      return `${day}/${month}/${year}`; // Devuelve la fecha en el formato DD/MM/YYYY
+    }
+    return 'Fecha no disponible'; // Mensaje si la fecha no está definida
+  }
 }
-
-
-
-
-

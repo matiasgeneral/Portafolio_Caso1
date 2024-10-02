@@ -25,7 +25,6 @@ import { CoordinadorModule } from './coordinador/coordinador.module';
 
 
 
-
 @NgModule({
   declarations: [AppComponent, HomeComponent, 
     

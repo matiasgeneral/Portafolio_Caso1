@@ -33,11 +33,7 @@ export class CrearNoticiasComponent implements OnInit {
   async onSubmit() {
     if (this.newsForm.valid && this.selectedFile) {
       const newsData = this.newsForm.value;
-
-      // Asignar la fecha actual
-      newsData.date = this.getCurrentDate();
-
-      // Generar el UID de la noticia
+      newsData.date = this.getCurrentDate(); // Asignar la fecha actual
       const id = this.firestore.getId();
       newsData.id = id;  // Añadir el UID a los datos de la noticia
 
@@ -49,22 +45,30 @@ export class CrearNoticiasComponent implements OnInit {
         .snapshotChanges()
         .pipe(
           finalize(async () => {
-            const url = await fileRef.getDownloadURL().toPromise();
-            newsData.image = url;
-
-            // Crear la noticia en Firestore con el UID
-            this.createNews(newsData, id);
-            this.showSuccessAlert();
-            this.resetForm();
+            try {
+              const url = await fileRef.getDownloadURL().toPromise();
+              newsData.image = url;
+              this.createNews(newsData, id);
+              this.showSuccessAlert();
+              this.resetForm();
+            } catch (error) {
+              console.error('Error al obtener la URL de la imagen:', error);
+              this.showErrorAlert('No se pudo obtener la URL de la imagen.');
+            }
           })
         )
-        .subscribe();
+        .subscribe(
+          () => {},
+          (error) => {
+            console.error('Error durante la subida:', error);
+            this.showErrorAlert('Error al subir la imagen.');
+          }
+        );
     } else {
       console.log('El formulario no es válido o no hay archivo seleccionado');
     }
   }
 
-  // Método para crear una noticia en Firestore con un UID
   createNews(newsData: any, id: string) {
     const path = 'noticias';
     return this.firestore.createDoc(newsData, path, id);
@@ -72,9 +76,11 @@ export class CrearNoticiasComponent implements OnInit {
 
   onImageSelected(event: any) {
     const file = event.target.files[0];
-    if (file) {
+    if (file && file.type.startsWith('image/')) {
       this.selectedFile = file;
       this.newsForm.patchValue({ image: file.name });
+    } else {
+      this.showErrorAlert('Por favor, selecciona un archivo de imagen.');
     }
   }
 
@@ -84,7 +90,15 @@ export class CrearNoticiasComponent implements OnInit {
       message: 'La noticia ha sido creada correctamente.',
       buttons: ['OK'],
     });
+    await alert.present();
+  }
 
+  async showErrorAlert(message: string) {
+    const alert = await this.alertController.create({
+      header: 'Error',
+      message: message,
+      buttons: ['OK'],
+    });
     await alert.present();
   }
 
@@ -95,9 +109,14 @@ export class CrearNoticiasComponent implements OnInit {
 
   getCurrentDate(): string {
     const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, '0');
     const day = String(today.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const year = today.getFullYear();
+    return `${day}/${month}/${year}`; // Formato día/mes/año
+  }
+
+  formatDate(dateString: string): string {
+    const parts = dateString.split('-');
+    return `${parts[2]}/${parts[1]}/${parts[0]}`; // Formato 'DD/MM/YYYY'
   }
 }
