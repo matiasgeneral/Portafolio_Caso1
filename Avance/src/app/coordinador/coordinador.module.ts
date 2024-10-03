@@ -9,6 +9,7 @@ import { IonicModule } from '@ionic/angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CrearEspaciosPublicosComponent } from './crear-espacios-publicos/crear-espacios-publicos.component';
+import { CrearProyectosComponent } from './crear-proyectos/crear-proyectos.component';
 
 
 @NgModule({
@@ -16,6 +17,7 @@ import { CrearEspaciosPublicosComponent } from './crear-espacios-publicos/crear-
     CrearNoticiasComponent,
     CrearActividadesComponent,
     CrearEspaciosPublicosComponent,
+    CrearProyectosComponent,
   ],
   
   imports: [
