@@ -1,3 +1,49 @@
-<p>
-  buscador-espacios-publicos works!
-</p>
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Buscador de espacios públicos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card class="custom-card">
+    <ion-card-header>
+      <ion-card-title>Lista de espacios públicos</ion-card-title>
+      <div class="ion-text-end">
+        <ion-button expand="full" routerLink="/visualizacion-espacios-publicos" class="ver-noticias-button">
+          Ver espacios públicos
+        </ion-button>
+      </div>
+    </ion-card-header>
+    
+    <ion-card-content>
+      <ion-list>
+        <!-- Mostrar los espacios públicos -->
+        <ion-item *ngFor="let espacioPublico of espacioPublicos">
+          <ion-thumbnail slot="start">
+            <img *ngIf="espacioPublico.image" [src]="espacioPublico.image" alt="Imagen del espacio público" class="media-image"/>
+          </ion-thumbnail>
+
+          <ion-label>
+            <strong>Título:</strong> {{ espacioPublico.titulo | titlecase }}<br />
+            <strong>Descripción:</strong> {{ espacioPublico.descripcion | titlecase }}<br />
+
+            <strong>Ubicación: </strong> 
+            <a href="{{ espacioPublico.ubicacion  }}" target="_blank">{{ espacioPublico.ubicacion | slice:0:20 }}...</a>
+          </ion-label>
+
+            <strong>Fecha de Creación:</strong> {{ espacioPublico.fechaCreacion | date:'longDate' }}<br />
+            
+          
+
+          <ion-button (click)="administrarEspacioPublicos(espacioPublico)" fill="outline" color="secondary" slot="end">
+            <ion-icon slot="start" name="settings"></ion-icon>
+            Editar
+          </ion-button>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

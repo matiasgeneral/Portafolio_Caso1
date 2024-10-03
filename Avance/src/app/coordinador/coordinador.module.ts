@@ -8,12 +8,14 @@ import { CrearActividadesComponent } from './crear-actividades/crear-actividades
 import { IonicModule } from '@ionic/angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { CrearEspaciosPublicosComponent } from './crear-espacios-publicos/crear-espacios-publicos.component';
 
 
 @NgModule({
   declarations: [
     CrearNoticiasComponent,
     CrearActividadesComponent,
+    CrearEspaciosPublicosComponent,
   ],
   
   imports: [

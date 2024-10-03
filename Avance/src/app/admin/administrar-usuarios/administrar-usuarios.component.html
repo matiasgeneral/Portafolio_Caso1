@@ -13,7 +13,7 @@
   </ion-button>
 
   <ion-card *ngIf="userDetails">
-    <ion-card-content>
+    <ion-card-header>
       <div class="media-previews">
         <ion-card class="preview-card">
           <ion-card-header>
@@ -25,14 +25,14 @@
         </ion-card>
       </div>
 
-      <ion-card-header>
-        <ion-card-title>
-          {{ userDetails.nombre.charAt(0).toUpperCase() + userDetails.nombre.slice(1).toLowerCase() }} 
-          {{ userDetails.apellidoPaterno.charAt(0).toUpperCase() + userDetails.apellidoPaterno.slice(1).toLowerCase() }}
-          {{ userDetails.apellidoMaterno.charAt(0).toUpperCase() + userDetails.apellidoMaterno.slice(1).toLowerCase() }}
-        </ion-card-title>
-      </ion-card-header>
+      <ion-card-title>
+        {{ userDetails.nombre.charAt(0).toUpperCase() + userDetails.nombre.slice(1).toLowerCase() }} 
+        {{ userDetails.apellidoPaterno.charAt(0).toUpperCase() + userDetails.apellidoPaterno.slice(1).toLowerCase() }}
+        {{ userDetails.apellidoMaterno.charAt(0).toUpperCase() + userDetails.apellidoMaterno.slice(1).toLowerCase() }}
+      </ion-card-title>
+    </ion-card-header>
 
+    <ion-card-content>
       <p><strong>Nombre:</strong> {{ userDetails.nombre.charAt(0).toUpperCase() + userDetails.nombre.slice(1).toLowerCase() }}</p>
       <p><strong>Apellido Paterno:</strong> {{ userDetails.apellidoPaterno.charAt(0).toUpperCase() + userDetails.apellidoPaterno.slice(1).toLowerCase() }}</p>
       <p><strong>Apellido Materno:</strong> {{ userDetails.apellidoMaterno.charAt(0).toUpperCase() + userDetails.apellidoMaterno.slice(1).toLowerCase() }}</p>

@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Crear Espacio Publico</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="crear-espacioPublico-content" padding>
+  <form [formGroup]="espacioPublicoForm" (ngSubmit)="onSubmit()">
+    <ion-item>
+      <ion-label position="floating">Título</ion-label>
+      <ion-input formControlName="titulo" required></ion-input>
+    </ion-item>
+    <ion-note *ngIf="espacioPublicoForm.get('titulo')?.touched && espacioPublicoForm.get('titulo')?.hasError('required')" color="danger">
+      El título es requerido.
+    </ion-note>
+
+    <ion-item>
+      <ion-label position="floating">Descripción</ion-label>
+      <ion-textarea formControlName="descripcion" required></ion-textarea>
+    </ion-item>
+    <ion-note *ngIf="espacioPublicoForm.get('descripcion')?.touched && espacioPublicoForm.get('descripcion')?.hasError('required')" color="danger">
+      La descripción es requerida.
+    </ion-note>
+    <ion-item>
+      <ion-label position="floating">Ubicacion</ion-label>
+      <ion-textarea formControlName="ubicacion" required></ion-textarea>
+    </ion-item>
+    <ion-note *ngIf="espacioPublicoForm.get('ubicacion')?.touched && espacioPublicoForm.get('ubicacion')?.hasError('required')" color="danger">
+      La ubicacion es requerida.
+    </ion-note>
+
+    <ion-item>
+      <ion-label>Seleccionar Imagen</ion-label>
+      <input type="file" (change)="onImageSelected($event)" accept="image/*" />
+    </ion-item>
+    <ion-note *ngIf="!selectedFile" color="danger">
+      Debes seleccionar una imagen.
+    </ion-note>
+
+    <ion-button expand="full" type="submit" class="crear-actividad-button" [disabled]="!espacioPublicoForm.valid || !selectedFile">
+      Crear Actividad
+    </ion-button>
+  </form>
+</ion-content>
