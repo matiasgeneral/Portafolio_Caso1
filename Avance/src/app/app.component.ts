@@ -27,6 +27,7 @@ export class AppComponent implements OnInit {
     { title: 'Crear noticia', url: './crear-noticias', icon: 'newspaper' },
     { title: 'Crear actividades', url: './crear-actividades', icon: 'heart'},
     { title: 'Crear Espacios publicos', url: './crear-espacios-publicos', icon: 'flower' },
+    { title: 'Crear Proyectos', url: './crear-proyectos', icon: 'star' },
 
     { Title: '----------------------------', url: '#', icon: '' },
 
