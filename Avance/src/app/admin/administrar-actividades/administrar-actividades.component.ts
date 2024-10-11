@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FirestoreService } from 'src/app/service/firestore.service';
+import { FirestorageService } from 'src/app/service/firestorage.service';
 
 @Component({
   selector: 'app-administrar-actividades',
@@ -14,7 +15,8 @@ export class AdministrarActividadesComponent  implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private firestoreService: FirestoreService
+    private firestoreService: FirestoreService,
+    private FirestorageService: FirestorageService
   ) { }
 
   ngOnInit() {
@@ -52,11 +54,24 @@ export class AdministrarActividadesComponent  implements OnInit {
   // Método para borrar la actividad
   deleteDoc() {
     if (this.id) {
-      this.firestoreService.deleteDoc('actividad', this.id).then(() => {
-        console.log('Actividad borrada');
-        this.goBack(); // Regresa a la lista de actividad después de borrar
-      }).catch(error => {
-        console.error('Error al borrar la actividad:', error);
+      // Obtén el espacioPublico  para acceder a los datos de la imagen antes de eliminarla
+      this.firestoreService.getDoc('actividad', this.id).subscribe((actividad: any) => {
+        const imageUrl = actividad.image;  // Suponiendo que 'noticia.image' contiene la URL completa de la imagen
+    
+        // Primero elimina la imagen usando refFromURL
+        this.FirestorageService.deleteImageFromUrl(imageUrl).subscribe(() => {
+          console.log('Imagen borrada');
+    
+          // Luego elimina el documento
+          this.firestoreService.deleteDoc('actividad', this.id!).then(() => {
+            console.log('actividad borrada');
+            this.goBack(); // Regresa a la lista de noticias después de borrar
+          }).catch((error: any) => {
+            console.error('Error al borrar la actividad:', error);
+          });
+        }, (error: any) => {
+          console.error('Error al borrar la imagen:', error);
+        });
       });
     }
   }

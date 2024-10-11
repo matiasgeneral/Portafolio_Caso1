@@ -4,6 +4,8 @@ import { Router } from '@angular/router'; // Importa Router
 import { auth } from './firebase-config'; // Asegúrate de ajustar la ruta según tu configuración
 import { Title } from '@angular/platform-browser';
 
+
+
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -35,6 +37,7 @@ export class AppComponent implements OnInit {
     { title: 'Buscar noticias(administrar)', url: './buscador-noticias', icon: 'file-tray-full' },
     { title: 'buscador actividades(administrar)', url: './buscador-actividades', icon: 'search' },
     {title: 'buscador espacios publicos(administrar)', url: './buscador-espacios-publicos', icon: 'search' },
+    {title:'Buscador de proyectos(administrar)', url:'./buscador-proyectos', icon:'search'},
   ];
 
   public accountPages = [

@@ -32,11 +32,24 @@ export class FirestoreService {
     const collection = this.afs.collection(path);
     return collection.doc(id).delete();
   }
-// Deshabilitar un documento
-deshabilitarDoc(path: string, id: string) {
+
+// Borrar usuario
+deleteUser(path: string, rut: string) {
   const collection = this.afs.collection(path);
-  return collection.doc(id).update({ disabled: true });
+  return collection.doc(rut).delete();
 }
+deleteUser2(path: string, uid: string) {
+  const collection = this.afs.collection(path);
+  return collection.doc(uid).delete();
+}
+
+
+  
+  // Deshabilitar un documento
+  deshabilitarDoc(path: string, id: string) {
+    const collection = this.afs.collection(path);
+    return collection.doc(id).update({ disabled: true });
+  }
 
   // Listar documentos
   getdocs<tipo>(path: string) {
@@ -66,10 +79,16 @@ deshabilitarDoc(path: string, id: string) {
     const collection = this.afs.collection('ventas', ref => ref.where('uidComprador', '==', uid));
     return collection.valueChanges();
   }
-    // Método para crear un documento con ID generado automáticamente
-    createDocWithAutoId(data: any, path: string) {
-      const collection = this.afs.collection(path);
-      return collection.add(data);  // Esto genera automáticamente el ID único
-    }
+  // Método para crear un documento con ID generado automáticamente
+  createDocWithAutoId(data: any, path: string) {
+    const collection = this.afs.collection(path);
+    return collection.add(data);  // Esto genera automáticamente el ID único
   }
+
+  // Método para cambiar el rol de un usuario
+  updateUserRole(uid: string, newRole: string, path: string) {
+    return this.updateDoc({ tipo: newRole }, path, uid);
+  }
+
+}
 

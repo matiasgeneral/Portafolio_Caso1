@@ -13,6 +13,7 @@ import { BuscadorProyectosComponent } from './buscador-proyectos/buscador-proyec
 import { BuscadorUsuariosComponent } from './buscador-usuarios/buscador-usuarios.component';
 import { BuscadorNoticiasComponent } from './buscador-noticias/buscador-noticias.component';
 import { AdministrarNoticiasComponent } from './administrar-noticias/administrar-noticias.component';
+import { EditarUsuariosComponent } from './editar-usuarios/editar-usuarios.component';
 
 
 @NgModule({
@@ -27,7 +28,9 @@ import { AdministrarNoticiasComponent } from './administrar-noticias/administrar
     BuscadorEspaciosPublicosComponent,
     BuscadorProyectosComponent,
     BuscadorUsuariosComponent,
-    BuscadorNoticiasComponent
+    BuscadorNoticiasComponent,
+
+    EditarUsuariosComponent,
   ],
 
   imports: [

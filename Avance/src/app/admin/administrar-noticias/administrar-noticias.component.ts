@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FirestoreService } from 'src/app/service/firestore.service';
+import { FirestorageService } from 'src/app/service/firestorage.service';
 
 @Component({
   selector: 'app-administrar-noticias',
@@ -14,7 +15,8 @@ export class AdministrarNoticiasComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private firestoreService: FirestoreService
+    private firestoreService: FirestoreService,
+    private FirestorageService: FirestorageService
   ) { }
 
   ngOnInit() {
@@ -49,17 +51,35 @@ export class AdministrarNoticiasComponent implements OnInit {
     this.router.navigate(['/editar-noticia', this.id]);
   }
 
-  // Método para borrar la noticia
+
+
   deleteDoc() {
     if (this.id) {
-      this.firestoreService.deleteDoc('noticias', this.id).then(() => {
-        console.log('Noticia borrada');
-        this.goBack(); // Regresa a la lista de noticias después de borrar
-      }).catch(error => {
-        console.error('Error al borrar la noticia:', error);
+      // Obtén la noticia para acceder a los datos de la imagen antes de eliminarla
+      this.firestoreService.getDoc('noticias', this.id).subscribe((noticia: any) => {
+        const imageUrl = noticia.image;  // Suponiendo que 'noticia.image' contiene la URL completa de la imagen
+    
+        // Primero elimina la imagen usando refFromURL
+        this.FirestorageService.deleteImageFromUrl(imageUrl).subscribe(() => {
+          console.log('Imagen borrada');
+    
+          // Luego elimina el documento
+          this.firestoreService.deleteDoc('noticias', this.id!).then(() => {
+            console.log('Noticia borrada');
+            this.goBack(); // Regresa a la lista de noticias después de borrar
+          }).catch((error: any) => {
+            console.error('Error al borrar la noticia:', error);
+          });
+        }, (error: any) => {
+          console.error('Error al borrar la imagen:', error);
+        });
       });
     }
   }
+  
+
+
+
 
   // Método para deshabilitar la noticia
   deshabilitarDoc() {

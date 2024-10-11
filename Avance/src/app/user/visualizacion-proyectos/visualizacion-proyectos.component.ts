@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FirestoreService } from 'src/app/service/firestore.service';
 
 @Component({
   selector: 'app-visualizacion-proyectos',
@@ -6,9 +7,25 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./visualizacion-proyectos.component.scss'],
 })
 export class VisualizacionProyectosComponent  implements OnInit {
+  proyectos: any[] = []; // Arreglo para almacenar los proyecto
+  constructor(private firestoreService: FirestoreService) { }
 
-  constructor() { }
+  ngOnInit() {
+    this.cargarProyectos(); // Cargar proyectos al iniciar el componente
+  }
 
-  ngOnInit() {}
+  cargarProyectos() {
+    this.firestoreService.getdocs<any>('proyecto').subscribe(proyectos => {
+      this.proyectos = proyectos; // Almacenar los proyectos obtenidos de Firestore
+      console.log('proyectos cargados:', this.proyectos); // Verifica la estructura de datos aquí
+    });
+  }
 
+  formatDate(date: string): string {
+    if (date) {
+      const [day, month, year] = date.split('/'); // Separa la cadena por "/"
+      return `${day}/${month}/${year}`; // Devuelve la fecha en el formato DD/MM/YYYY
+    }
+    return 'Fecha no disponible'; // Mensaje si la fecha no está definida
+  }
 }
