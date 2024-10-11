@@ -11,6 +11,10 @@ import { BuscadorUsuariosComponent } from './buscador-usuarios/buscador-usuarios
 import { BuscadorNoticiasComponent } from './buscador-noticias/buscador-noticias.component';
 import { AdministrarNoticiasComponent } from './administrar-noticias/administrar-noticias.component';
 import { EditarUsuariosComponent } from './editar-usuarios/editar-usuarios.component';
+import { EditarActividadesComponent } from './editar-actividades/editar-actividades.component';
+import { EditarEspaciosPublicosComponent } from './editar-espacios-publicos/editar-espacios-publicos.component';
+import { EditarNoticiasComponent } from './editar-noticias/editar-noticias.component';
+import { EditarProyectosComponent } from './editar-proyectos/editar-proyectos.component';
 
 const routes: Routes = [
   {
@@ -54,10 +58,30 @@ const routes: Routes = [
     path: 'buscador-noticias',
     component: BuscadorNoticiasComponent
   },
+
   {
-    path:'editar-usuarios',
+    path: 'editar-actividades/:id',
+    component: EditarActividadesComponent
+  },
+  {
+    path: 'editar-espacios-publicos',
+    component: EditarEspaciosPublicosComponent
+  },
+  {
+    path: 'editar-noticias',
+    component: EditarNoticiasComponent
+
+  },
+  {
+    path: 'editar-proyectos',
+    component: EditarProyectosComponent
+  },
+  {
+    path: 'editar-usuarios',
     component: EditarUsuariosComponent
   },
+
+  
 
 ];
 

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { firstValueFrom, Observable } from 'rxjs';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -21,12 +22,19 @@ export class FirestoreService {
     return collection.doc(id).valueChanges();
   }
 
-  // Actualizar documento
   updateDoc(data: any, path: string, id: string) {
+    console.log('El ID que se pasa es:', id); // Verifica si es un string
+  
+    // Verificar si el ID es un string
+    if (typeof id !== 'string') {
+      throw new Error('El ID proporcionado no es un string');
+    }
+  
     const collection = this.afs.collection(path);
     return collection.doc(id).update(data);
   }
-
+  
+  
   // Borrar documento
   deleteDoc(path: string, id: string) {
     const collection = this.afs.collection(path);

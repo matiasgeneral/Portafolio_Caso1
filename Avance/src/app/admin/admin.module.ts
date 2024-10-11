@@ -14,6 +14,11 @@ import { BuscadorUsuariosComponent } from './buscador-usuarios/buscador-usuarios
 import { BuscadorNoticiasComponent } from './buscador-noticias/buscador-noticias.component';
 import { AdministrarNoticiasComponent } from './administrar-noticias/administrar-noticias.component';
 import { EditarUsuariosComponent } from './editar-usuarios/editar-usuarios.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'; // Importa ReactiveFormsModule
+import { EditarActividadesComponent } from './editar-actividades/editar-actividades.component';
+import { EditarEspaciosPublicosComponent } from './editar-espacios-publicos/editar-espacios-publicos.component';
+import { EditarNoticiasComponent } from './editar-noticias/editar-noticias.component';
+import { EditarProyectosComponent } from './editar-proyectos/editar-proyectos.component';
 
 
 @NgModule({
@@ -29,14 +34,22 @@ import { EditarUsuariosComponent } from './editar-usuarios/editar-usuarios.compo
     BuscadorProyectosComponent,
     BuscadorUsuariosComponent,
     BuscadorNoticiasComponent,
-
+    
+    EditarActividadesComponent,
+    EditarEspaciosPublicosComponent,
+    EditarNoticiasComponent,
+    EditarProyectosComponent,
     EditarUsuariosComponent,
+
+
   ],
 
   imports: [
     CommonModule,
     AdminRoutingModule,
-    IonicModule 
+    IonicModule ,
+    FormsModule, // Formularios Template-Driven
+    ReactiveFormsModule // Formularios Reactivos (necesario para formGroup)
   ]
 })
 export class AdminModule { }

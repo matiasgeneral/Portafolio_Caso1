@@ -1,17 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { FirestoreService } from '../../service/firestore.service';
-import { InteractionService } from '../../service/interaction.service';
-import { AuthenticationService } from '../../service/authentication.service';
-import { firstValueFrom } from 'rxjs';
-
-// Interfaz para definir la estructura del usuario
-interface Usuario {
-  nombre: string;
-  apellidoPaterno: string;
-  apellidoMaterno: string;
-  tipo: string; // Rol del usuario
-}
+import { FirestoreService } from 'src/app/service/firestore.service';
+import { InteractionService } from 'src/app/service/interaction.service';
 
 @Component({
   selector: 'app-editar-usuarios',
@@ -20,85 +11,82 @@ interface Usuario {
 })
 export class EditarUsuariosComponent implements OnInit {
   editarUsuarioForm: FormGroup;
-  currentUserRole: string | null = null; // Rol del usuario que está editando
-  selectedUserId: string = ''; // Asigna un valor por defecto
-  userData: Usuario | null = null; // Datos del usuario que se editarán
-  roles: string[] = []; // Lista de roles disponibles para selección
+  rut: string | null = null;
+  userDetails: any;
+  roles: string[] = ['Administrador', 'Coordinador', 'Secretario', 'Usuario Registrado'];
 
   constructor(
+    private route: ActivatedRoute,
+    private router: Router,
     private fb: FormBuilder,
-    private firestore: FirestoreService,
-    private interaction: InteractionService,
-    private authService: AuthenticationService
+    private firestoreService: FirestoreService,
+    private interactionService: InteractionService
   ) {
     this.editarUsuarioForm = this.fb.group({
       nombre: ['', Validators.required],
       apellidoPaterno: ['', Validators.required],
       apellidoMaterno: ['', Validators.required],
-      rol: ['', Validators.required] // Rol a editar
+      rol: ['', Validators.required],
     });
   }
 
   ngOnInit() {
-    this.loadCurrentUserRole(); // Cargar el rol del usuario actual
-    this.getDoc(); // Cargar datos del usuario a editar
-  }
+    this.route.paramMap.subscribe(params => {
+      this.rut = params.get('rut');
+      console.log('RUT del usuario:', this.rut);
 
-  // Cargar el rol del usuario actual (quien está haciendo la edición)
-  async loadCurrentUserRole() {
-    const currentUser = await firstValueFrom(this.authService.stateAuth());
-
-    if (currentUser && currentUser.uid) {
-      this.firestore.getDoc<Usuario>('Usuario', currentUser.uid).subscribe(userDoc => {
-        if (userDoc) {
-          this.currentUserRole = userDoc.tipo; // Acceder sin corchetes
-          this.setAvailableRoles();
-        }
-      });
-    }
-  }
-
-  // Filtrar los roles disponibles según el rol del usuario que edita
-  setAvailableRoles() {
-    if (this.currentUserRole === 'administrador') {
-      this.roles = ['usuario', 'secretario', 'coordinador', 'administrador'];
-    } else if (this.currentUserRole === 'coordinador') {
-      this.roles = ['usuario', 'secretario'];
-    } else {
-      this.roles = ['usuario']; // Si es secretario o usuario, solo puede asignar el rol de 'usuario'
-    }
-  }
-
-  // Cargar datos del usuario seleccionado para editar
-  async getDoc() {
-    this.firestore.getDoc<Usuario>('Usuario', this.selectedUserId).subscribe(userDoc => {
-      if (userDoc) {
-        this.userData = userDoc; // Almacena los datos del usuario
-        this.editarUsuarioForm.patchValue({
-          nombre: userDoc.nombre, // Acceder sin corchetes
-          apellidoPaterno: userDoc.apellidoPaterno,
-          apellidoMaterno: userDoc.apellidoMaterno,
-          rol: userDoc.tipo // Rol actual del usuario
+      if (this.rut) {
+        this.firestoreService.getdocs<any>('Usuario').subscribe(users => {
+          this.userDetails = users.find(user => user.rut === this.rut);
+          if (this.userDetails) {
+            console.log('Detalles del usuario:', this.userDetails);
+            // Cargar los datos del usuario en el formulario
+            this.editarUsuarioForm.setValue({
+              nombre: this.userDetails.nombre || '',
+              apellidoPaterno: this.userDetails.apellidoPaterno || '',
+              apellidoMaterno: this.userDetails.apellidoMaterno || '',
+              rol: this.userDetails.rol || '',
+            });
+          } else {
+            console.error('Usuario no encontrado');
+          }
+        }, error => {
+          console.error('Error al obtener los usuarios:', error);
         });
       }
     });
   }
 
-  // Guardar cambios en el usuario editado
   async onEditUser() {
     if (this.editarUsuarioForm.valid) {
-      const { nombre, apellidoPaterno, apellidoMaterno, rol } = this.editarUsuarioForm.value;
+      const updatedUser = {
+        ...this.userDetails,
+        ...this.editarUsuarioForm.value,
+      };
 
-      try {
-        // Actualizar en Firestore
-        await this.firestore.updateDoc({ nombre, apellidoPaterno, apellidoMaterno, tipo: rol }, 'Usuario', this.selectedUserId);
-        this.interaction.presentToast('Usuario actualizado con éxito');
-      } catch (error) {
-        console.error('Error al actualizar usuario:', error);
-        this.interaction.presentToast('Error al actualizar usuario');
+      // Utilizar uid para actualizar
+      const rut = this.userDetails.rut;
+
+      if (rut) {
+        this.interactionService.openLoading('Actualizando usuario...');
+        try {
+          await this.firestoreService.updateDoc('Usuario', rut, updatedUser);
+          this.interactionService.presentToast('Usuario editado con éxito');
+          this.router.navigate(['/buscador-usuarios']);
+        } catch (error) {
+          console.error('Error al editar usuario:', error);
+          this.interactionService.presentToast('Error al editar usuario');
+        } finally {
+          this.interactionService.closeLoading();
+        }
+      } else {
+        console.error('El UID del usuario es null');
+        this.interactionService.presentToast('Error: UID del usuario no encontrado');
       }
-    } else {
-      this.interaction.presentToast('Complete todos los campos correctamente');
     }
+  }
+
+  goBack() {
+    this.router.navigate(['/buscador-usuarios']);
   }
 }

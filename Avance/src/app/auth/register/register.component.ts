@@ -76,7 +76,7 @@ export class RegisterComponent {
           uid,
           foto: fotoCarnetUrl,
           documento: documentoResidenciaUrl,
-          tipo: 'usuario',
+          rol: 'usuario',
           estado: 'pendiente' // Agregar estado pendiente para que el administrador lo apruebe
         };
 

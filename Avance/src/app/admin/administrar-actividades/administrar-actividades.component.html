@@ -42,8 +42,7 @@
   <ion-button expand="full" color="warning" (click)="deshabilitarDoc()">
     Deshabilitar actividad
   </ion-button>
-  <ion-button expand="full" color="secondary" [routerLink]="['/editar-actividad', actividadDetails.id]">
-    Editar actividad
-  </ion-button>
+  <ion-button  expand="full" color="secondary" (click)="verDetalles(actividadDetails)">Editar Actividad</ion-button>
+  <br><br><br>
   <br><br>
 </ion-content>

@@ -46,10 +46,20 @@ export class AdministrarActividadesComponent  implements OnInit {
     this.router.navigate(['/buscador-actividades']); // Asegúrate de que esta ruta sea correcta
   }
 
-  // Método para editar la actividad
-  updateDoc() {
-    this.router.navigate(['/editar-actividad', this.id]);
-  }
+  // Método para ver los detalles de un usuario y luego editar
+  verDetalles(actividades: any) {
+    console.log('Detalles de la actividad:', actividades);
+    // Asegúrate de que `usuario.rut` existe antes de navegar
+    if (actividades.id) {
+      this.router.navigate(['/editar-actividades', actividades.id]); // Redirige a la pantalla de detalles del usuario, pasando su RUT
+    } else {
+      console.error('RUT de usuario no definido');
+    }
+    }
+  
+  
+
+
 
   // Método para borrar la actividad
   deleteDoc() {
