@@ -43,22 +43,9 @@ export class EditarActividadesComponent implements OnInit {
         // Cargar los detalles de la actividad y rellenar el formulario
         this.firestore.getDoc<any>('actividad', this.id).subscribe(actividad => {
           if (actividad) {
-            // Verificar si fechaEvento está definido
-            if (actividad.fechaEvento) {
-              // Asegurarse de que la fecha es un string y tiene un formato correcto
-              if (typeof actividad.fechaEvento === 'string') {
-                actividad.fechaEvento = this.formatDateToDDMMYYYY(actividad.fechaEvento);
-              } else if (actividad.fechaEvento instanceof Date) {
-                actividad.fechaEvento = this.formatDateToDDMMYYYY(actividad.fechaEvento); // Usar el método para formatear la fecha
-              } else {
-                console.error('Formato de fecha no válido:', actividad.fechaEvento);
-              }
-            } else {
-              console.error('Fecha de evento no está definida en la actividad:', actividad);
-            }
-
-            // Rellenar el formulario con los datos actuales
-            this.actividadForm.patchValue(actividad);
+            // Formatear la fecha antes de rellenar el formulario
+            actividad.fechaEvento = this.formatDateToDDMMYYYY(actividad.fechaEvento);
+            this.actividadForm.patchValue(actividad); // Rellenar el formulario con los datos actuales
             console.log('Detalles de la actividad cargados:', actividad);
           } else {
             console.error('Actividad no encontrada');
@@ -74,7 +61,7 @@ export class EditarActividadesComponent implements OnInit {
       const actividadData = this.actividadForm.value;
 
       // Formatear la fecha al guardar
-      actividadData.fechaEvento = this.formatDateToDDMMYYYY(actividadData.fechaEvento);
+      actividadData.fechaEvento = this.formatDateToYYYYMMDD(actividadData.fechaEvento);
 
       // Si hay una imagen seleccionada, se sube a Firebase Storage
       if (this.selectedFile) {
@@ -150,14 +137,21 @@ export class EditarActividadesComponent implements OnInit {
     this.router.navigate(['/buscador-actividades']); // Asegúrate de que esta ruta sea correcta
   }
 
+  // Función para formatear fecha a DD/MM/YYYY
+  formatDateToDDMMYYYY(dateString: string): string {
+    if (!dateString) return ''; // Retornar cadena vacía si dateString es undefined
+    const parts = dateString.split('-');
+    if (parts.length !== 3) return ''; // Verificar si hay 3 partes
+    return `${parts[2]}/${parts[1]}/${parts[0]}`; // Formato 'DD/MM/YYYY'
+}
 
-// Método para formatear fecha a 'dd/mm/yyyy' en formato UTC
-private formatDateToDDMMYYYY(date: string | Date): string {
-  const d = new Date(date);
-  const day = String(d.getUTCDate()).padStart(2, '0');
-  const month = String(d.getUTCMonth() + 1).padStart(2, '0'); // Los meses empiezan desde 0
-  const year = d.getUTCFullYear();
-  return `${day}/${month}/${year}`;
+
+  // Función para formatear fecha a YYYY-MM-DD
+  formatDateToYYYYMMDD(dateString: string): string {
+    if (!dateString) return ''; // Retornar cadena vacía si dateString es undefined
+    const parts = dateString.split('/');
+    if (parts.length !== 3) return ''; // Verificar si hay 3 partes
+    return `${parts[2]}-${parts[1]}-${parts[0]}`; // Formato 'YYYY-MM-DD'
 }
 
 }
