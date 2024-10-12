@@ -40,6 +40,7 @@ export class CrearActividadesComponent implements OnInit {
       // Asignar la fecha de creación en formato día/mes/año
       actividadData.fechaCreacion = this.getCurrentDate();
 
+
       // Formatear fechaEvento a día/mes/año
       actividadData.fechaEvento = this.formatDate(actividadData.fechaEvento);
 
@@ -115,12 +116,13 @@ export class CrearActividadesComponent implements OnInit {
     const day = String(today.getDate()).padStart(2, '0');
     const month = String(today.getMonth() + 1).padStart(2, '0'); // Mes es 0-indexed
     const year = today.getFullYear();
-    return `${day}/${month}/${year}`; // Cambiar a formato día/mes/año
-  }
+    return `${day}/${month}/${year}`; // Cambiado a formato día/mes/año
+}
 
-  formatDate(dateString: string): string {
+formatDate(dateString: string): string {
     // Asumir que dateString está en formato 'YYYY-MM-DD'
     const parts = dateString.split('-');
-    return `${parts[2]}/${parts[1]}/${parts[0]}`; // Formato 'DD/MM/YYYY'
-  }
+    return `${parts[2]}/${parts[1]}/${parts[0]}`; // Cambiado a formato 'DD/MM/YYYY'
+}
+
 }

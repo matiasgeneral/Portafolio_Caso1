@@ -43,6 +43,8 @@ export class EditarActividadesComponent implements OnInit {
         // Cargar los detalles de la actividad y rellenar el formulario
         this.firestore.getDoc<any>('actividad', this.id).subscribe(actividad => {
           if (actividad) {
+            // Formatear la fecha antes de rellenar el formulario
+            actividad.fechaEvento = this.formatDateToDDMMYYYY(actividad.fechaEvento);
             this.actividadForm.patchValue(actividad); // Rellenar el formulario con los datos actuales
             console.log('Detalles de la actividad cargados:', actividad);
           } else {
@@ -57,6 +59,9 @@ export class EditarActividadesComponent implements OnInit {
   async onSubmit() {
     if (this.actividadForm.valid) {
       const actividadData = this.actividadForm.value;
+
+      // Formatear la fecha al guardar
+      actividadData.fechaEvento = this.formatDateToYYYYMMDD(actividadData.fechaEvento);
 
       // Si hay una imagen seleccionada, se sube a Firebase Storage
       if (this.selectedFile) {
@@ -130,5 +135,17 @@ export class EditarActividadesComponent implements OnInit {
   // Método para regresar a la lista de actividades
   goBack() {
     this.router.navigate(['/buscador-actividades']); // Asegúrate de que esta ruta sea correcta
+  }
+
+  // Función para formatear fecha a DD/MM/YYYY
+  formatDateToDDMMYYYY(dateString: string): string {
+    const parts = dateString.split('-');
+    return `${parts[2]}/${parts[1]}/${parts[0]}`; // Formato 'DD/MM/YYYY'
+  }
+
+  // Función para formatear fecha a YYYY-MM-DD
+  formatDateToYYYYMMDD(dateString: string): string {
+    const parts = dateString.split('/');
+    return `${parts[2]}-${parts[1]}-${parts[0]}`; // Formato 'YYYY-MM-DD'
   }
 }

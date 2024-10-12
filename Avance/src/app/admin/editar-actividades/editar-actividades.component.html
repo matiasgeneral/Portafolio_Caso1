@@ -52,13 +52,18 @@
         </div>
 
         <!-- Fecha del Evento -->
-        <ion-item>
-          <ion-label position="floating">Fecha del Evento</ion-label>
-          <ion-datetime formControlName="fechaEvento" displayFormat="YYYY-MM-DD"></ion-datetime>
-        </ion-item>
-        <div *ngIf="actividadForm.get('fechaEvento')?.invalid && (actividadForm.get('fechaEvento')?.touched || actividadForm.get('fechaEvento')?.dirty)">
-          <p class="error-text">La fecha del evento es obligatoria.</p>
-        </div>
+        
+          
+
+
+
+          <ion-item>
+            <ion-label position="floating">Fecha del Evento</ion-label>
+            <ion-input type="date" formControlName="fechaEvento" required></ion-input>
+          </ion-item>
+          <ion-note *ngIf="actividadForm.get('fechaEvento')?.touched && actividadForm.get('fechaEvento')?.hasError('required')" color="danger">
+            La fecha de evento es requerida.
+          </ion-note>
 
         <!-- Cantidad máxima de participantes -->
         <ion-item>
@@ -71,7 +76,7 @@
 
         <!-- Imagen de la actividad -->
         <ion-item>
-          <ion-label position="floating">Imagen</ion-label>
+          <ion-label position="floating"></ion-label>
           <input type="file" (change)="onImageSelected($event)" accept="image/*">
         </ion-item>
 
