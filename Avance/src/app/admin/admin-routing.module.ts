@@ -64,20 +64,19 @@ const routes: Routes = [
     component: EditarActividadesComponent
   },
   {
-    path: 'editar-espacios-publicos',
+    path: 'editar-espacios-publicos/:id',
     component: EditarEspaciosPublicosComponent
   },
   {
-    path: 'editar-noticias',
+    path: 'editar-noticias/:id',
     component: EditarNoticiasComponent
-
   },
   {
-    path: 'editar-proyectos',
+    path: 'editar-proyectos/:id',
     component: EditarProyectosComponent
   },
   {
-    path: 'editar-usuarios',
+    path: 'editar-usuarios/:id',
     component: EditarUsuariosComponent
   },
 

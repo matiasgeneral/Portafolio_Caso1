@@ -42,7 +42,7 @@
   <ion-button expand="full" color="warning" (click)="deshabilitarDoc()">
     Deshabilitar Noticia
   </ion-button>
-  <ion-button expand="full" color="secondary" routerLink="/editar-noticia/{{ noticiaDetails.id }}">
-    Editar Noticia
-  </ion-button><br><br><br>
+  <ion-button  expand="full" color="secondary" (click)="verDetalles(noticiaDetails)">Editar Noticia</ion-button>
+  <br><br><br>
+  <br><br>
 </ion-content>

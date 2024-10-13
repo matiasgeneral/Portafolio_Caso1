@@ -46,10 +46,15 @@ export class AdministrarNoticiasComponent implements OnInit {
     this.router.navigate(['/buscador-noticias']); // Asegúrate de que esta ruta sea correcta
   }
 
-  // Método para editar la noticia
-  updateDoc() {
-    this.router.navigate(['/editar-noticia', this.id]);
+ // Método para ver los detalles de un usuario y luego editar
+ verDetalles(noticias: any) {
+  console.log('Detalles de las noticias:', noticias);
+  if (noticias.id) {
+    this.router.navigate(['/editar-noticias', noticias.id]); // Asegúrate de que la ruta sea correcta
+  } else {
+    console.error('ID de noticia no definido');
   }
+}
 
 
 
