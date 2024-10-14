@@ -85,4 +85,17 @@ export class AdministrarEspaciosPublicosComponent implements OnInit {
   formatDate(date: any): string {
     return formatDate(date, 'dd/MM/yyyy', 'en-US');
   }
+
+   // Método para ver los detalles  luego editar
+ verDetalles(espacioPublico: any) {
+  console.log('Detalles del espacio publico', espacioPublico);
+  if (espacioPublico.id) {
+    this.router.navigate(['/editar-espacios-publicos', espacioPublico.id]); // Asegúrate de que la ruta sea correcta
+  } else {
+    console.error('ID del espacio publico no  es definido');
+  }
+}
+
+
+
 }

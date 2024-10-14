@@ -48,8 +48,7 @@
   <ion-button expand="full" color="warning" (click)="deshabilitarDoc()">
     Deshabilitar espacio público
   </ion-button>
-  <ion-button expand="full" color="secondary" [routerLink]="['/editar-espacio-publico', espacioPublicoDetails.id]">
-    Editar espacio público
-  </ion-button>
+  <ion-button  expand="full" color="secondary" (click)="verDetalles(espacioPublicoDetails)">Editar Espaco Publico</ion-button>
+  <br><br><br>
   <br><br><br>
 </ion-content>
