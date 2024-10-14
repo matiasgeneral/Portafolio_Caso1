@@ -1,0 +1,91 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Editar Proyecto</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <!-- Botón para volver a la lista de actividades -->
+  <ion-button expand="full" (click)="goBack()" color="light">
+    Volver a la lista de actividades
+  </ion-button>
+
+  <!-- Card para mostrar la actividad si está disponible -->
+  <ion-card *ngIf="proyectoForm">
+    <ion-card-header>
+      <!-- Vista previa de la imagen si está disponible -->
+      <div class="media-previews">
+        <ion-card class="preview-card">
+          <ion-card-content>
+            <img *ngIf="proyectoForm.get('image')?.value" [src]="proyectoForm.get('image')?.value" alt="Imagen de la actividad" class="media-image" />
+          </ion-card-content>
+        </ion-card>
+      </div>
+
+      <ion-card-title>
+        {{ proyectoForm.get('titulo')?.value.charAt(0).toUpperCase() + proyectoForm.get('titulo')?.value.slice(1).toLowerCase() }}
+      </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <!-- Formulario de edición de la actividad -->
+      <form [formGroup]="proyectoForm" (ngSubmit)="onSubmit()">
+        <!-- Título de la actividad -->
+        <ion-item>
+          <ion-label position="floating">Título</ion-label>
+          <ion-input formControlName="titulo" type="text" required></ion-input>
+        </ion-item>
+        <div *ngIf="proyectoForm.get('titulo')?.invalid && (proyectoForm.get('titulo')?.touched || proyectoForm.get('titulo')?.dirty)">
+          <p class="error-text">El título es obligatorio.</p>
+        </div>
+
+        <!-- Descripción de la actividad -->
+        <ion-item>
+          <ion-label position="floating">Descripción</ion-label>
+          <ion-textarea formControlName="descripcion" required></ion-textarea>
+        </ion-item>
+        <div *ngIf="proyectoForm.get('descripcion')?.invalid && (proyectoForm.get('descripcion')?.touched || proyectoForm.get('descripcion')?.dirty)">
+          <p class="error-text">La descripción es obligatoria.</p>
+        </div>
+
+        <!-- Fecha Inicio -->
+        <ion-item>
+          <ion-label position="floating">Inicio del proyecto </ion-label>
+          <ion-input type="date" formControlName="fechaInicio" required></ion-input>
+        </ion-item>
+        <ion-note *ngIf="proyectoForm.get('fechaInicio')?.touched && proyectoForm.get('fechaInicio')?.hasError('required')" color="danger">
+          La fecha de evento es requerida.
+        </ion-note>
+
+                <!-- Fecha Fin -->
+                <ion-item>
+                  <ion-label position="floating">Fin del proyecto</ion-label>
+                  <ion-input type="date" formControlName="fechaFin" required></ion-input>
+                </ion-item>
+                <ion-note *ngIf="proyectoForm.get('fechaFin')?.touched && proyectoForm.get('fechaFin')?.hasError('required')" color="danger">
+                  La fecha de evento es requerida.
+                </ion-note>
+        
+
+
+
+        <!-- Imagen de la actividad -->
+        <ion-item>
+          <ion-label position="floating">Seleccionar Imagen</ion-label> <br>
+          <input type="file" (change)="onImageSelected($event)" accept="image/*" />
+        </ion-item>
+
+        <!-- Botón para guardar cambios -->
+        <ion-button expand="full" type="submit" [disabled]="proyectoForm.invalid" color="secondary">
+          Guardar cambios
+        </ion-button> <br>
+
+        <ion-button expand="full" color="warning" (click)="goBack()">Cancelar</ion-button>
+
+      </form>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

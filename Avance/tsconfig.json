@@ -22,7 +22,8 @@
       "es2018", 
       "dom"
     ],
-    "useDefineForClassFields": false
+    "useDefineForClassFields": false,
+    "types": ["google.maps"] // Agregar esta línea
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

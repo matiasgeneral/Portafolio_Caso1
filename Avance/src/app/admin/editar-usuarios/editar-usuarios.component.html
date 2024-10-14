@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Editar Usuario</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="goBack()">Volver</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="editarUsuarioForm" (ngSubmit)="onEditUser()">
+    <ion-item>
+      <ion-label position="floating">Nombre</ion-label>
+      <ion-input formControlName="nombre" required></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Apellido Paterno</ion-label>
+      <ion-input formControlName="apellidoPaterno" required></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Apellido Materno</ion-label>
+      <ion-input formControlName="apellidoMaterno" required></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Rol</ion-label>
+      <ion-select formControlName="rol" required>
+        <ion-select-option value="Administrador">Administrador</ion-select-option>
+        <ion-select-option value="Coordinador">Coordinador</ion-select-option>
+        <ion-select-option value="Secretario">Secretario</ion-select-option>
+        <ion-select-option value="Usuario Registrado">Usuario Registrado</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-button expand="full" type="submit" [disabled]="editarUsuarioForm.invalid">Guardar Cambios</ion-button>
+  </form>
+</ion-content>

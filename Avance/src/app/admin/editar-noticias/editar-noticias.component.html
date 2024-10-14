@@ -1,0 +1,78 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Editar Noticia</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <!-- Botón para volver a la lista de noticias -->
+  <ion-button expand="full" (click)="goBack()" color="light">
+    Volver a la lista de noticias
+  </ion-button>
+
+  <!-- Card para mostrar la noticia si está disponible -->
+  <ion-card *ngIf="noticiaForm">
+    <ion-card-header>
+      <ion-card-title>
+        Editar Noticia
+      </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <!-- Vista previa de la imagen guardada si está disponible -->
+      <div class="media-previews" *ngIf="noticiaForm.get('image')?.value">
+        <ion-card class="preview-card">
+          <ion-card-content>
+            <img [src]="noticiaForm.get('image')?.value" alt="Imagen de la noticia" class="media-image" />
+          </ion-card-content>
+        </ion-card>
+      </div>
+
+      <!-- Formulario de edición de la noticia -->
+      <form [formGroup]="noticiaForm" (ngSubmit)="onSubmit()">
+        <!-- Título de la noticia -->
+        <ion-item>
+          <ion-label position="floating">Título</ion-label>
+          <ion-input formControlName="title" type="text" required></ion-input>
+        </ion-item>
+        <div *ngIf="noticiaForm.get('title')?.invalid && (noticiaForm.get('title')?.touched || noticiaForm.get('title')?.dirty)">
+          <p class="error-text">El título es obligatorio.</p>
+        </div>
+
+        <!-- Subtítulo de la noticia -->
+        <ion-item>
+          <ion-label position="floating">Subtítulo</ion-label>
+          <ion-input formControlName="subtitle" type="text" required></ion-input>
+        </ion-item>
+        <div *ngIf="noticiaForm.get('subtitle')?.invalid && (noticiaForm.get('subtitle')?.touched || noticiaForm.get('subtitle')?.dirty)">
+          <p class="error-text">El subtítulo es obligatorio.</p>
+        </div>
+
+        <!-- Detalles de la noticia -->
+        <ion-item>
+          <ion-label position="floating">Detalles</ion-label>
+          <ion-textarea formControlName="details" required></ion-textarea>
+        </ion-item>
+        <div *ngIf="noticiaForm.get('details')?.invalid && (noticiaForm.get('details')?.touched || noticiaForm.get('details')?.dirty)">
+          <p class="error-text">Los detalles son obligatorios.</p>
+        </div>
+
+        <!-- Opción para cambiar la imagen -->
+        <ion-item>
+          <ion-label position="floating">Seleccionar Imagen</ion-label> <br>
+          <input type="file" (change)="onImageSelected($event)" accept="image/*" />
+        </ion-item>
+
+        <!-- Botón para guardar cambios -->
+        <ion-button expand="full" type="submit" [disabled]="noticiaForm.invalid" color="secondary">
+          Guardar cambios
+        </ion-button>
+        
+        <ion-button expand="full" color="warning" (click)="goBack()">Cancelar</ion-button>
+      </form>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
