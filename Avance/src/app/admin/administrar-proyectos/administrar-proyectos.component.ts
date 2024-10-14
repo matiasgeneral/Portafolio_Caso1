@@ -47,9 +47,14 @@ export class AdministrarProyectosComponent implements OnInit {
     this.router.navigate(['/buscador-proyectos']); // Asegúrate de que esta ruta sea correcta
   }
 
-  // Método para editar el Proyecto
-  updateDoc() {
-    this.router.navigate(['/editar-proyecto', this.id]);
+   // Método para ver los detalles  luego editar
+   verDetalles(proyecto: any) {
+    console.log('Detalles del proyecto', proyecto);
+    if (proyecto.id) {
+      this.router.navigate(['/editar-proyectos', proyecto.id]); // Asegúrate de que la ruta sea correcta
+    } else {
+      console.error('ID del proyecto no  es definido');
+    }
   }
 
   // Método para borrar el Proyecto
