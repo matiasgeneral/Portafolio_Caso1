@@ -119,8 +119,13 @@
   
         <!-- Opción para cambiar la imagen -->
         <ion-item>
-          <ion-label position="floating">Seleccionar Imagen</ion-label> <br>
+          <ion-label position="floating">Seleccionar foto carnet</ion-label> <br>
           <input type="file" (change)="onImageSelected($event)" accept="image/*" />
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">Seleccionar Documento</ion-label> <br>
+          <input type="file" (change)="onImageSelected2($event)" accept="image/*" />
         </ion-item>
   
         <!-- Botón para guardar cambios -->

@@ -106,6 +106,20 @@ export class EditarUsuariosComponent implements OnInit {
     }
   }
   
+
+  onImageSelected2(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.usuarioForm.patchValue({
+          documento: e.target.result // Guarda la imagen en el formulario
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
 // Método para regresar a la lista de actividades
 goBack() {
   this.router.navigate(['/buscador-usuarios']); // Asegúrate de que esta ruta sea correcta
