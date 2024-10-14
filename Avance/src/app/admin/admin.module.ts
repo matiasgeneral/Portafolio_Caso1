@@ -19,10 +19,12 @@ import { EditarActividadesComponent } from './editar-actividades/editar-activida
 import { EditarEspaciosPublicosComponent } from './editar-espacios-publicos/editar-espacios-publicos.component';
 import { EditarNoticiasComponent } from './editar-noticias/editar-noticias.component';
 import { EditarProyectosComponent } from './editar-proyectos/editar-proyectos.component';
+// Importa tus componentes aquí
 
 
 @NgModule({
   declarations: [
+    
     AdministrarActividadesComponent,
     AdministrarEspaciosPublicosComponent,
     AdministrarProyectosComponent,
@@ -39,7 +41,7 @@ import { EditarProyectosComponent } from './editar-proyectos/editar-proyectos.co
     EditarEspaciosPublicosComponent,
     EditarNoticiasComponent,
     EditarProyectosComponent,
-    EditarUsuariosComponent,
+    EditarUsuariosComponent
 
 
   ],

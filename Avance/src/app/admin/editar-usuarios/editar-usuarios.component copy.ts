@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FirestoreService } from 'src/app/service/firestore.service';
-import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-editar-usuarios',
@@ -19,13 +18,12 @@ export class EditarUsuariosComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private firestoreService: FirestoreService,
-    private formBuilder: FormBuilder,
-    private alertController: AlertController // Inyectar AlertController
+    private formBuilder: FormBuilder
   ) {
     // Inicializar el FormGroup
     this.usuarioForm = this.formBuilder.group({
-      rut: ['', Validators.required],
-      email: ['', Validators.required],
+      rut: ['', Validators.required],  
+      email: ['', Validators.required],     
       nombre: ['', Validators.required],
       apellidoPaterno: ['', Validators.required],
       apellidoMaterno: ['', Validators.required],
@@ -63,33 +61,25 @@ export class EditarUsuariosComponent implements OnInit {
     });
   }
 
+  // Método para regresar a la lista de usuarios
+  goBack() {
+    this.router.navigate(['/buscador-usuarios']); // Asegúrate de que esta ruta sea correcta
+  }
+
   // Método para guardar los cambios en el usuario
-  async onSubmit() {
+  onSubmit() {
     if (this.usuarioForm.valid) {
       const updatedUser = { ...this.usuarioForm.value, rut: this.rut }; // Agregar RUT a los datos actualizados
       if (this.rut) {
-        try {
-          await this.firestoreService.updateUserDoc(this.rut, updatedUser);
+        this.firestoreService.updateUserDoc(this.rut, updatedUser).then(() => {
           console.log('Usuario actualizado');
-          this.showSuccessAlert(); // Mostrar alerta de éxito
-          this.router.navigate(['/buscador-usuarios']); // Redirigir a la lista de usuarios
-        } catch (error) {
+        }).catch(error => {
           console.error('Error al actualizar el usuario:', error);
-        }
+        });
       } else {
         console.error('RUT es nulo o no es un string');
       }
     }
-  }
-
-  // Método para mostrar la alerta de éxito
-  async showSuccessAlert() {
-    const alert = await this.alertController.create({
-      header: 'Éxito',
-      message: 'Los cambios han sido guardados correctamente.',
-      buttons: ['OK'],
-    });
-    await alert.present();
   }
 
   // Método para manejar la selección de imagen
@@ -105,9 +95,4 @@ export class EditarUsuariosComponent implements OnInit {
       reader.readAsDataURL(file);
     }
   }
-  
-// Método para regresar a la lista de actividades
-goBack() {
-  this.router.navigate(['/buscador-usuarios']); // Asegúrate de que esta ruta sea correcta
-}
 }

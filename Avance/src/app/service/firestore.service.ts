@@ -24,35 +24,35 @@ export class FirestoreService {
 
   updateDoc(data: any, path: string, id: string) {
     console.log('El ID que se pasa es:', id); // Verifica si es un string
-  
+
     // Verificar si el ID es un string
     if (typeof id !== 'string') {
       throw new Error('El ID proporcionado no es un string');
     }
-  
+
     const collection = this.afs.collection(path);
     return collection.doc(id).update(data);
   }
-  
-  
+
+
   // Borrar documento
   deleteDoc(path: string, id: string) {
     const collection = this.afs.collection(path);
     return collection.doc(id).delete();
   }
 
-// Borrar usuario
-deleteUser(path: string, rut: string) {
-  const collection = this.afs.collection(path);
-  return collection.doc(rut).delete();
-}
-deleteUser2(path: string, uid: string) {
-  const collection = this.afs.collection(path);
-  return collection.doc(uid).delete();
-}
+  // Borrar usuario
+  deleteUser(path: string, rut: string) {
+    const collection = this.afs.collection(path);
+    return collection.doc(rut).delete();
+  }
+  deleteUser2(path: string, uid: string) {
+    const collection = this.afs.collection(path);
+    return collection.doc(uid).delete();
+  }
 
 
-  
+
   // Deshabilitar un documento
   deshabilitarDoc(path: string, id: string) {
     const collection = this.afs.collection(path);
@@ -98,5 +98,36 @@ deleteUser2(path: string, uid: string) {
     return this.updateDoc({ tipo: newRole }, path, uid);
   }
 
-}
+  // Método exclusivo para actualizar un documento de usuario
+  updateUserDoc(rut: string, data: any) {
+    if (typeof rut !== 'string' || !rut) {
+      return Promise.reject('El RUT debe ser un string válido');
+    }
+  
+    // Buscar el documento por el campo 'rut'
+    return this.afs.collection('Usuario', ref => ref.where('rut', '==', rut))
+      .get().toPromise()
+      .then(querySnapshot => {
+        if (!querySnapshot || querySnapshot.empty) {
+          throw new Error('No se encontró ningún usuario con el RUT proporcionado');
+        }
+  
+        // Obtenemos el ID del documento
+        const docId = querySnapshot.docs[0].id;
+        
+        // Actualizamos el documento con el ID encontrado
+        return this.afs.collection('Usuario').doc(docId).update(data);
+      })
+      .then(() => {
+        console.log('Usuario actualizado correctamente');
+      })
+      .catch(error => {
+        console.error('Error al actualizar el usuario:', error);
+        throw error;
+      });
+  }
+  
+  }
+  
+
 
