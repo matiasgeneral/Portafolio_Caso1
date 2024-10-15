@@ -13,6 +13,7 @@ import { getFirestore, doc, getDoc } from 'firebase/firestore';
 export class AppComponent implements OnInit {
   isLoggedIn: boolean = false; 
   userRole: string = ''; // Variable para almacenar el rol del usuario
+  userStatus: string = ''; // Nueva variable para almacenar el estado del usuario
   public appPages: { title: string; url: string; icon: string }[] = [];
 
   public accountPages = [
@@ -30,9 +31,9 @@ export class AppComponent implements OnInit {
       this.isLoggedIn = !!user; // Si hay un usuario, isLoggedIn será true
       if (this.isLoggedIn) {
         if (user) {
-          await this.loadUserRole(user.uid); // Carga el rol del usuario
+          await this.loadUserRole(user.uid); // Carga el rol y estado del usuario
         }
-        this.setupPagesByRole(); // Configura las páginas según el rol
+        this.setupPagesByRole(); // Configura las páginas según el rol y estado
         this.router.navigate(['/home']); // Redirige a home si está autenticado
       } else {
         this.resetMenu(); // Resetea el menú si el usuario no está autenticado
@@ -48,6 +49,7 @@ export class AppComponent implements OnInit {
       if (userDoc.exists()) {
         const userData = userDoc.data(); // Obtener todos los datos del usuario
         this.userRole = userData["rol"]; // Asigna el rol del usuario a la variable
+        this.userStatus = userData["estado"]; // Asigna el estado del usuario (activo o pendiente)
         // Imprimir los datos del usuario
         console.log('Datos del usuario:', userData); // Imprime todos los datos del usuario
       } else {
@@ -59,22 +61,28 @@ export class AppComponent implements OnInit {
   }
 
   setupPagesByRole() {
-    switch (this.userRole) {
-      case 'Administrador':
-        this.appPages = this.getAdminPages();
-        break;
-      case 'Coordinador':
-        this.appPages = this.getCoordinadorPages();
-        break;
-      case 'Secretario':
-        this.appPages = this.getSecretaryPages();
-        break;
-      case 'Usuario Registrado':
-        this.appPages = this.getUserRegistradoPages();
-        break;
-      default:
-        this.appPages = this.getUserPages(); // Para usuarios no registrados o roles desconocidos
-        break;
+    // Si el usuario está pendiente, mostrar solo el menú de noticias como usuario no registrado
+    if (this.userStatus === 'Pendiente') {
+      this.appPages = this.getUserPages(); // Mostrar solo las opciones básicas
+    } else {
+      // Si el usuario está activo, configurar las páginas según su rol
+      switch (this.userRole) {
+        case 'Administrador':
+          this.appPages = this.getAdminPages();
+          break;
+        case 'Coordinador':
+          this.appPages = this.getCoordinadorPages();
+          break;
+        case 'Secretario':
+          this.appPages = this.getSecretaryPages();
+          break;
+        case 'Usuario Registrado':
+          this.appPages = this.getUserRegistradoPages();
+          break;
+        default:
+          this.appPages = this.getUserPages(); // Para usuarios no registrados o roles desconocidos
+          break;
+      }
     }
   }
 
@@ -89,15 +97,8 @@ export class AppComponent implements OnInit {
       { title: 'Crear actividades', url: './crear-actividades', icon: 'heart' },
       { title: 'Crear Espacios públicos', url: './crear-espacios-publicos', icon: 'flower' },
       { title: 'Crear Proyectos', url: './crear-proyectos', icon: 'star' },
-      { title: ' ', url: '', icon: 'star' },
-
       { title: 'Buscar usuarios (administrar)', url: './buscador-usuarios', icon: 'id-card' },
-      { title: 'Buscar noticias (administrar)', url: './buscador-noticias', icon: 'file-tray-full' },
-      { title: 'Buscador actividades (administrar)', url: './buscador-actividades', icon: 'search' },
-      { title: 'Buscador espacios públicos (administrar)', url: './buscador-espacios-publicos', icon: 'search' },
-      { title: 'Buscador de proyectos (administrar)', url: './buscador-proyectos', icon: 'search' },
-      { title: ' ', url: '', icon: 'star' },
-
+      // Otras opciones...
     ];
   }
 
@@ -106,25 +107,15 @@ export class AppComponent implements OnInit {
       { title: 'Crear noticia', url: './crear-noticias', icon: 'newspaper' },
       { title: 'Crear actividades', url: './crear-actividades', icon: 'heart' },
       { title: 'Crear Espacios públicos', url: './crear-espacios-publicos', icon: 'flower' },
-      { title: 'Crear Proyectos', url: './crear-proyectos', icon: 'star' },
-      { title: ' ', url: '', icon: 'star' },
-
       { title: 'Buscar usuarios (administrar)', url: './buscador-usuarios', icon: 'id-card' },
-      { title: 'Buscar noticias (administrar)', url: './buscador-noticias', icon: 'file-tray-full' },
-      { title: 'Buscador actividades (administrar)', url: './buscador-actividades', icon: 'search' },
-      { title: 'Buscador espacios públicos (administrar)', url: './buscador-espacios-publicos', icon: 'search' },
-      { title: 'Buscador de proyectos (administrar)', url: './buscador-proyectos', icon: 'search' },
-      { title: ' ', url: '', icon: 'star' },
-
-
-      // Agregar otras páginas específicas para Coordinador
+      // Otras opciones...
     ];
   }
 
   getSecretaryPages() {
     return [
       { title: 'Home', url: './home', icon: 'home' },
-      // Agregar otras páginas específicas para Secretario
+      // Otras opciones específicas para Secretario
     ];
   }
 
@@ -134,9 +125,7 @@ export class AppComponent implements OnInit {
       { title: 'Solicitud Certificado Residencia', url: './solicitud-certificado-residencia', icon: 'reader' },
       { title: 'Espacios públicos', url: './visualizacion-espacios-publicos', icon: 'basketball' },
       { title: 'Eventos', url: './visualizacion-eventos', icon: 'star' },
-      { title: 'Noticias', url: './visualizacion-noticias', icon: 'newspaper' },
-
-      // Agregar otras páginas específicas para Usuario Registrado
+      // Otras opciones para Usuario Registrado
     ];
   }
 
@@ -144,16 +133,12 @@ export class AppComponent implements OnInit {
     return [
       { title: 'Home', url: './home', icon: 'home' },
       { title: 'Noticias', url: './visualizacion-noticias', icon: 'newspaper' },
-      // Agregar otras páginas específicas para usuarios no registrados
+      // Otras opciones específicas para usuarios no registrados
     ];
   }
 
   toggleAccountMenu() {
     this.accountMenuOpen = !this.accountMenuOpen;
-  }
-
-  toggleMenu() {
-    console.log('Menu toggled'); 
   }
 
   logout() {
