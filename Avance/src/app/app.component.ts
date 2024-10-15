@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Auth, onAuthStateChanged, signOut } from 'firebase/auth';
-import { Router } from '@angular/router'; 
-import { auth } from './firebase-config'; 
+import { Router } from '@angular/router';
+import { auth } from './firebase-config';
 import { Title } from '@angular/platform-browser';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
 
@@ -11,7 +11,7 @@ import { getFirestore, doc, getDoc } from 'firebase/firestore';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  isLoggedIn: boolean = false; 
+  isLoggedIn: boolean = false;
   userRole: string = ''; // Variable para almacenar el rol del usuario
   userStatus: string = ''; // Nueva variable para almacenar el estado del usuario
   public appPages: { title: string; url: string; icon: string }[] = [];
@@ -23,7 +23,7 @@ export class AppComponent implements OnInit {
 
   public accountMenuOpen = false;
 
-  constructor(private router: Router) { } 
+  constructor(private router: Router) { }
 
   ngOnInit() {
     // Monitorea el estado de autenticación del usuario
@@ -97,7 +97,17 @@ export class AppComponent implements OnInit {
       { title: 'Crear actividades', url: './crear-actividades', icon: 'heart' },
       { title: 'Crear Espacios públicos', url: './crear-espacios-publicos', icon: 'flower' },
       { title: 'Crear Proyectos', url: './crear-proyectos', icon: 'star' },
-      { title: 'Buscar usuarios (administrar)', url: './buscador-usuarios', icon: 'id-card' },
+      { title: 'Crear Eventos', url: './crear-eventos', icon: 'calendar' },
+  
+      // Espacio en blanco (URL no válida)
+      { title: ' ', url: '#', icon: '' }, // Este elemento no dirige a ninguna parte
+
+      { title: 'Buscar usuarios(administrar)', url: './buscador-usuarios', icon: 'id-card' },
+      { title: 'Buscar noticias(administrar)', url: './buscador-noticias', icon: 'file-tray-full' },
+      { title: 'buscador actividades(administrar)', url: './buscador-actividades', icon: 'search' },
+      { title: 'buscador espacios publicos(administrar)', url: './buscador-espacios-publicos', icon: 'search' },
+      { title: 'Buscador de proyectos(administrar)', url: './buscador-proyectos', icon: 'search' },
+
       // Otras opciones...
     ];
   }
@@ -107,7 +117,17 @@ export class AppComponent implements OnInit {
       { title: 'Crear noticia', url: './crear-noticias', icon: 'newspaper' },
       { title: 'Crear actividades', url: './crear-actividades', icon: 'heart' },
       { title: 'Crear Espacios públicos', url: './crear-espacios-publicos', icon: 'flower' },
-      { title: 'Buscar usuarios (administrar)', url: './buscador-usuarios', icon: 'id-card' },
+      { title: 'Crear Proyectos', url: './crear-proyectos', icon: 'star' },
+      { title: 'Crear Eventos', url: './crear-eventos', icon: 'calendar' },
+  
+      // Espacio en blanco (URL no válida)
+      { title: ' ', url: '#', icon: '' }, // Este elemento no dirige a ninguna parte
+
+      { title: 'Buscar usuarios(Coordinador)', url: './buscador-usuarios', icon: 'id-card' },
+      { title: 'Buscar noticias(Coordinador)', url: './buscador-noticias', icon: 'file-tray-full' },
+      { title: 'buscador actividades(Coordinador)', url: './buscador-actividades', icon: 'search' },
+      { title: 'buscador espacios publicos(Coordinador)', url: './buscador-espacios-publicos', icon: 'search' },
+      { title: 'Buscador de proyectos(Coordinador)', url: './buscador-proyectos', icon: 'search' },
       // Otras opciones...
     ];
   }
@@ -143,9 +163,9 @@ export class AppComponent implements OnInit {
 
   logout() {
     signOut(auth).then(() => {
-      this.isLoggedIn = false; 
+      this.isLoggedIn = false;
       this.resetMenu(); // Resetear menú al cerrar sesión
-      this.router.navigate(['/home']); 
+      this.router.navigate(['/home']);
     }).catch((error) => {
       console.error('Error al cerrar sesión:', error);
     });
