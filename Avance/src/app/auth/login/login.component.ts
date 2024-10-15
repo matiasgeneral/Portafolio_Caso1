@@ -32,7 +32,8 @@ export class LoginComponent {
 
       if (result) {
         await this.presentToast('Inicio de sesión exitoso', 'success');
-        // this.createPersonalData(); // Si necesitas crear datos personales, descomenta esta línea.
+        // Forzar la recarga de la página para actualizar el menú y la interfaz
+        window.location.reload();
       } else {
         await this.presentToast('Inicio de sesión fallido', 'danger');
       }
