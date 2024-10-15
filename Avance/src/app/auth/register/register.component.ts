@@ -76,8 +76,8 @@ export class RegisterComponent {
           uid,
           foto: fotoCarnetUrl,
           documento: documentoResidenciaUrl,
-          rol: 'usuario',
-          estado: 'pendiente' // Agregar estado pendiente para que el administrador lo apruebe
+          rol: 'Usuario Registrado',
+          estado: 'Pendiente' // Agregar estado pendiente para que el administrador lo apruebe
         };
 
         await this.database.createDoc(data, path, uid);

@@ -93,17 +93,13 @@ export class FirestoreService {
     return collection.add(data);  // Esto genera automáticamente el ID único
   }
 
-  // Método para cambiar el rol de un usuario
-  updateUserRole(uid: string, newRole: string, path: string) {
-    return this.updateDoc({ tipo: newRole }, path, uid);
-  }
 
   // Método exclusivo para actualizar un documento de usuario
   updateUserDoc(rut: string, data: any) {
     if (typeof rut !== 'string' || !rut) {
       return Promise.reject('El RUT debe ser un string válido');
     }
-  
+
     // Buscar el documento por el campo 'rut'
     return this.afs.collection('Usuario', ref => ref.where('rut', '==', rut))
       .get().toPromise()
@@ -111,10 +107,10 @@ export class FirestoreService {
         if (!querySnapshot || querySnapshot.empty) {
           throw new Error('No se encontró ningún usuario con el RUT proporcionado');
         }
-  
+
         // Obtenemos el ID del documento
         const docId = querySnapshot.docs[0].id;
-        
+
         // Actualizamos el documento con el ID encontrado
         return this.afs.collection('Usuario').doc(docId).update(data);
       })
@@ -126,8 +122,23 @@ export class FirestoreService {
         throw error;
       });
   }
-  
+  // Obtener rol de usuario por RUT
+  getUserRole(rut: string): Promise<string | null> {
+    return this.afs.collection('Usuario', ref => ref.where('rut', '==', rut)).get().toPromise()
+      .then(querySnapshot => {
+        if (querySnapshot && !querySnapshot.empty) {
+          const userData = querySnapshot.docs[0].data() as { role?: string };
+          return userData.role || null;  // Devuelve el rol o null si no existe
+        }
+        return null;  // Si no se encuentra el usuario
+      })
+      .catch(error => {
+        console.error('Error al obtener el rol del usuario:', error);
+        throw error;
+      });
   }
-  
+
+}
+
 
 

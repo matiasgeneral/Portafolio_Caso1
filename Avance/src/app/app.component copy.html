@@ -7,12 +7,48 @@
           <ion-note>Bienvenido</ion-note>
 
           <!-- Menú para todos los roles -->
-          <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages">
-            <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" routerLinkActive="selected">
+          <ion-menu-toggle auto-hide="false" *ngFor="let p of userPages">
+            <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false"
+              routerLinkActive="selected">
               <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
               <ion-label>{{ p.title }}</ion-label>
             </ion-item>
           </ion-menu-toggle>
+
+                   <!-- Menú para los usuarios registrados -->
+                   <ng-container *ngIf="(userRole === 'Usuario Registrado' ) && userStatus === 'Activo'">
+                    <ion-menu-toggle auto-hide="false" *ngFor="let p of userRegistradoPages">
+                      <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false"
+                        routerLinkActive="selected">
+                        <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
+                        <ion-label>{{ p.title }}</ion-label>
+                      </ion-item>
+                    </ion-menu-toggle>
+                  </ng-container>
+
+
+
+          <!-- Menú para el Administrador y Coordinador (acceso total) -->
+          <ng-container *ngIf="(userRole === 'Administrador' || userRole === 'Coordinador') && userStatus === 'Activo'">
+            <ion-menu-toggle auto-hide="false" *ngFor="let p of adminPages">
+              <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false"
+                routerLinkActive="selected">
+                <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
+                <ion-label>{{ p.title }}</ion-label>
+              </ion-item>
+            </ion-menu-toggle>
+          </ng-container>
+
+          <!-- Menú para el Secretario (acceso limitado) -->
+          <ng-container *ngIf="userRole === 'Secretario' && userStatus === 'Activo'">
+            <ion-menu-toggle auto-hide="false" *ngFor="let p of secretaryPages">
+              <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false"
+                routerLinkActive="selected">
+                <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
+                <ion-label>{{ p.title }}</ion-label>
+              </ion-item>
+            </ion-menu-toggle>
+          </ng-container>
 
           <!-- Menú desplegable para Register y Login, visible solo si NO está logueado -->
           <ion-list *ngIf="!isLoggedIn">
@@ -50,7 +86,6 @@
         <ion-note><br>Capstone 2024 DuocUC</ion-note>
       </ion-content>
     </ion-menu>
-
     <ion-router-outlet id="main-content"></ion-router-outlet>
   </ion-split-pane>
 </ion-app>
