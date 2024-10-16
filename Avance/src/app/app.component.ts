@@ -93,12 +93,15 @@ export class AppComponent implements OnInit {
 
   getAdminPages() {
     return [
+
+      { title: 'Home', url: './home', icon: 'home' },
       { title: 'Noticias', url: './visualizacion-noticias', icon: 'newspaper' },
       { title: 'Espacios públicos', url: './visualizacion-espacios-publicos', icon: 'basketball' },
       { title: 'Eventos', url: './visualizacion-eventos', icon: 'star' },
-
-
+      { title: 'Proyectos', url: './visualizacion-proyectos', icon: 'star' },
+      
       { title: ' ', url: '#', icon: '' }, // Este elemento no dirige a ninguna parte
+
       { title: 'Crear noticia', url: './crear-noticias', icon: 'newspaper' },
       { title: 'Crear actividades', url: './crear-actividades', icon: 'heart' },
       { title: 'Crear Espacios públicos', url: './crear-espacios-publicos', icon: 'flower' },
@@ -120,9 +123,12 @@ export class AppComponent implements OnInit {
 
   getCoordinadorPages() {
     return [
+    { title: 'Home', url: './home', icon: 'home' },
       { title: 'Noticias', url: './visualizacion-noticias', icon: 'newspaper' },
       { title: 'Espacios públicos', url: './visualizacion-espacios-publicos', icon: 'basketball' },
       { title: 'Eventos', url: './visualizacion-eventos', icon: 'star' },
+      { title: 'Proyectos', url: './visualizacion-proyectos', icon: 'star' },
+      
       { title: ' ', url: '#', icon: '' }, // Este elemento no dirige a ninguna parte
       { title: 'Crear noticia', url: './crear-noticias', icon: 'newspaper' },
       { title: 'Crear actividades', url: './crear-actividades', icon: 'heart' },
@@ -148,6 +154,8 @@ export class AppComponent implements OnInit {
       { title: 'Noticias', url: './visualizacion-noticias', icon: 'newspaper' },
       { title: 'Espacios públicos', url: './visualizacion-espacios-publicos', icon: 'basketball' },
       { title: 'Eventos', url: './visualizacion-eventos', icon: 'star' },
+      { title: 'Proyectos', url: './visualizacion-proyectos', icon: 'star' },
+      
       { title: ' ', url: '#', icon: '' }, // Este elemento no dirige a ninguna parte
       { title: 'Solicitudes de registros usuarios nuevos', url: './lista-registros-usuarios', icon: 'person-add' },
       { title: 'Solicitudes espacios publicos', url: './lista-solicitudes-espacios-publicos', icon: 'list' },
@@ -164,6 +172,8 @@ export class AppComponent implements OnInit {
       { title: 'Noticias', url: './visualizacion-noticias', icon: 'newspaper' },
       { title: 'Espacios públicos', url: './visualizacion-espacios-publicos', icon: 'basketball' },
       { title: 'Eventos', url: './visualizacion-eventos', icon: 'star' },
+      { title: 'Proyectos', url: './visualizacion-proyectos', icon: 'star' },
+
       { title: 'Solicitud Certificado Residencia', url: './solicitud-certificado-residencia', icon: 'reader' },
       // Otras opciones para Usuario Registrado
     ];

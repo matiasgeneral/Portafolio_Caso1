@@ -11,6 +11,7 @@ import { PostulacionEventosComponent } from './postulacion-eventos/postulacion-e
 import { VisualizacionProyectosComponent } from './visualizacion-proyectos/visualizacion-proyectos.component';
 import { PostulacionProyectosComponent } from './postulacion-proyectos/postulacion-proyectos.component';
 import { VisualizacionNoticiasComponent } from './visualizacion-noticias/visualizacion-noticias.component';
+import { NoticiaComponent } from './noticia/noticia.component';
 
 
 @NgModule({
@@ -23,6 +24,7 @@ import { VisualizacionNoticiasComponent } from './visualizacion-noticias/visuali
     VisualizacionProyectosComponent,
     PostulacionProyectosComponent,
     VisualizacionNoticiasComponent,
+    NoticiaComponent,
     
     
 

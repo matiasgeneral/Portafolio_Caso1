@@ -12,7 +12,10 @@ export class ListaRegistrosUsuariosComponent implements OnInit {
   users: any[] = [];  // Lista de usuarios
   loading: boolean = true; // Indicador de carga
 
-  constructor(private firestoreService: FirestoreService, private router: Router, private alertController: AlertController) {}
+  constructor(
+    private firestoreService: FirestoreService, 
+    private router: Router, 
+    private alertController: AlertController) {}
 
   ngOnInit() {
     // Obtener solo los usuarios con estado 'pendiente' de la colección 'Usuario'
