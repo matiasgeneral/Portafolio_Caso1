@@ -18,7 +18,7 @@ const routes: Routes = [
     component:EnvioSolicitudesProyectosComponent,
   },
   {
-    path: 'gestion-nuevos-usuarios',
+    path: 'gestion-nuevos-usuarios/:rut',
     component:GestionNuevosUsuariosComponent,
   },
   {

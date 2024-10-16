@@ -10,9 +10,9 @@
 <ion-content>
   <h2 style="text-align: center;">Noticias Vecinales</h2>
   <br>
-
   <ng-container *ngIf="noticias && noticias.length; else noNoticias">
-    <ion-card *ngFor="let noticia of noticias" style="max-width: 500px; margin: 0 auto; padding: 20px;">
+    <ion-card *ngFor="let noticia of noticias" 
+              style="max-width: 500px; margin: 0 auto; padding: 20px 0 20px 0; margin-bottom: 20px;">
       <img *ngIf="noticia.image" [src]="noticia.image" style="width: 100%; height: auto; object-fit: cover;" />
       <ion-card-header>
         <ion-card-title>{{ noticia.title | titlecase }}</ion-card-title>
@@ -21,13 +21,13 @@
 
       <ion-card-content>
         <p><strong>Detalles:</strong> {{ noticia.details }}</p>
-        <p><strong>Fecha:</strong> {{ formatDate(noticia.date) }}</p> <!-- Cambia aqui 'fechaCreacion' por 'date' -->
+        <p><strong>Fecha:</strong> {{ formatDate(noticia.date) }}</p>
       </ion-card-content>
 
       <ion-button expand="block" [routerLink]="['/visualizacion-noticias', noticia.id]">Ver noticia</ion-button>
     </ion-card>
   </ng-container>
-
+  
   <ng-template #noNoticias>
     <ion-card style="max-width: 500px; margin: 0 auto; padding: 20px;">
       <ion-card-content>

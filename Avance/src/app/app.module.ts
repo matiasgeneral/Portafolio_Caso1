@@ -21,6 +21,7 @@ import { UserModule } from './user/user.module';
 import { AdminModule } from './admin/admin.module';
 import { FormsModule } from '@angular/forms';
 import { CoordinadorModule } from './coordinador/coordinador.module';
+import { SecretarioModule } from './secretario/secretario.module';
 
 
 
@@ -38,6 +39,7 @@ import { CoordinadorModule } from './coordinador/coordinador.module';
         UserModule,
         AdminModule,
         CoordinadorModule,
+        SecretarioModule
       ],
   
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy  }, { provide: LOCALE_ID, useValue: 'es-CL' },

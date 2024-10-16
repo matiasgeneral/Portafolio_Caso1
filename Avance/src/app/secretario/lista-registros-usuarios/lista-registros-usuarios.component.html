@@ -1,3 +1,38 @@
-<p>
-  lista-registros-usuarios works!
-</p>
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Lista de usuarios nuevos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card class="custom-card">
+    <ion-card-header>
+      <ion-card-title>Lista de usuarios nuevos</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-list>
+        <ion-item *ngFor="let user of users">
+          <ion-thumbnail slot="start">
+            <img *ngIf="user.foto" [src]="user.foto" alt="Imagen de {{ user.foto }}" class="media-image" />
+          </ion-thumbnail>
+
+          <ion-label>
+            <strong>Nombre Completo:</strong> {{ user.nombre | titlecase }} {{ user.apellidoPaterno | titlecase }} {{ user.apellidoMaterno | titlecase }}<br />
+            <strong>RUT:</strong> {{ user.rut }}<br />
+            <strong>Rol:</strong> {{ user.rol }}<br />
+            <strong>Estado de la cuenta:</strong> {{ user.estado }}<br />
+          </ion-label>
+
+          <ion-button (click)="verDetalles(user)" fill="outline" color="secondary" slot="end">
+            <ion-icon slot="start" name="eye"></ion-icon>
+            Editar
+          </ion-button>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

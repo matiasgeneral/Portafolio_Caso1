@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { firstValueFrom, Observable } from 'rxjs';
+import { WhereFilterOp } from '@angular/fire/firestore';
 
 
 @Injectable({
@@ -42,10 +43,13 @@ export class FirestoreService {
   }
 
   // Borrar usuario
-  deleteUser(path: string, rut: string) {
+  /*  
+   deleteUser(path: string, rut: string) {
     const collection = this.afs.collection(path);
     return collection.doc(rut).delete();
   }
+  */
+
   deleteUser2(path: string, uid: string) {
     const collection = this.afs.collection(path);
     return collection.doc(uid).delete();
@@ -137,7 +141,10 @@ export class FirestoreService {
         throw error;
       });
   }
-
+  // Método para obtener documentos con una condición específica
+  getDocsWithCondition<T>(collection: string, field: string, operator: WhereFilterOp, value: any): Observable<T[]> {
+    return this.afs.collection<T>(collection, (ref) => ref.where(field, operator, value)).valueChanges();
+  }
 }
 
 

@@ -11,7 +11,7 @@ import { ListaRegistrosUsuariosComponent } from './lista-registros-usuarios/list
 import { ListaSolicitudesEspaciosPublicosComponent } from './lista-solicitudes-espacios-publicos/lista-solicitudes-espacios-publicos.component';
 import { ListaSolicitudesProyectosComponent } from './lista-solicitudes-proyectos/lista-solicitudes-proyectos.component';
 import { VerificacionSolicitudesProyectosComponent } from './verificacion-solicitudes-proyectos/verificacion-solicitudes-proyectos.component';
-
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -19,17 +19,21 @@ import { VerificacionSolicitudesProyectosComponent } from './verificacion-solici
     AsignacionSolicitudesEspaciosPublicosComponent,
     EnvioSolicitudesProyectosComponent,
     GestionNuevosUsuariosComponent,
+
     ListaRegistrosUsuariosComponent,
     ListaSolicitudesEspaciosPublicosComponent,
     ListaSolicitudesProyectosComponent,
+    
     VerificacionSolicitudesProyectosComponent,
     
   ],
   imports: [
     CommonModule,
     SecretarioRoutingModule,
-    IonicModule,
-    FormsModule
+    IonicModule ,
+    FormsModule, // Formularios Template-Driven
+    ReactiveFormsModule // Formularios Reactivos (necesario para formGroup)
+
   ]
 })
 export class SecretarioModule { }

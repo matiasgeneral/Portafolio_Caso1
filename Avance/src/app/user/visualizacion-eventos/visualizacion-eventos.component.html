@@ -12,7 +12,7 @@
   <br>
 
   <ng-container *ngIf="eventos && eventos.length; else noEventos">
-    <ion-card *ngFor="let evento of eventos" style="max-width: 500px; margin: 0 auto; padding: 20px;">
+    <ion-card *ngFor="let evento of eventos" style="max-width: 500px; margin: 0 auto; padding: 20px 0 20px 0; margin-bottom: 20px;">
       <img *ngIf="evento.image" [src]="evento.image" style="width: 100%; height: auto; object-fit: cover;" />
       <ion-card-header>
         <ion-card-title>{{ evento.titulo | titlecase }}</ion-card-title>
