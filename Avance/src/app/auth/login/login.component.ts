@@ -68,3 +68,4 @@ export class LoginComponent {
     return this.firestore.createDoc(data, path, this.firestore.getId());
   }
 }
+
