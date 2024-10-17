@@ -1,0 +1,32 @@
+.certificate-card {
+    background-color: var(--ion-card-background);
+    color: var(--ion-text-color);
+    --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    margin: 20px;
+  }
+  
+  .card-title {
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: var(--ion-color-primary);
+  }
+  
+  .label-bold {
+    font-weight: bold;
+    color: var(--ion-text-color);
+  }
+  
+  ion-note {
+    color: var(--ion-text-color-shade);
+  }
+  
+  ion-button {
+    --background: var(--ion-color-primary);
+    --color: var(--ion-color-light);
+    --border-radius: 10px;
+    --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    --padding-start: 15px;
+    --padding-end: 15px;
+  }
+  

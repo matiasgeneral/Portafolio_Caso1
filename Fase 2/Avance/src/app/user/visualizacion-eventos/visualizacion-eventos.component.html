@@ -1,0 +1,39 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Listado de Eventos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <h2 style="text-align: center;">Eventos Vecinales</h2>
+  <br>
+
+  <ng-container *ngIf="eventos && eventos.length; else noEventos">
+    <ion-card *ngFor="let evento of eventos" style="max-width: 500px; margin: 0 auto; padding: 20px 0 20px 0; margin-bottom: 20px;">
+      <img *ngIf="evento.image" [src]="evento.image" style="width: 100%; height: auto; object-fit: cover;" />
+      <ion-card-header>
+        <ion-card-title>{{ evento.titulo | titlecase }}</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <p><strong>Descripción:</strong> {{ evento.descripcion }}</p>
+ 
+        <p><strong>Fecha del Evento:</strong> {{ formatDate(evento.fechaEvento) }}</p>
+        <p><strong>Cantidad Máxima:</strong> {{ evento.cantidadMax }}</p>
+      </ion-card-content>
+
+      <ion-button expand="block" [routerLink]="['/postulacion-eventos', evento.id]">Postular a Evento</ion-button>
+    </ion-card>
+  </ng-container>
+
+  <ng-template #noEventos>
+    <ion-card style="max-width: 500px; margin: 0 auto; padding: 20px;">
+      <ion-card-content>
+        <h3>No hay eventos disponibles.</h3>
+      </ion-card-content>
+    </ion-card>
+  </ng-template>
+</ion-content>
