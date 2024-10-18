@@ -1,54 +1,135 @@
 import { Injectable } from '@angular/core';
-import { jsPDF } from 'jspdf';
+import { Filesystem, Directory } from '@capacitor/filesystem';
+import * as pdfMake from 'pdfmake/build/pdfmake';
+import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+import { Platform } from '@ionic/angular';
+import { TDocumentDefinitions } from 'pdfmake/interfaces';
+import { AlertController } from '@ionic/angular'; // Importar el controlador de alertas
 
 @Injectable({
   providedIn: 'root',
 })
 export class PdfService {
-  constructor() {}
+  constructor(private platform: Platform, private alertController: AlertController) {
+    // Inicializar las fuentes para PDFMake
+    (pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
+  }
 
-  generateCertificate(userData: any) {
-    const doc = new jsPDF();
-
-    // Formato del nombre completo
+  async generateCertificate(userData: any) {
     const fullName = `${userData.nombre} ${userData.apellidoPaterno} ${userData.apellidoMaterno}`;
+    const currentDate = new Date();
+    const formattedDate = this.formatDate(currentDate); // Formatear la fecha actual
+    const formattedTime = this.formatTime(currentDate); // Formatear la hora actual
 
-    // Configurar fuente y estilos
-    doc.setFont('Helvetica', 'bold');
-    
-    // Título del certificado
-    doc.setFontSize(22);
-    doc.text('Certificado de Residencia', 105, 30, { align: 'center' });
+    // Definición del documento PDF
+    const documentDefinition: TDocumentDefinitions = {
+      content: [
+        { text: 'Certificado de Residencia', style: 'header' },
+        { text: 'Junta de Vecinos San Bernardo', style: 'subheader', margin: [0, 10, 0, 20] }, // Agregar la junta de vecinos
+        { text: `\nNombre completo: ${fullName}`, style: 'details' },
+        { text: `Dirección: ${userData.direccion}`, style: 'details' },
+        { text: `RUT: ${userData.rut}`, style: 'details' },
+        { text: `Fecha de emisión: ${formattedDate}`, style: 'details', margin: [0, 10, 0, 10] },
+        {
+          text:
+            'Este certificado acredita que el usuario mencionado reside en la dirección indicada, ' +
+            'y puede utilizar este documento para los fines que estime convenientes.',
+          margin: [0, 10, 0, 10],
+        },
+        {
+          text: '\n_____Junta de Vecinos de San Bernardo_____',
+          alignment: 'center',
+          margin: [0, 30, 0, 5],
+        },
+        { text: 'Firma del Responsable', alignment: 'center', margin: [0, 0, 0, 20] },
+      ],
+      styles: {
+        header: {
+          fontSize: 24,
+          bold: true,
+          alignment: 'center',
+          margin: [0, 20, 0, 10],
+        },
+        subheader: {
+          fontSize: 18,
+          bold: true,
+          alignment: 'center',
+          margin: [0, 0, 0, 10],
+        },
+        details: {
+          fontSize: 14,
+          margin: [0, 5, 0, 5],
+        },
+      },
+      pageMargins: [40, 60, 40, 60], // Márgenes de la página
+    };
 
-    // Subtítulo
-    doc.setFontSize(16);
-    doc.setFont('Helvetica', 'normal');
-    doc.text('Por medio de la presente, se certifica que:', 20, 50);
+    // Crear el PDF usando PDFMake
+    const pdfDocGenerator = pdfMake.createPdf(documentDefinition);
 
-    // Información del usuario (nombre y dirección)
-    doc.setFontSize(14);
-    doc.text(`Nombre completo: ${fullName}`, 20, 70);
-    doc.text(`Dirección: ${userData.direccion}`, 20, 80);
-    doc.text(`RUT: ${userData.rut}`, 20, 90);
+    // Manejo para plataformas móviles o web
+    if (this.platform.is('hybrid')) {
+      // En Android/iOS, guardar el PDF en el dispositivo
+      pdfDocGenerator.getBase64(async (data) => {
+        try {
+          const fileName = `certificado_residencia_${fullName.replace(/\s+/g, '_')}_${formattedDate}_${formattedTime}.pdf`; // Crear el nombre del archivo
+          await this.savePdfToDevice(data, fileName);
+          console.log('PDF guardado correctamente.');
 
-    // Fecha de emisión
-    doc.text(`Fecha de emisión: ${new Date().toLocaleDateString()}`, 20, 100);
+          // Mostrar alerta solo en Android
+          if (this.platform.is('android')) {
+            this.showDownloadAlert();
+          }
+        } catch (error) {
+          console.error('Error al guardar el PDF:', error);
+        }
+      });
+    } else {
+      // En la web, descargar el archivo directamente
+      const fileName = `certificado_residencia_${fullName.replace(/\s+/g, '_')}_${formattedDate}_${formattedTime}.pdf`; // Crear el nombre del archivo
+      pdfDocGenerator.download(fileName);
+    }
+  }
 
-    // Texto principal con ajuste de líneas
-    doc.setFontSize(12);
-    const contentText = 
-      `Este documento certifica que el usuario mencionado reside en la dirección indicada, ` +
-      `pudiendo utilizar este documento para los fines que estime conveniente.`;
+  // Guardar PDF en el dispositivo móvil
+  private async savePdfToDevice(pdfData: string, fileName: string) {
+    try {
+      const result = await Filesystem.writeFile({
+        path: fileName,
+        data: pdfData,
+        directory: Directory.Documents,
+        recursive: true,
+      });
+      console.log('PDF guardado en:', result.uri);
+    } catch (error) {
+      console.error('Error al guardar el archivo en el dispositivo:', error);
+      throw new Error('No se pudo guardar el PDF en el dispositivo.');
+    }
+  }
 
-    // Ajuste de texto largo dentro de los márgenes (170 es el ancho máximo en mm)
-    doc.text(contentText, 20, 120, { maxWidth: 170 });
+  // Método para mostrar alerta
+  private async showDownloadAlert() {
+    const alert = await this.alertController.create({
+      header: 'PDF Guardado',
+      message: 'Recuerda ver la carpeta Documentos para ver el archivo, la carpeta donde se guarda su certificado de residencia puede variar dependiendo del dispositivo.',
+      buttons: ['OK'],
+    });
 
-    // Pie de página (firma o sección adicional)
-    doc.setFontSize(14);
-    doc.text('_________________________', 105, 150, { align: 'center' });
-    doc.text('Firma del Responsable', 105, 160, { align: 'center' });
+    await alert.present();
+  }
 
-    // Guardar el PDF con un nombre dinámico
-    doc.save(`certificado_residencia_${fullName}.pdf`);
+  // Formatear la fecha en 'dd-mm-yyyy'
+  private formatDate(date: Date): string {
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Meses son 0-11
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+  }
+
+  // Formatear la hora en 'hh-mm'
+  private formatTime(date: Date): string {
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    return `${hours}-${minutes}`;
   }
 }

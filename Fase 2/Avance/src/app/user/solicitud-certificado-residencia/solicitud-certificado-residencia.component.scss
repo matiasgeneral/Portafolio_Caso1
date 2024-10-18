@@ -1,32 +1,59 @@
 .certificate-card {
-    background-color: var(--ion-card-background);
-    color: var(--ion-text-color);
-    --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 15px;
-    margin: 20px;
-  }
-  
-  .card-title {
-    font-size: 1.6rem;
-    font-weight: bold;
-    color: var(--ion-color-primary);
-  }
-  
-  .label-bold {
-    font-weight: bold;
-    color: var(--ion-text-color);
-  }
-  
-  ion-note {
-    color: var(--ion-text-color-shade);
-  }
-  
-  ion-button {
-    --background: var(--ion-color-primary);
-    --color: var(--ion-color-light);
-    --border-radius: 10px;
-    --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    --padding-start: 15px;
-    --padding-end: 15px;
-  }
-  
+  background-color: var(--ion-card-background);
+  color: var(--ion-text-color);
+  --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  margin: 20px;
+  padding: 20px; /* Añadir padding para mejorar la separación interna */
+}
+
+.card-title {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: var(--ion-color-primary);
+}
+
+.label-bold {
+  font-weight: bold;
+  color: var(--ion-text-color);
+}
+
+ion-note {
+  color: var(--ion-text-color-shade);
+}
+
+.button-container {
+  margin-top: 20px; /* Añadir margen superior para separar del contenido */
+}
+
+ion-button {
+  --background: var(--ion-color-primary);
+  --color: var(--ion-color-light);
+  --border-radius: 10px;
+  --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  --padding-start: 15px;
+  --padding-end: 15px;
+}
+
+/* Estilos para mensajes de estado */
+.pdf-status-message {
+  margin-top: 15px;
+  font-size: 16px;
+  text-align: center;
+}
+
+/* Estilos para el mensaje de éxito */
+.success {
+  color: green;
+}
+
+/* Estilos para el mensaje de error */
+.error {
+  color: red;
+}
+
+/* Animación suave para el botón al ser clicado */
+ion-button:active {
+  transform: scale(0.95);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}

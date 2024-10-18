@@ -24,6 +24,12 @@
       <div class="button-container">
         <ion-button expand="block" color="primary" (click)="generatePDF()">Generar Certificado PDF</ion-button>
       </div>
+      
+
+      <!-- Mensaje de éxito o error -->
+      <div *ngIf="pdfGenerationStatus" class="pdf-status-message" [ngClass]="{ 'success': pdfGenerationStatus.success, 'error': !pdfGenerationStatus.success }">
+        {{ pdfGenerationStatus.message }}
+      </div>
     </ion-card-content>
   </ion-card>
 </ion-content>
