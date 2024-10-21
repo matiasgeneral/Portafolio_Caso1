@@ -18,3 +18,11 @@ pass: 123456789
 usuario no aceptado, menú limitado hasta que no se apruebe su estado de usuario 
 usuario2@usuairo.cl
 pass: 123456789
+
+Cuenta administrador
+admin@admin.cl
+pass: 123456789
+
+Cuenta secretario
+secretario@secretario.cl
+pass: 123456789
