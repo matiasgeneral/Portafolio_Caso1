@@ -1,0 +1,20 @@
+/////////////21-10-2024/////////////////////////////////
+
+Se ha realizado una actualización a la base de datos, por lo cual se debe utilizar la ultima versión de la apk(mientras que la versión web funciona sin inconvenientes)
+
+https://sistema-unidad-terrritorial.web.app/#/login
+
+ultima apk( app-debug-21-10-2024 .apk)
+
+-Se actualizo la base de datos, para mejorar la sintaxis,
+
+-Recordar que la creación de usuarios o registro después de completarse debe ser aprobada por un rol de administrador, coordinador o secretario para que pueda acceder a las funcionalidades correspondientes.
+
+ejemplo:
+usuario ya aceptado previamente, puede acceder a las funciones del usuario registrado
+usuario@usuairo.cl
+pass: 123456789
+
+usuario no aceptado, menú limitado hasta que no se apruebe su estado de usuario 
+usuario2@usuairo.cl
+pass: 123456789
