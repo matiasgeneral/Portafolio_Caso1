@@ -58,7 +58,6 @@ const routes: Routes = [
     path: 'buscador-noticias',
     component: BuscadorNoticiasComponent
   },
-
   {
     path: 'editar-actividades/:id',
     component: EditarActividadesComponent
@@ -79,8 +78,6 @@ const routes: Routes = [
     path: 'editar-usuarios/:id',
     component: EditarUsuariosComponent
   },
-
-  
 
 ];
 

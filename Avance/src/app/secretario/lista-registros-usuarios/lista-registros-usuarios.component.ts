@@ -19,7 +19,7 @@ export class ListaRegistrosUsuariosComponent implements OnInit {
 
   ngOnInit() {
     // Obtener solo los usuarios con estado 'pendiente' de la colección 'Usuario'
-    this.firestoreService.getDocsWithCondition<any>('Usuario', 'estado', '==', 'Pendiente')
+    this.firestoreService.getDocsWithCondition<any>('usuarios', 'estado', '==', 'Pendiente')
       .subscribe(
         (data: any[]) => {
           this.users = data;  // Guardar los usuarios en la variable 'users'
@@ -34,11 +34,11 @@ export class ListaRegistrosUsuariosComponent implements OnInit {
   }
 
 // Método para ver los detalles de un usuario
-verDetalles(usuario: any) {
-  console.log('Detalles del usuario:', usuario);
+verDetalles(usuarios: any) {
+  console.log('Detalles del usuario:', usuarios);
   // Asegúrate de que `usuario.rut` existe antes de navegar
-  if (usuario.rut) {
-    this.router.navigate(['/gestion-nuevos-usuarios', usuario.rut]); // Redirige a la pantalla de detalles del usuario, pasando su RUT
+  if (usuarios.rut) {
+    this.router.navigate(['/gestion-nuevos-usuarios', usuarios.rut]); // Redirige a la pantalla de detalles del usuario, pasando su RUT
   } else {
     console.error('RUT de usuario no definido');
   }

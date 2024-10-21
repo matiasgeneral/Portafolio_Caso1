@@ -25,7 +25,7 @@ export class AdministrarUsuariosComponent implements OnInit {
 
       // Aquí puedes hacer una llamada al servicio para obtener la información del usuario
       if (this.rut) {
-        this.firestoreService.getdocs<any>('Usuario').subscribe(users => {
+        this.firestoreService.getdocs<any>('usuarios').subscribe(users => {
           // Filtra el usuario basado en el RUT
           this.userDetails = users.find(user => user.rut === this.rut);
           if (this.userDetails) {
@@ -61,25 +61,25 @@ export class AdministrarUsuariosComponent implements OnInit {
 
 
   
-  // Método para deshabilitar la noticia
+  // Método para deshabilitar 
   deshabilitarDoc() {
     if (this.rut) {
-      this.firestoreService.deshabilitarDoc('Usuario', this.rut).then(() => {
+      this.firestoreService.deshabilitarDoc('usuarios', this.rut).then(() => {
         console.log('Noticia deshabilitada');
-        this.goBack(); // Regresa a la lista de noticias después de deshabilitar
+        this.goBack(); // Regresa a la lista de usuarios después de deshabilitar
       }).catch(error => {
-        console.error('Error al deshabilitar la noticia:', error);
+        console.error('Error al deshabilitar al usuario:', error);
       });
     }
   }
 
   
   // Método para ver los detalles de un usuario y luego editar
-verDetalles(usuario: any) {
-  console.log('Detalles del usuario:', usuario);
+verDetalles(usuarios: any) {
+  console.log('Detalles del usuario:', usuarios);
   // Asegúrate de que `usuario.rut` existe antes de navegar
-  if (usuario.rut) {
-    this.router.navigate(['/editar-usuarios', usuario.rut]); // Redirige a la pantalla de detalles del usuario, pasando su RUT
+  if (usuarios.rut) {
+    this.router.navigate(['/editar-usuarios', usuarios.rut]); // Redirige a la pantalla de detalles del usuario, pasando su RUT
   } else {
     console.error('RUT de usuario no definido');
   }

@@ -45,7 +45,7 @@ export class GestionNuevosUsuariosComponent  implements OnInit {
 
       // Aquí puedes hacer una llamada al servicio para obtener la información del usuario
       if (this.rut) {
-        this.firestoreService.getdocs<any>('Usuario').subscribe(users => {
+        this.firestoreService.getdocs<any>('usuarios').subscribe(users => {
           // Filtra el usuario basado en el RUT
           const userDetails = users.find(user => user.rut === this.rut);
           if (userDetails) {

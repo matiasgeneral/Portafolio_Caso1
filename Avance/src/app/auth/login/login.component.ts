@@ -60,7 +60,7 @@ export class LoginComponent {
       nombre: 'alejandro',
       apellido: 'villa',
       rut: '18148569-1',
-      direccion: 'direccion xupalo',
+      direccion: 'direccion falsa 123',
       telefono: '963256987',
       correoElectronico: 'ale.villa@duocuc.cl',
       rol: 'admin'

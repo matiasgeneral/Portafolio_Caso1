@@ -47,7 +47,7 @@ export class RegisterComponent {
       this.interaction.openLoading('Registrando usuario...');
 
       try {
-        const path = 'Usuario';
+        const path = 'usuarios';
         
         // Verificar si el RUT ya está registrado
         const rutExists = await this.database.checkRUTExists(rut, path);

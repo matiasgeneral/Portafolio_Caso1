@@ -14,7 +14,6 @@ export class CrearActividadesComponent implements OnInit {
   actividadForm: FormGroup;
   selectedFile: File | null = null;
   maxParticipants: number = 300; // Máximo de participantes
-  remainingSpots: number = this.maxParticipants; // Espacios restantes
 
   constructor(
     private firestore: FirestoreService,
@@ -40,19 +39,11 @@ export class CrearActividadesComponent implements OnInit {
       // Asignar la fecha de creación en formato día/mes/año
       actividadData.fechaCreacion = this.getCurrentDate();
 
-
       // Formatear fechaEvento a día/mes/año
       actividadData.fechaEvento = this.formatDate(actividadData.fechaEvento);
 
-      // Calcular los espacios restantes
-      const participantes = Number(actividadData.cantidadMax);
-      this.remainingSpots -= participantes;
-
-      // Verificar si hay suficientes espacios
-      if (this.remainingSpots < 0) {
-        console.log('No hay suficientes espacios disponibles');
-        return;
-      }
+      // Iniciar 'cantidadDisponible' igual a 'cantidadMax'
+      actividadData.cantidadDisponible = actividadData.cantidadMax;
 
       // Generar el UID de la actividad
       const id = this.firestore.getId();
@@ -108,7 +99,6 @@ export class CrearActividadesComponent implements OnInit {
   resetForm() {
     this.actividadForm.reset();
     this.selectedFile = null;
-    this.remainingSpots = this.maxParticipants; // Reiniciar los espacios restantes
   }
 
   getCurrentDate(): string {
@@ -117,12 +107,11 @@ export class CrearActividadesComponent implements OnInit {
     const month = String(today.getMonth() + 1).padStart(2, '0'); // Mes es 0-indexed
     const year = today.getFullYear();
     return `${day}/${month}/${year}`; // Cambiado a formato día/mes/año
-}
+  }
 
-formatDate(dateString: string): string {
+  formatDate(dateString: string): string {
     // Asumir que dateString está en formato 'YYYY-MM-DD'
     const parts = dateString.split('-');
     return `${parts[2]}/${parts[1]}/${parts[0]}`; // Cambiado a formato 'DD/MM/YYYY'
-}
-
+  }
 }

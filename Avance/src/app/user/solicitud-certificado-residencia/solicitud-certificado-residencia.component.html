@@ -1,18 +1,35 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
-    <ion-title>Certificados de residencia</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content class="ion-padding">
+  <ion-card class="certificate-card">
+    <ion-card-header class="ion-text-center">
+      <ion-card-title class="card-title">Solicitud de Certificado de Residencia</ion-card-title>
+    </ion-card-header>
 
+    <ion-card-content>
+      <ion-list lines="full" class="certificate-details">
+        <ion-item>
+          <ion-label class="label-bold">Nombre completo:</ion-label>
+          <ion-note>{{ userData.nombre }} {{ userData.apellidoPaterno }} {{ userData.apellidoMaterno }}</ion-note>
+        </ion-item>
+        <ion-item>
+          <ion-label class="label-bold">Dirección:</ion-label>
+          <ion-note>{{ userData.direccion }}</ion-note>
+        </ion-item>
+        <ion-item>
+          <ion-label class="label-bold">RUT:</ion-label>
+          <ion-note>{{ userData.rut }}</ion-note>
+        </ion-item>
+      </ion-list>
 
-<ion-content>
-  <p>
-    Solicita tu certificado de residencia
-  </p>
-  <ion-button href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfpKoqg8z_USCc2PTthSYqajR98CKKgj2HBg&s" target="_blank">
-    Solicitar certificado
-  </ion-button>
+      <!-- Botón para generar el PDF -->
+      <div class="button-container">
+        <ion-button expand="block" color="primary" (click)="generatePDF()">Generar Certificado PDF</ion-button>
+      </div>
+      
+
+      <!-- Mensaje de éxito o error -->
+      <div *ngIf="pdfGenerationStatus" class="pdf-status-message" [ngClass]="{ 'success': pdfGenerationStatus.success, 'error': !pdfGenerationStatus.success }">
+        {{ pdfGenerationStatus.message }}
+      </div>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

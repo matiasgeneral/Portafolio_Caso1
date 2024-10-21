@@ -36,7 +36,7 @@ export class AuthenticationService {
   async getUserRole(uid: string): Promise<string | null> {
     try {
       const userDoc = await firstValueFrom(
-        this.firestoreService.getDoc<any>('Usuario', uid)
+        this.firestoreService.getDoc<any>('usuarios', uid)
       );
       return userDoc?.tipo || null; // Devuelve el rol o null si no existe
     } catch (error) {
@@ -50,7 +50,7 @@ export class AuthenticationService {
     try {
       await this.firestoreService.updateDoc(
         { tipo: newRole }, // Actualiza el campo 'tipo' con el nuevo rol
-        'Usuario',
+        'usuarios',
         uid
       );
       console.log('Rol de usuario actualizado correctamente');

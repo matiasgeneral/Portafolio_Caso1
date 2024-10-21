@@ -105,7 +105,7 @@ export class FirestoreService {
     }
 
     // Buscar el documento por el campo 'rut'
-    return this.afs.collection('Usuario', ref => ref.where('rut', '==', rut))
+    return this.afs.collection('usuarios', ref => ref.where('rut', '==', rut))
       .get().toPromise()
       .then(querySnapshot => {
         if (!querySnapshot || querySnapshot.empty) {
@@ -116,7 +116,7 @@ export class FirestoreService {
         const docId = querySnapshot.docs[0].id;
 
         // Actualizamos el documento con el ID encontrado
-        return this.afs.collection('Usuario').doc(docId).update(data);
+        return this.afs.collection('usuarios').doc(docId).update(data);
       })
       .then(() => {
         console.log('Usuario actualizado correctamente');
@@ -128,7 +128,7 @@ export class FirestoreService {
   }
   // Obtener rol de usuario por RUT
   getUserRole(rut: string): Promise<string | null> {
-    return this.afs.collection('Usuario', ref => ref.where('rut', '==', rut)).get().toPromise()
+    return this.afs.collection('usuarios', ref => ref.where('rut', '==', rut)).get().toPromise()
       .then(querySnapshot => {
         if (querySnapshot && !querySnapshot.empty) {
           const userData = querySnapshot.docs[0].data() as { role?: string };
