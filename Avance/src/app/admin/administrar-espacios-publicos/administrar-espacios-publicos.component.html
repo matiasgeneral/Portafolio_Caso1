@@ -34,8 +34,8 @@
     </ion-card-header>
 
     <ion-card-content>
-      <p><strong>Título: </strong> {{ espacioPublicoDetails.titulo }}</p>
-      <p><strong>Descripción: </strong> {{ espacioPublicoDetails.descripcion }}</p>
+      <p><strong>Título: </strong> {{ formatTitle(espacioPublicoDetails.titulo) }}</p>
+      <p><strong>Descripción: </strong> {{ formatDescription(espacioPublicoDetails.descripcion) }}</p>
       <p><strong>Ubicación: </strong> <a href="{{ espacioPublicoDetails.ubicacion }}" target="_blank">Ver en mapa</a></p>
       <p><strong>Fecha de Creación: </strong> {{ formatDate(espacioPublicoDetails.fechaCreacion) }}</p>
     </ion-card-content>
@@ -48,7 +48,7 @@
   <ion-button expand="full" color="warning" (click)="deshabilitarDoc()">
     Deshabilitar espacio público
   </ion-button>
-  <ion-button  expand="full" color="secondary" (click)="verDetalles(espacioPublicoDetails)">Editar Espaco Publico</ion-button>
+  <ion-button expand="full" color="secondary" (click)="verDetalles(espacioPublicoDetails)">Editar Espacio Público</ion-button>
   <br><br><br>
   <br><br><br>
 </ion-content>

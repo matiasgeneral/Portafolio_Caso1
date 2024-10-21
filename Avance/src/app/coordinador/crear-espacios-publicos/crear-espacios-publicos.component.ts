@@ -27,51 +27,44 @@ export class CrearEspaciosPublicosComponent implements OnInit {
       descripcion: ['', Validators.required],
       ubicacion: ['', Validators.required],
       image: ['', Validators.required],
-      fechaCreacion: [''], // Añadir campo para fecha de creación
+      fechaCreacion: [''], // Este campo se asignará en onSubmit
     });
   }
 
   async onSubmit() {
     if (this.espacioPublicoForm.valid && this.selectedFile) {
-      const espacioPublicoData = this.espacioPublicoForm.value;
+      const espacioPublicoData = { ...this.espacioPublicoForm.value };
+      espacioPublicoData.fechaCreacion = this.getCurrentDate(); // Almacena como string
 
-      // Asignar la fecha de creación en formato día/mes/año
-      espacioPublicoData.fechaCreacion = this.getCurrentDate();
-
-      // Formatear fecha a día/mes/año
-      // Si se necesita una fecha adicional, asegúrate de tenerla en el formulario
-      // espacioPublicoData.fecha = this.formatDate(espacioPublicoData.fecha);
-
-      // Generar el UID del espacio público
       const id = this.firestore.getId();
-      espacioPublicoData.id = id; // Añadir el UID a los datos del espacio público
+      espacioPublicoData.id = id;
 
-      const filePath = `espacioPublico/${this.selectedFile.name}`;
+      const filePath = `espaciosPublicos/${id}_${this.selectedFile.name}`; // Incluye ID para evitar conflictos
       const fileRef = this.storage.ref(filePath);
       const uploadTask = this.storage.upload(filePath, this.selectedFile);
 
-      uploadTask
-        .snapshotChanges()
-        .pipe(
-          finalize(async () => {
+      uploadTask.snapshotChanges()
+        .pipe(finalize(async () => {
+          try {
             const url = await fileRef.getDownloadURL().toPromise();
-            espacioPublicoData.image = url;
-
-            // Crear el espacio público en Firestore con el UID
+            espacioPublicoData.image = url; // Guarda la URL de la imagen
             await this.createEspacioPublico(espacioPublicoData, id);
             this.showSuccessAlert();
             this.resetForm();
-          })
-        )
+          } catch (error) {
+            console.error('Error al cargar la imagen o crear el espacio público:', error);
+            this.showErrorAlert('Error al crear el espacio público.');
+          }
+        }))
         .subscribe();
     } else {
       console.log('El formulario no es válido o no hay archivo seleccionado');
+      this.showErrorAlert('Por favor, completa todos los campos y selecciona un archivo.');
     }
   }
 
-  // Método para crear un espacio público en Firestore con un UID
   async createEspacioPublico(espacioPublicoData: any, id: string) {
-    const path = 'espacioPublico';
+    const path = 'espaciosPublicos'; // Nombre correcto de tu colección
     await this.firestore.createDoc(espacioPublicoData, path, id);
   }
 
@@ -89,7 +82,15 @@ export class CrearEspaciosPublicosComponent implements OnInit {
       message: 'El espacio público ha sido creado correctamente.',
       buttons: ['OK'],
     });
+    await alert.present();
+  }
 
+  async showErrorAlert(message: string) {
+    const alert = await this.alertController.create({
+      header: 'Error',
+      message: message,
+      buttons: ['OK'],
+    });
     await alert.present();
   }
 
@@ -99,16 +100,10 @@ export class CrearEspaciosPublicosComponent implements OnInit {
   }
 
   getCurrentDate(): string {
-    const today = new Date();
-    const day = String(today.getDate()).padStart(2, '0');
-    const month = String(today.getMonth() + 1).padStart(2, '0'); // Mes es 0-indexed
-    const year = today.getFullYear();
-    return `${day}/${month}/${year}`; // Cambiar a formato día/mes/año
-  }
-
-  formatDate(dateString: string): string {
-    // Asumir que dateString está en formato 'YYYY-MM-DD'
-    const parts = dateString.split('-');
-    return `${parts[2]}/${parts[1]}/${parts[0]}`; // Formato 'DD/MM/YYYY'
+    const now = new Date();
+    const day = String(now.getDate()).padStart(2, '0');
+    const month = String(now.getMonth() + 1).padStart(2, '0'); // Mes es 0-indexed
+    const year = now.getFullYear();
+    return `${day}/${month}/${year}`; // Formato día/mes/año
   }
 }

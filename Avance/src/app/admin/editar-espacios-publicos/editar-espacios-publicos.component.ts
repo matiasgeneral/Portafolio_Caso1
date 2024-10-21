@@ -12,8 +12,8 @@ import { AlertController } from '@ionic/angular';
   styleUrls: ['./editar-espacios-publicos.component.scss'],
 })
 export class EditarEspaciosPublicosComponent implements OnInit {
-  id: string | null = null; // Aquí almacenaremos el id del espacio publico
-  espaciosPublicosadForm: FormGroup; // Formulario para editar el espacio publico
+  id: string | null = null; // Aquí almacenaremos el id del espacio público
+  espaciosPublicosadForm: FormGroup; // Formulario para editar el espacio público
   selectedFile: File | null = null; // Archivo de imagen seleccionado
   currentImage: string = ''; // Propiedad para almacenar la imagen actual
 
@@ -25,7 +25,7 @@ export class EditarEspaciosPublicosComponent implements OnInit {
     private storage: AngularFireStorage,
     private alertController: AlertController
   ) {
-    // Inicializar el formulario con los campos necesarios para editar el espacio publico
+    // Inicializar el formulario con los campos necesarios para editar el espacio público
     this.espaciosPublicosadForm = this.formBuilder.group({
       titulo: ['', Validators.required],
       descripcion: ['', Validators.required],
@@ -35,26 +35,26 @@ export class EditarEspaciosPublicosComponent implements OnInit {
   }
 
   ngOnInit() {
-    // Obtener el ID del espacio publico desde los parámetros de la ruta
+    // Obtener el ID del espacio público desde los parámetros de la ruta
     this.route.paramMap.subscribe((params) => {
       this.id = params.get('id');
       if (this.id) {
-        // Cargar los detalles del espacio publico y rellenar el formulario
-        this.firestore.getDoc<any>('espacioPublico', this.id).subscribe((espacioPublico) => {
+        // Cargar los detalles del espacio público y rellenar el formulario
+        this.firestore.getDoc<any>('espaciosPublicos', this.id).subscribe((espacioPublico) => {
           if (espacioPublico) {
             // Rellenar el formulario con los datos actuales
             this.espaciosPublicosadForm.patchValue(espacioPublico);
             this.currentImage = espacioPublico.image; // Almacenar la imagen actual
-            console.log('Detalles del espacio publico cargados:', espacioPublico);
+            console.log('Detalles del espacio público cargados:', espacioPublico);
           } else {
-            console.error('Espacio publico no encontrado');
+            console.error('Espacio público no encontrado');
           }
         });
       }
     });
   }
 
-  // Método para manejar la edición del espacio publico
+  // Método para manejar la edición del espacio público
   async onSubmit() {
     if (this.espaciosPublicosadForm.valid) {
       const espacioPublicoData = this.espaciosPublicosadForm.value;
@@ -72,19 +72,19 @@ export class EditarEspaciosPublicosComponent implements OnInit {
     }
   }
 
-  // Método para actualizar el Espacio Publico en Firestore
+  // Método para actualizar el Espacio Público en Firestore
   async updateEspacioPublico(espacioPublicoData: any) {
     if (this.id && typeof this.id === 'string') {
-      const path = 'espacioPublico'; // Asegúrate de que la colección sea correcta
+      const path = 'espaciosPublicos'; // Asegúrate de que la colección sea correcta
       try {
-        await this.firestore.updateDoc(espacioPublicoData, path, this.id); // Actualizar los datos del espacio publico
+        await this.firestore.updateDoc(espacioPublicoData, path, this.id); // Actualizar los datos del espacio público
         this.showSuccessAlert();
-        this.router.navigate(['/buscador-espacios-publicos']); // Navegar a la lista de espacios publicos después de editar
+        this.router.navigate(['/buscador-espacios-publicos']); // Navegar a la lista de espacios públicos después de editar
       } catch (error) {
-        console.error('Error al actualizar el espacio publico:', error);
+        console.error('Error al actualizar el espacio público:', error);
       }
     } else {
-      console.error('El ID del espacio publico no es válido:', this.id);
+      console.error('El ID del espacio público no es válido:', this.id);
     }
   }
 
@@ -97,9 +97,9 @@ export class EditarEspaciosPublicosComponent implements OnInit {
     }
   }
 
-  // Subir imagen a Firebase y luego actualizar el espacio publico
+  // Subir imagen a Firebase y luego actualizar el espacio público
   uploadImageAndUpdate(espacioPublicoData: any) {
-    const filePath = `espacioPublico/${this.selectedFile!.name}`;
+    const filePath = `espaciosPublicos/${this.selectedFile!.name}`;
     const fileRef = this.storage.ref(filePath);
     const uploadTask = this.storage.upload(filePath, this.selectedFile!);
     uploadTask
@@ -108,7 +108,7 @@ export class EditarEspaciosPublicosComponent implements OnInit {
         finalize(async () => {
           try {
             const url = await fileRef.getDownloadURL().toPromise();
-            espacioPublicoData.image = url; // Establecer la URL de la imagen en los datos del espacio publico
+            espacioPublicoData.image = url; // Establecer la URL de la imagen en los datos del espacio público
             this.updateEspacioPublico(espacioPublicoData);
           } catch (error) {
             console.error('Error al obtener la URL de la imagen:', error);
@@ -122,14 +122,26 @@ export class EditarEspaciosPublicosComponent implements OnInit {
   async showSuccessAlert() {
     const alert = await this.alertController.create({
       header: 'Éxito',
-      message: 'El espacio publico actualizado correctamente.',
+      message: 'El espacio público actualizado correctamente.',
       buttons: ['OK'],
     });
     await alert.present();
   }
 
-  // Método para regresar a la lista de espacios publicos
+  // Método para regresar a la lista de espacios públicos
   goBack() {
     this.router.navigate(['/buscador-espacios-publicos']); // Asegúrate de que esta ruta sea correcta
+  }
+
+  // Método para formatear el título correctamente
+  formatTitle(title: string): string {
+    return title.replace(/\w\S*/g, (txt) => {
+      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    });
+  }
+
+  // Método para formatear la descripción correctamente
+  formatDescription(description: string): string {
+    return description.charAt(0).toUpperCase() + description.slice(1);
   }
 }

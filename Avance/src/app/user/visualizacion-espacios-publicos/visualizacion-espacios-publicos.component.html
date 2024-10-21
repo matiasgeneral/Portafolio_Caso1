@@ -12,7 +12,7 @@
   <br>
 
   <ng-container *ngIf="espaciosPublicos && espaciosPublicos.length; else noEventos">
-    <ion-card *ngFor="let espacioPublico of espaciosPublicos" style="max-width: 500px; margin: 0 auto; padding: 20px 0 20px 0; margin-bottom: 20px;">
+    <ion-card *ngFor="let espacioPublico of espaciosPublicos" style="max-width: 500px; margin: 0 auto; padding: 20px 0; margin-bottom: 20px;">
       <!-- Mostrar la imagen desde el campo correcto -->
       <img *ngIf="espacioPublico.image" [src]="espacioPublico.image" alt="{{ espacioPublico.titulo }}" style="width: 100%; height: auto; object-fit: cover;" />
 
@@ -25,21 +25,18 @@
         <p><strong>Descripción:</strong> {{ espacioPublico.descripcion | titlecase }}</p>
         <!-- Mostrar la ubicación como un enlace a Google Maps -->
         <p><strong>Ubicación:</strong> <a href="{{ espacioPublico.ubicacion }}" target="_blank">Ver en mapa</a></p>
-        <!-- Formatear la fecha de creación correctamente -->
-        <p><strong>Fecha de Creación:</strong> {{ formatDate(espacioPublico.fechaCreacion) }}</p>
-
-      </ion-card-content>
 
       <!-- Botón para postular al evento -->
-      <ion-button expand="block" [routerLink]="['/postulacion-espacios-publicos', espacioPublico.id]">Postular a Evento</ion-button>
+      <ion-button expand="block" [routerLink]="['/postulacion-espacios-publicos', espacioPublico.id]">Solicitar</ion-button>
+      </ion-card-content>
     </ion-card>
   </ng-container>
 
-  <!-- Mostrar mensaje si no hay eventos disponibles -->
+  <!-- Mostrar mensaje si no hay espacios públicos disponibles -->
   <ng-template #noEventos>
     <ion-card style="max-width: 500px; margin: 0 auto; padding: 20px;">
       <ion-card-content>
-        <h3>No hay espacio publico.</h3>
+        <h3>No hay espacios públicos disponibles.</h3>
       </ion-card-content>
     </ion-card>
   </ng-template>

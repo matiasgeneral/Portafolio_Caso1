@@ -13,7 +13,6 @@ export class PostulacionEspaciosPublicosComponent implements OnInit {
   espacioPublico: any;
   nombreSolicitante: string = '';
   postulacionForm: FormGroup; 
-  disponibilidad: boolean = true; 
   fechaUso: string = '';
   horaInicio: string = '';
   horaFin: string = '';

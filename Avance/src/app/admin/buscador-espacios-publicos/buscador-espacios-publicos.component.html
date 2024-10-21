@@ -21,7 +21,7 @@
     <ion-card-content>
       <ion-list>
         <!-- Mostrar los espacios públicos -->
-        <ion-item *ngFor="let espacioPublico of espacioPublicos">
+        <ion-item *ngFor="let espacioPublico of espaciosPublicos">
           <ion-thumbnail slot="start">
             <img *ngIf="espacioPublico.image" [src]="espacioPublico.image" alt="Imagen del espacio público" class="media-image"/>
           </ion-thumbnail>
@@ -31,12 +31,10 @@
             <strong>Descripción:</strong> {{ espacioPublico.descripcion | titlecase }}<br />
 
             <strong>Ubicación: </strong> 
-            <a href="{{ espacioPublico.ubicacion  }}" target="_blank">{{ espacioPublico.ubicacion | slice:0:20 }}...</a>
-          </ion-label>
+            <a href="{{ espacioPublico.ubicacion }}" target="_blank">{{ espacioPublico.ubicacion | slice:0:20 }}...</a><br />
 
-            <strong>Fecha de Creación:</strong> {{ espacioPublico.fechaCreacion | date:'longDate' }}<br />
-            
-          
+            <strong>Fecha de Creación:</strong> {{ espacioPublico.fechaCreacion }}<br /> <!-- Se muestra directamente como string -->
+          </ion-label>
 
           <ion-button (click)="administrarEspacioPublicos(espacioPublico)" fill="outline" color="secondary" slot="end">
             <ion-icon slot="start" name="settings"></ion-icon>

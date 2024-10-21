@@ -3,7 +3,6 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { firstValueFrom, Observable } from 'rxjs';
 import { WhereFilterOp, arrayUnion } from '@angular/fire/firestore';
 
-
 @Injectable({
   providedIn: 'root'
 })
@@ -23,6 +22,7 @@ export class FirestoreService {
     return collection.doc(id).valueChanges();
   }
 
+  // Actualizar documento
   updateDoc(data: any, path: string, id: string) {
     console.log('El ID que se pasa es:', id); // Verifica si es un string
 
@@ -35,7 +35,6 @@ export class FirestoreService {
     return collection.doc(id).update(data);
   }
 
-
   // Borrar documento
   deleteDoc(path: string, id: string) {
     const collection = this.afs.collection(path);
@@ -43,19 +42,10 @@ export class FirestoreService {
   }
 
   // Borrar usuario
-  /*  
-   deleteUser(path: string, rut: string) {
-    const collection = this.afs.collection(path);
-    return collection.doc(rut).delete();
-  }
-  */
-
   deleteUser2(path: string, uid: string) {
     const collection = this.afs.collection(path);
     return collection.doc(uid).delete();
   }
-
-
 
   // Deshabilitar un documento
   deshabilitarDoc(path: string, id: string) {
@@ -91,12 +81,12 @@ export class FirestoreService {
     const collection = this.afs.collection('ventas', ref => ref.where('uidComprador', '==', uid));
     return collection.valueChanges();
   }
+
   // Método para crear un documento con ID generado automáticamente
   createDocWithAutoId(data: any, path: string) {
     const collection = this.afs.collection(path);
-    return collection.add(data);  // Esto genera automáticamente el ID único
+    return collection.add(data); // Esto genera automáticamente el ID único
   }
-
 
   // Método exclusivo para actualizar un documento de usuario
   updateUserDoc(rut: string, data: any) {
@@ -126,40 +116,39 @@ export class FirestoreService {
         throw error;
       });
   }
+
   // Obtener rol de usuario por RUT
   getUserRole(rut: string): Promise<string | null> {
     return this.afs.collection('usuarios', ref => ref.where('rut', '==', rut)).get().toPromise()
       .then(querySnapshot => {
         if (querySnapshot && !querySnapshot.empty) {
           const userData = querySnapshot.docs[0].data() as { role?: string };
-          return userData.role || null;  // Devuelve el rol o null si no existe
+          return userData.role || null; // Devuelve el rol o null si no existe
         }
-        return null;  // Si no se encuentra el usuario
+        return null; // Si no se encuentra el usuario
       })
       .catch(error => {
         console.error('Error al obtener el rol del usuario:', error);
         throw error;
       });
   }
+
   // Método para obtener documentos con una condición específica
   getDocsWithCondition<T>(collection: string, field: string, operator: WhereFilterOp, value: any): Observable<T[]> {
     return this.afs.collection<T>(collection, (ref) => ref.where(field, operator, value)).valueChanges();
   }
 
+  // Actualizar espacio público
+  async updateEspacioPublico(id: string, newData: any) {
+    const path = 'espaciosPublicos'; // Asegúrate que este sea el nombre correcto de tu colección
+    await this.updateDoc(newData, path, id);
+  }
 
-  
-async updateEspacioPublico(id: string, newData: any) {
-  const path = 'espacioPublico';
-  await this.updateDoc(newData, path, id);
+  // Método para agregar una fecha reservada a un espacio público
+  addFechaReservada(id: string, fechaReservada: any) {
+    const collection = this.afs.collection('espaciosPublicos'); // Asegúrate que el nombre de la colección sea correcto
+    return collection.doc(id).set({
+      fechasReservadas: arrayUnion(fechaReservada) // Añade la fecha reservada al array de fechasReservadas
+    }, { merge: true }); // merge: true asegura que no se sobrescriban los otros campos
+  }
 }
-// Método para agregar una fecha reservada a un espacio público
-addFechaReservada(id: string, fechaReservada: any) {
-  const collection = this.afs.collection('espacioPublico');
-  return collection.doc(id).update({
-    fechasReservadas: arrayUnion(fechaReservada) // Cambia esto
-  });
-}
-}
-
-
-

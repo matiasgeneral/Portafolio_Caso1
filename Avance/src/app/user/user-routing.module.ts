@@ -32,7 +32,7 @@ const routes: Routes = [
     component:VisualizacionEventosComponent,
   },
   {
-    path: 'postulacion-eventos',
+    path: 'postulacion-eventos/:id',
     component:PostulacionEventosComponent,
   },
   {
@@ -40,7 +40,7 @@ const routes: Routes = [
     component:VisualizacionProyectosComponent,
   },
   {
-    path: 'postulacion-proyectos',
+    path: 'postulacion-proyectos/:id',
     component:PostulacionProyectosComponent,
   },
   {

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FirestoreService } from 'src/app/service/firestore.service';
 import { formatDate } from '@angular/common'; // Importar para formatear fechas
-import {FirestorageService} from 'src/app/service/firestorage.service';
+import { FirestorageService } from 'src/app/service/firestorage.service';
 
 @Component({
   selector: 'app-administrar-espacios-publicos',
@@ -17,14 +17,14 @@ export class AdministrarEspaciosPublicosComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private firestoreService: FirestoreService,
-    private FirestorageService: FirestorageService
+    private firestorageService: FirestorageService
   ) {}
 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
       this.id = params.get('id');
       if (this.id) {
-        this.firestoreService.getDoc<any>('espacioPublico', this.id).subscribe(espacioPublico => {
+        this.firestoreService.getDoc<any>('espaciosPublicos', this.id).subscribe(espacioPublico => {
           if (espacioPublico) {
             this.espacioPublicoDetails = espacioPublico;
           }
@@ -41,20 +41,20 @@ export class AdministrarEspaciosPublicosComponent implements OnInit {
 
   deleteDoc() {
     if (this.id) {
-      // Obtén el espacioPublico  para acceder a los datos de la imagen antes de eliminarla
-      this.firestoreService.getDoc('espacioPublico', this.id).subscribe((espacioPublico: any) => {
-        const imageUrl = espacioPublico.image;  // Suponiendo que 'noticia.image' contiene la URL completa de la imagen
-    
+      // Obtén el espacioPublico para acceder a los datos de la imagen antes de eliminarla
+      this.firestoreService.getDoc('espaciosPublicos', this.id).subscribe((espacioPublico: any) => {
+        const imageUrl = espacioPublico.image; // Suponiendo que 'espacioPublico.image' contiene la URL completa de la imagen
+
         // Primero elimina la imagen usando refFromURL
-        this.FirestorageService.deleteImageFromUrl(imageUrl).subscribe(() => {
+        this.firestorageService.deleteImageFromUrl(imageUrl).subscribe(() => {
           console.log('Imagen borrada');
-    
+
           // Luego elimina el documento
-          this.firestoreService.deleteDoc('espacioPublico', this.id!).then(() => {
-            console.log('espacio publico borrado');
-            this.goBack(); // Regresa a la lista de espacio publicos después de borrar
+          this.firestoreService.deleteDoc('espaciosPublicos', this.id!).then(() => {
+            console.log('espacio público borrado');
+            this.goBack(); // Regresa a la lista de espacios públicos después de borrar
           }).catch((error: any) => {
-            console.error('Error al borrar el espacio publico:', error);
+            console.error('Error al borrar el espacio público:', error);
           });
         }, (error: any) => {
           console.error('Error al borrar la imagen:', error);
@@ -62,7 +62,6 @@ export class AdministrarEspaciosPublicosComponent implements OnInit {
       });
     }
   }
-  
 
   deshabilitarDoc() {
     if (this.id) {
@@ -74,28 +73,33 @@ export class AdministrarEspaciosPublicosComponent implements OnInit {
     }
   }
 
-  // Método para formatear el título correctamente
+  // Método para formatear el título y la descripción correctamente
   formatTitle(title: string): string {
-    return title.replace(/\w\S*/g, (txt) => {
-      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-    });
+    return title.charAt(0).toUpperCase() + title.slice(1).toLowerCase();
+  }
+
+  formatDescription(description: string): string {
+    return description.charAt(0).toUpperCase() + description.slice(1).toLowerCase();
   }
 
   // Método para formatear la fecha
-  formatDate(date: any): string {
-    return formatDate(date, 'dd/MM/yyyy', 'en-US');
+  formatDate(dateString: string | undefined): string {
+    if (!dateString) {
+      return 'Fecha no disponible'; // Manejo de fecha no disponible
+    }
+
+    // Asumir que dateString está en formato 'DD/MM/YYYY'
+    const parts = dateString.split('/');
+    return `${parts[0]}/${parts[1]}/${parts[2]}`; // Retorna en formato 'DD/MM/YYYY'
   }
 
-   // Método para ver los detalles  luego editar
- verDetalles(espacioPublico: any) {
-  console.log('Detalles del espacio publico', espacioPublico);
-  if (espacioPublico.id) {
-    this.router.navigate(['/editar-espacios-publicos', espacioPublico.id]); // Asegúrate de que la ruta sea correcta
-  } else {
-    console.error('ID del espacio publico no  es definido');
+  // Método para ver los detalles y luego editar
+  verDetalles(espacioPublico: any) {
+    console.log('Detalles del espacio público', espacioPublico);
+    if (espacioPublico.id) {
+      this.router.navigate(['/editar-espacios-publicos', espacioPublico.id]); // Asegúrate de que la ruta sea correcta
+    } else {
+      console.error('ID del espacio público no está definido');
+    }
   }
-}
-
-
-
 }
