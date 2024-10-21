@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { firstValueFrom, Observable } from 'rxjs';
-import { WhereFilterOp } from '@angular/fire/firestore';
+import { WhereFilterOp, arrayUnion } from '@angular/fire/firestore';
 
 
 @Injectable({
@@ -145,6 +145,20 @@ export class FirestoreService {
   getDocsWithCondition<T>(collection: string, field: string, operator: WhereFilterOp, value: any): Observable<T[]> {
     return this.afs.collection<T>(collection, (ref) => ref.where(field, operator, value)).valueChanges();
   }
+
+
+  
+async updateEspacioPublico(id: string, newData: any) {
+  const path = 'espacioPublico';
+  await this.updateDoc(newData, path, id);
+}
+// Método para agregar una fecha reservada a un espacio público
+addFechaReservada(id: string, fechaReservada: any) {
+  const collection = this.afs.collection('espacioPublico');
+  return collection.doc(id).update({
+    fechasReservadas: arrayUnion(fechaReservada) // Cambia esto
+  });
+}
 }
 
 

@@ -1,198 +1,195 @@
 {
-    "colecciones": {
-      "usuarios": {
-        "uid": "",                      // Identificador único del usuario
-        "nombre": "",                   // Nombre del usuario
-        "apellidoPaterno": "",          // Apellido paterno
-        "apellidoMaterno": "",          // Apellido materno
-        "direccion": "",                // Dirección del usuario (para acreditación)
-        "documento": "",                // Documento para acreditar el domicilio (solo uno, sin tipo ni URL)
-        "foto": "",                     // Foto del carnet de identidad (solo una)
-        "email": "",                    // Correo electrónico
-        "telefono": "",                 // Número de teléfono
-        "estado": "pendiente",          // Estado de la cuenta (pendiente/activo)
-        "rol": "Usuario Registrado"     // Rol del usuario (por defecto al registrarse)
-      },
-      "actividades": {
-        "id": "",                       // Identificador único de la actividad
-        "titulo": "",                   // Título de la actividad
-        "descripcion": "",              // Descripción de la actividad
-        "fechaCreacion": "DD-MM-YYYY",  // Fecha en que se creó la actividad
-        "fechaEvento": "DD-MM-YYYY",    // Fecha del evento
-        "cantidadMax": 3,               // Cantidad máxima de participantes por actividad (máximo 3 incluyendo al usuario)
-        "cantidadDisponible": "",       // Cantidad de cupos disponibles
-        "participantes": [               // Usuarios que se inscribieron en la actividad
-          {
-            "uid": "",                  // Identificador único del usuario
-            "nombre": "",               // Nombre del participante
-            "fechaInscripcion": "DD-MM-YYYY", // Fecha en que se inscribió
-            "cantidadParticipantes": 3   // Cantidad de participantes (máximo 3 incluyendo al usuario)
+  "colecciones": {
+    "usuarios": {
+      "uid": "",                      // Identificador único del usuario
+      "nombre": "",                   // Nombre del usuario
+      "apellidoPaterno": "",          // Apellido paterno
+      "apellidoMaterno": "",          // Apellido materno
+      "rut": "",                      // RUT del usuario
+      "direccion": "",                // Dirección del usuario (para acreditación)
+      "documento": "",                // Documento para acreditar el domicilio (solo uno, sin tipo ni URL)
+      "foto": "",                     // Foto del carnet de identidad (solo una)
+      "email": "",                    // Correo electrónico
+      "telefono": "",                 // Número de teléfono
+      "estado": "pendiente",          // Estado de la cuenta (pendiente/activo)
+      "rol": "Usuario Registrado"     // Rol del usuario (por defecto al registrarse)
+    },
+    "actividades": {
+      "id": "",                       // Identificador único de la actividad
+      "titulo": "",                   // Título de la actividad
+      "descripcion": "",              // Descripción de la actividad
+      "fechaCreacion": "DD-MM-YYYY",  // Fecha en que se creó la actividad
+      "fechaEvento": "DD-MM-YYYY",    // Fecha del evento
+      "cantidadMax": 3,               // Cantidad máxima de participantes por actividad (máximo 3 incluyendo al usuario)
+      "cantidadDisponible": 3,        // Cantidad de cupos disponibles
+      "participantes": [              // Usuarios que se inscribieron en la actividad
+        {
+          "uid": "usuario_1_uid",           // Relación con el usuario (ID único del usuario)
+          "nombre": "Juan",                 // Nombre del usuario (opcional)
+          "fechaInscripcion": "DD-MM-YYYY", // Fecha en que se inscribió
+          "cantidadParticipantes": 2        // Cantidad de participantes (máximo 3)
+        }
+      ],
+      "image": ""                     // URL de la imagen relacionada
+    },
+    "espaciosPublicos": {
+      "id": "",                       // Identificador único del espacio
+      "titulo": "",                   // Título del espacio
+      "descripcion": "",              // Descripción del espacio
+      "ubicacion": "",                // Ubicación del espacio
+      "fechaCreacion": "DD-MM-YYYY",  // Fecha de creación
+      "image": "",                    // URL de la imagen
+      "fechasReservadas": [           // Reservas para el espacio
+        {
+          "fecha": "DD-MM-YYYY",      // Fecha de la reserva
+          "horaInicio": "HH:MM",      // Hora de inicio
+          "horaFin": "HH:MM",         // Hora de fin
+          "solicitante": {            // Información del usuario que solicitó el espacio
+            "uid": "usuario_1_uid",   // Identificador único del usuario
+            "nombre": "Ana",          // Nombre del solicitante (opcional)
+            "fechaSolicitud": "DD-MM-YYYY" // Fecha en que se realizó la solicitud
           }
-        ],
-        "image": ""                     // URL de la imagen relacionada
-      },
-      "espaciosPublicos": {
-        "id": "",                       // Identificador único del espacio
-        "titulo": "",                   // Título del espacio
-        "descripcion": "",              // Descripción del espacio
-        "ubicacion": "",                // Ubicación del espacio
-        "fechaCreacion": "DD-MM-YYYY",  // Fecha de creación
-        "image": "",                    // URL de la imagen
-        "fechasReservadas": [           // Reservas para el espacio
-          {
-            "fecha": "DD-MM-YYYY",      // Fecha de la reserva
-            "horaInicio": "HH:MM",      // Hora de inicio
-            "horaFin": "HH:MM",         // Hora de fin
-            "solicitante": {            // Información del usuario que solicitó el espacio
-              "uid": "",                // Identificador único del usuario
-              "nombre": "",             // Nombre del solicitante
-              "fechaSolicitud": "DD-MM-YYYY" // Fecha en que se realizó la solicitud
+        }
+      ]
+    },
+    "noticias": {
+      "id": "",                       // Identificador único de la noticia
+      "title": "",                    // Título de la noticia
+      "subtitle": "",                 // Subtítulo (opcional)
+      "details": "",                  // Detalles de la noticia
+      "date": "DD-MM-YYYY",           // Fecha de publicación
+      "image": ""                     // URL de la imagen
+    },
+    "proyectos": {
+      "id": "",                       // Identificador único del proyecto
+      "titulo": "",                   // Título del proyecto
+      "descripcion": "",              // Descripción del proyecto
+      "fechaCreacion": "DD-MM-YYYY",  // Fecha de creación
+      "fechaInicio": "DD-MM-YYYY",    // Fecha de inicio
+      "fechaFin": "DD-MM-YYYY",       // Fecha de fin
+      "estado": "activo",             // Estado del proyecto (activo/inactivo)
+      "maxPostulantes": 10,           // Máximo de postulantes
+      "minPostulantes": 1,            // Mínimo de postulantes
+      "documentosRequeridos": [       // Lista de documentos requeridos
+        {
+          "nombre": "Certificado de residencia", // Nombre del documento requerido
+          "tipo": "pdf"                          // Tipo de documento (opcional)
+        }
+      ],
+      "postulantes": [                // Usuarios que se han postulado al proyecto
+        {
+          "uid": "usuario_2_uid",                // Identificador del postulante
+          "nombre": "Carlos",                    // Nombre del postulante
+          "documentosSubidos": [                 // Lista de documentos que el postulante ha subido
+            {
+              "documentoId": "doc_1",            // Identificador del documento subido
+              "nombre": "certificado_residencia",// Nombre del documento subido
+              "tipo": "pdf",                     // Tipo del documento (opcional)
+              "url": "http://ejemplo.com/doc.pdf"// URL del documento subido
             }
-          }
-        ]
-      },
-      "noticias": {
-        "id": "",                       // Identificador único de la noticia
-        "title": "",                    // Título de la noticia
-        "subtitle": "",                 // Subtítulo (opcional)
-        "details": "",                  // Detalles de la noticia
-        "date": "DD-MM-YYYY",          // Fecha de publicación
-        "image": ""                     // URL de la imagen
-      },
-      "proyectos": {
-        "id": "",                       // Identificador único del proyecto
-        "titulo": "",                   // Título del proyecto
-        "descripcion": "",              // Descripción del proyecto
-        "fechaCreacion": "DD-MM-YYYY",  // Fecha de creación
-        "fechaInicio": "DD-MM-YYYY",    // Fecha de inicio
-        "fechaFin": "DD-MM-YYYY",       // Fecha de fin
-        "estado": "activo",             // Estado del proyecto (activo/inactivo)
-        "maxPostulantes": "",           // Máximo de postulantes
-        "minPostulantes": "",            // Mínimo de postulantes
-        "documentosRequeridos": [       // Lista de documentos requeridos
-          {
-            "nombre": "",                // Nombre del documento (a definir por el usuario)
-            "tipo": ""                   // Tipo de documento (opcional)
-          }
-        ],
-        "postulantes": [                // Usuarios que se han postulado al proyecto
-          {
-            "uid": "",                   // Identificador del postulante
-            "nombre": "",                // Nombre del postulante
-            "documentosSubidos": [      // Lista de documentos que el postulante ha subido
-              {
-                "documentoId": "",       // Identificador del documento
-                "nombre": "",            // Nombre del documento
-                "tipo": "",              // Tipo del documento (opcional)
-                "url": ""                // URL del documento
-              }
-            ]
-          }
-        ]
-      }
+          ]
+        }
+      ]
     }
   }
-  
-
-  //sin comentar
+}
 
 
+//SIN COMENTAR//
 
-  {
-    "colecciones": {
-      "usuarios": {
-        "uid": "",                      
-        "nombre": "",                   
-        "apellidoPaterno": "",          
-        "apellidoMaterno": "",          
-        "direccion": "",                
-        "documento": "",                
-        "foto": "",                     
-        "email": "",                    
-        "telefono": "",                 
-        "estado": "pendiente",          
-        "rol": "Usuario Registrado"     
-      },
-      "actividades": {
-        "id": "",                       
-        "titulo": "",                   
-        "descripcion": "",              
-        "fechaCreacion": "DD-MM-YYYY",  
-        "fechaEvento": "DD-MM-YYYY",    
-        "cantidadMax": 3,               
-        "cantidadDisponible": "",       
-        "participantes": [               
-          {
-            "uid": "",                  
-            "nombre": "",               
-            "fechaInscripcion": "DD-MM-YYYY", 
-            "cantidadParticipantes": 3   
+
+{
+  "colecciones": {
+    "usuarios": {
+      "uid": "",
+      "nombre": "",
+      "apellidoPaterno": "",
+      "apellidoMaterno": "",
+      "rut": "",
+      "direccion": "",
+      "documento": "",
+      "foto": "",
+      "email": "",
+      "telefono": "",
+      "estado": "pendiente",
+      "rol": "Usuario Registrado"
+    },
+    "actividades": {
+      "id": "",
+      "titulo": "",
+      "descripcion": "",
+      "fechaCreacion": "DD-MM-YYYY",
+      "fechaEvento": "DD-MM-YYYY",
+      "cantidadMax": 3,
+      "cantidadDisponible": 3,
+      "participantes": [
+        {
+          "uid": "usuario_1_uid",
+          "nombre": "Juan",
+          "fechaInscripcion": "DD-MM-YYYY",
+          "cantidadParticipantes": 2
+        }
+      ],
+      "image": ""
+    },
+    "espaciosPublicos": {
+      "id": "",
+      "titulo": "",
+      "descripcion": "",
+      "ubicacion": "",
+      "fechaCreacion": "DD-MM-YYYY",
+      "image": "",
+      "fechasReservadas": [
+        {
+          "fecha": "DD-MM-YYYY",
+          "horaInicio": "HH:MM",
+          "horaFin": "HH:MM",
+          "solicitante": {
+            "uid": "usuario_1_uid",
+            "nombre": "Ana",
+            "fechaSolicitud": "DD-MM-YYYY"
           }
-        ],
-        "image": ""                     
-      },
-      "espaciosPublicos": {
-        "id": "",                       
-        "titulo": "",                   
-        "descripcion": "",              
-        "ubicacion": "",                
-        "fechaCreacion": "DD-MM-YYYY",  
-        "image": "",                    
-        "fechasReservadas": [           
-          {
-            "fecha": "DD-MM-YYYY",      
-            "horaInicio": "HH:MM",      
-            "horaFin": "HH:MM",         
-            "solicitante": {            
-              "uid": "",                
-              "nombre": "",             
-              "fechaSolicitud": "DD-MM-YYYY" 
+        }
+      ]
+    },
+    "noticias": {
+      "id": "",
+      "title": "",
+      "subtitle": "",
+      "details": "",
+      "date": "DD-MM-YYYY",
+      "image": ""
+    },
+    "proyectos": {
+      "id": "",
+      "titulo": "",
+      "descripcion": "",
+      "fechaCreacion": "DD-MM-YYYY",
+      "fechaInicio": "DD-MM-YYYY",
+      "fechaFin": "DD-MM-YYYY",
+      "estado": "activo",
+      "maxPostulantes": 10,
+      "minPostulantes": 1,
+      "documentosRequeridos": [
+        {
+          "nombre": "Certificado de residencia",
+          "tipo": "pdf"
+        }
+      ],
+      "postulantes": [
+        {
+          "uid": "usuario_2_uid",
+          "nombre": "Carlos",
+          "documentosSubidos": [
+            {
+              "documentoId": "doc_1",
+              "nombre": "certificado_residencia",
+              "tipo": "pdf",
+              "url": "http://ejemplo.com/doc.pdf"
             }
-          }
-        ]
-      },
-      "noticias": {
-        "id": "",                       
-        "title": "",                    
-        "subtitle": "",                 
-        "details": "",                  
-        "date": "DD-MM-YYYY",          
-        "image": ""                     
-      },
-      "proyectos": {
-        "id": "",                       
-        "titulo": "",                   
-        "descripcion": "",              
-        "fechaCreacion": "DD-MM-YYYY",  
-        "fechaInicio": "DD-MM-YYYY",    
-        "fechaFin": "DD-MM-YYYY",       
-        "estado": "activo",             
-        "maxPostulantes": "",           
-        "minPostulantes": "",            
-        "documentosRequeridos": [       
-          {
-            "nombre": "",                
-            "tipo": ""                   
-          }
-        ],
-        "postulantes": [                
-          {
-            "uid": "",                   
-            "nombre": "",                
-            "documentosSubidos": [      
-              {
-                "documentoId": "",       
-                "nombre": "",            
-                "tipo": "",              
-                "url": ""                
-              }
-            ]
-          }
-        ]
-      }
+          ]
+        }
+      ]
     }
   }
-
-  
-
-  
+}

@@ -26,7 +26,7 @@
         <p>El nombre es requerido</p>
       </ion-text>
 
-      <!-- Apellido PATERNO-->
+      <!-- Apellido Paterno -->
       <ion-item>
         <ion-label position="floating">Apellido Paterno</ion-label>
         <ion-input formControlName="apellidoPaterno"></ion-input>
@@ -34,7 +34,8 @@
       <ion-text color="danger" *ngIf="signup.get('apellidoPaterno')?.invalid && signup.get('apellidoPaterno')?.touched">
         <p>El apellido es requerido</p>
       </ion-text>
-      <!-- Apellido materno-->
+
+      <!-- Apellido Materno -->
       <ion-item>
         <ion-label position="floating">Apellido Materno</ion-label>
         <ion-input formControlName="apellidoMaterno"></ion-input>
@@ -42,6 +43,7 @@
       <ion-text color="danger" *ngIf="signup.get('apellidoMaterno')?.invalid && signup.get('apellidoMaterno')?.touched">
         <p>El apellido es requerido</p>
       </ion-text>
+
       <!-- RUT -->
       <ion-item>
         <ion-label position="floating">RUT</ion-label>
@@ -99,13 +101,19 @@
       <!-- Subida de archivos -->
       <ion-item>
         <ion-label>Foto Carnet</ion-label>
-        <ion-input type="file" (change)="onFileChange($event, 'fotoCarnetUrl')" accept="image/*"></ion-input>
+        <ion-input type="file" (change)="onFileChange($event, 'fotoCarnetUrl')" accept="image/png, image/jpeg"></ion-input>
       </ion-item>
+      <ion-text color="danger" *ngIf="signup.get('fotoCarnetUrl')?.invalid && signup.get('fotoCarnetUrl')?.touched">
+        <p>La foto debe ser una imagen (PNG o JPG)</p>
+      </ion-text>
 
       <ion-item>
         <ion-label>Documento de Residencia</ion-label>
-        <ion-input type="file" (change)="onFileChange($event, 'documentoResidenciaUrl')" accept="image/*"></ion-input>
+        <ion-input type="file" (change)="onFileChange($event, 'documentoResidenciaUrl')" accept="image/png, image/jpeg, application/pdf"></ion-input>
       </ion-item>
+      <ion-text color="danger" *ngIf="signup.get('documentoResidenciaUrl')?.invalid && signup.get('documentoResidenciaUrl')?.touched">
+        <p>El documento debe ser un archivo (PNG, JPG o PDF)</p>
+      </ion-text>
 
       <!-- Botón de registro -->
       <ion-button expand="full" type="submit" [disabled]="signup.invalid || passwordsDontMatch()">

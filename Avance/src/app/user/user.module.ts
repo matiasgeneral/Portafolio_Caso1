@@ -12,6 +12,7 @@ import { VisualizacionProyectosComponent } from './visualizacion-proyectos/visua
 import { PostulacionProyectosComponent } from './postulacion-proyectos/postulacion-proyectos.component';
 import { VisualizacionNoticiasComponent } from './visualizacion-noticias/visualizacion-noticias.component';
 import { NoticiaComponent } from './noticia/noticia.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -32,7 +33,8 @@ import { NoticiaComponent } from './noticia/noticia.component';
   imports: [
     CommonModule,
     UserRoutingModule,
-    IonicModule
+    IonicModule,
+    ReactiveFormsModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA], 
 })

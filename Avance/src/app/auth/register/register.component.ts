@@ -24,7 +24,7 @@ export class RegisterComponent {
       nombre: ['', Validators.required],
       apellidoPaterno: ['', Validators.required],
       apellidoMaterno: ['', Validators.required],
-      rut: ['', Validators.required],
+      rut: ['', [Validators.required, this.rutValidator]], // Validar RUT
       direccion: ['', Validators.required],
       telefono: ['', [Validators.required, Validators.pattern(/^\d{9}$/)]], // Validar que tenga 9 dígitos
       email: ['', [Validators.required, Validators.email]],
@@ -108,6 +108,23 @@ export class RegisterComponent {
   onFileChange(event: any, controlName: string) {
     const file = event.target.files[0];
     if (file) {
+      // Validar tipo de archivo
+      const validImageTypes = ['image/png', 'image/jpeg']; // Tipos válidos para foto
+      const validDocumentTypes = ['application/pdf', 'image/png', 'image/jpeg']; // Tipos válidos para documento
+
+      const isImage = validImageTypes.includes(file.type);
+      const isDocument = validDocumentTypes.includes(file.type);
+
+      if (controlName === 'fotoCarnetUrl' && !isImage) {
+        this.interaction.presentToast('La foto debe ser una imagen (PNG o JPG)');
+        return;
+      }
+
+      if (controlName === 'documentoResidenciaUrl' && !isDocument) {
+        this.interaction.presentToast('El documento debe ser un archivo (PNG, JPG o PDF)');
+        return;
+      }
+
       // Aquí puedes implementar la lógica para subir el archivo a Firebase Storage y obtener la URL
       const reader = new FileReader();
       reader.onload = () => {
@@ -118,5 +135,24 @@ export class RegisterComponent {
       };
       reader.readAsDataURL(file);
     }
+  }
+
+  // Método para validar el RUT
+  rutValidator(control: any) {
+    const rut = control.value;
+    if (!rut) return null; // Si no hay valor, no hay error
+    // Lógica para validar el RUT chileno
+    const rutSinPuntos = rut.replace(/\./g, '').replace('-', '');
+    const cuerpo = rutSinPuntos.slice(0, -1);
+    const dv = rutSinPuntos.slice(-1).toUpperCase();
+
+    const suma = [...cuerpo].reverse().reduce((acc, curr, index) => {
+      return acc + (parseInt(curr) * (index % 6 + 2));
+    }, 0);
+    
+    const calculatedDv = 11 - (suma % 11);
+    const dvCalculado = calculatedDv === 10 ? 'K' : calculatedDv === 11 ? '0' : calculatedDv.toString();
+
+    return dv === dvCalculado ? null : { invalidRut: true }; // Devuelve un error si el RUT es inválido
   }
 }

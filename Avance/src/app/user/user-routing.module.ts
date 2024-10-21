@@ -24,7 +24,7 @@ const routes: Routes = [
     component: VisualizacionEspaciosPublicosComponent,
   },
   {
-    path: 'postulacion-espacios-publicos',
+    path: 'postulacion-espacios-publicos/:id',
     component: PostulacionEspaciosPublicosComponent,
   },
   {
