@@ -3,6 +3,7 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { AdministrarUsuariosComponent } from './admin/administrar-usuarios/administrar-usuarios.component';
 import { BuscadorUsuariosComponent } from './admin/buscador-usuarios/buscador-usuarios.component';
 import { EditarUsuariosComponent } from './admin/editar-usuarios/editar-usuarios.component';
+import { CalendarioComponent } from './calendario/calendario.component';
 
 
 const routes: Routes = [
@@ -22,6 +23,7 @@ const routes: Routes = [
   { path: 'administrar-usuarios/:rut', component: AdministrarUsuariosComponent }, // Cambia a minúscula
   { path: 'buscador', component: BuscadorUsuariosComponent },
   { path: 'editar-usuarios/:rut', component: EditarUsuariosComponent },
+  {title:'calendario', path: 'calendario', component: CalendarioComponent },
 
 
 ];

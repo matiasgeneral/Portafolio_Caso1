@@ -17,17 +17,18 @@ import { environment } from 'src/environments/environment.prod';
 import { AuthModule } from './auth/auth.module';
 import { HomeModule } from './home/home.module';
 import { HomeComponent } from './home/home.component';
-import { UserModule } from './user/user.module';
+import { UserModule } from './user/user.module'; // Ensure this path is correct and the module is properly defined
 import { AdminModule } from './admin/admin.module';
 import { FormsModule } from '@angular/forms';
 import { CoordinadorModule } from './coordinador/coordinador.module';
 import { SecretarioModule } from './secretario/secretario.module';
+import { CalendarioComponent } from './calendario/calendario.component';
 
 
 
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, 
+  declarations: [AppComponent, HomeComponent, CalendarioComponent,
     
   ],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, AngularFireModule.initializeApp(environment.firebaseConfig),
@@ -36,10 +37,11 @@ import { SecretarioModule } from './secretario/secretario.module';
         AngularFirestoreModule,FormsModule,
         AuthModule,
         HomeModule,
-        UserModule,
+        UserModule, // Ensure this module is correctly defined and imported
         AdminModule,
         CoordinadorModule,
-        SecretarioModule
+        SecretarioModule,
+        
       ],
   
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy  }, { provide: LOCALE_ID, useValue: 'es-CL' },

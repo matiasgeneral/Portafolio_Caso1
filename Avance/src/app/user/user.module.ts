@@ -15,6 +15,7 @@ import { NoticiaComponent } from './noticia/noticia.component';
 import { ReactiveFormsModule } from '@angular/forms';
 
 
+
 @NgModule({
   declarations: [
     SolicitudCertificadoResidenciaComponent,
@@ -26,6 +27,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     PostulacionProyectosComponent,
     VisualizacionNoticiasComponent,
     NoticiaComponent,
+ 
     
     
 

@@ -138,8 +138,8 @@ export class FirestoreService {
     return this.afs.collection<T>(collection, (ref) => ref.where(field, operator, value)).valueChanges();
   }
 
-  // Actualizar espacio público
-  async updateEspacioPublico(id: string, newData: any) {
+   // Método para actualizar un espacio público
+   async updateEspacioPublico(id: string, newData: any) {
     const path = 'espaciosPublicos'; // Asegúrate que este sea el nombre correcto de tu colección
     await this.updateDoc(newData, path, id);
   }
@@ -151,4 +151,18 @@ export class FirestoreService {
       fechasReservadas: arrayUnion(fechaReservada) // Añade la fecha reservada al array de fechasReservadas
     }, { merge: true }); // merge: true asegura que no se sobrescriban los otros campos
   }
-}
+
+  // Método para obtener los espacios públicos
+  getEspaciosPublicos(): Observable<any[]> {
+    return this.afs.collection('espaciosPublicos').valueChanges({ idField: 'id' });
+  }
+
+  // Método para obtener las reservas de un espacio público en particular
+  getReservas(espacioPublicoId: string): Observable<any[]> {
+    return this.afs.collection('reservas', ref => ref.where('espacioPublicoId', '==', espacioPublicoId)).valueChanges();
+  }
+    
+  }
+  
+  
+

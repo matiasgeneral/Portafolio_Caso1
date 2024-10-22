@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { auth } from './firebase-config';
 import { Title } from '@angular/platform-browser';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
+import { CalendarioComponent } from './calendario/calendario.component';
 
 @Component({
   selector: 'app-root',
@@ -90,6 +91,7 @@ export class AppComponent implements OnInit {
 
   getAdminPages() {
     return [
+      { title: 'Calendario', url: './calendario', icon: 'calendar' },
       { title: 'Home', url: './home', icon: 'home' },
       { title: 'Noticias', url: './visualizacion-noticias', icon: 'newspaper' },
       { title: 'Espacios públicos', url: './visualizacion-espacios-publicos', icon: 'basketball' },
