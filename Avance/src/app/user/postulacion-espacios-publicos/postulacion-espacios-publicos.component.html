@@ -63,7 +63,12 @@
           La hora de fin es requerida.
         </ion-note>
 
-        <ion-button expand="full" type="submit" class="postular-espacioPublico-button" [disabled]="!postulacionForm.valid">
+        <!-- Mensaje de disponibilidad -->
+        <ion-item *ngIf="!disponible">
+          <ion-label color="danger">La fecha y hora ya están ocupadas.</ion-label>
+        </ion-item>
+
+        <ion-button expand="full" type="submit" class="postular-espacioPublico-button" [disabled]="!postulacionForm.valid || !disponible">
           Postular
         </ion-button>
       </ion-card-content>

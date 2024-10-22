@@ -161,7 +161,43 @@ export class FirestoreService {
   getReservas(espacioPublicoId: string): Observable<any[]> {
     return this.afs.collection('reservas', ref => ref.where('espacioPublicoId', '==', espacioPublicoId)).valueChanges();
   }
-    
+
+  // Propiedad para almacenar datos del espacio público
+  espacioPublico: { fechasReservadas?: any[] } | null = null;
+
+
+  verificarDisponibilidad(fechaReservada: any): Promise<boolean> {
+    // Verifica si la fecha y hora ya están ocupadas en las reservas del espacio público
+    return new Promise<boolean>((resolve) => {
+      // Asegúrate de que espacioPublico y fechasReservadas estén definidos
+      if (!this.espacioPublico || !this.espacioPublico.fechasReservadas) {
+        console.error('No se encontraron datos del espacio público o fechas reservadas.');
+        resolve(true); // Si no hay datos, consideramos que está disponible
+        return;
+      }
+  
+      const reservas = this.espacioPublico.fechasReservadas || [];
+      const fechaSolicitada = fechaReservada.fecha;
+      const horaInicioSolicitada = fechaReservada.horaInicio;
+      const horaFinSolicitada = fechaReservada.horaFin;
+  
+      const ocupada = reservas.some((reserva: any) => {
+        return reserva.fecha === fechaSolicitada &&
+               (
+                 (horaInicioSolicitada >= reserva.horaInicio && horaInicioSolicitada < reserva.horaFin) ||
+                 (horaFinSolicitada > reserva.horaInicio && horaFinSolicitada <= reserva.horaFin) ||
+                 (horaInicioSolicitada <= reserva.horaInicio && horaFinSolicitada >= reserva.horaFin)
+               );
+      });
+  
+      console.log(`Fecha solicitada: ${fechaSolicitada}, Hora inicio: ${horaInicioSolicitada}, Hora fin: ${horaFinSolicitada}`);
+      console.log(`Está ocupada: ${ocupada}`);
+      
+      resolve(!ocupada); // Devuelve true si está disponible, false si está ocupada
+    });
+  }
+
+  
   }
   
   
