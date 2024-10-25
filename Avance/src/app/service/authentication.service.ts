@@ -58,4 +58,17 @@ export class AuthenticationService {
       console.error('Error actualizando el rol del usuario:', error);
     }
   }
+
+
+  // AuthenticationService
+async getCurrentUser(): Promise<any> {
+  const user = await this.authFirebase.currentUser; // Obtiene el usuario actual
+  if (user) {
+    const uid = user.uid;
+    const userData = await this.firestoreService.getDoc<any>('usuarios', uid).toPromise(); // Obtener datos del usuario de Firestore
+    return { uid, ...userData }; // Retorna el UID junto con los datos del usuario
+  }
+  return null; // Si no hay usuario autenticado
+}
+
 }

@@ -5,7 +5,6 @@
 </ion-header>
 
 <ion-content class="postular-espacioPublico-content" padding>
-  <!-- Información del Espacio Público -->
   <ion-card *ngIf="espacioPublico">
     <ion-card-header>
       <ion-img [src]="espacioPublico.image" *ngIf="espacioPublico.image"></ion-img> <!-- Muestra la imagen -->
@@ -17,7 +16,6 @@
     </ion-card-content>
   </ion-card>
 
-  <!-- Información del Solicitante -->
   <ion-card>
     <ion-card-header>
       <ion-card-title>Datos del Solicitante</ion-card-title>
@@ -28,7 +26,6 @@
     </ion-card-content>
   </ion-card>
 
-  <!-- Formulario de Postulación -->
   <form [formGroup]="postulacionForm" (ngSubmit)="postular()">
     <ion-card>
       <ion-card-header>
@@ -66,7 +63,12 @@
           La hora de fin es requerida.
         </ion-note>
 
-        <ion-button expand="full" type="submit" class="postular-espacioPublico-button" [disabled]="!postulacionForm.valid">
+        <!-- Mensaje de disponibilidad -->
+        <ion-item *ngIf="!disponible">
+          <ion-label color="danger">La fecha y hora ya están ocupadas.</ion-label>
+        </ion-item>
+
+        <ion-button expand="full" type="submit" class="postular-espacioPublico-button" [disabled]="!postulacionForm.valid || !disponible">
           Postular
         </ion-button>
       </ion-card-content>

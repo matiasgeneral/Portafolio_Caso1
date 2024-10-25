@@ -13,6 +13,7 @@ import { PostulacionProyectosComponent } from './postulacion-proyectos/postulaci
 import { VisualizacionNoticiasComponent } from './visualizacion-noticias/visualizacion-noticias.component';
 import { NoticiaComponent } from './noticia/noticia.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { PerfilComponent } from './perfil/perfil.component';
 
 
 
@@ -27,6 +28,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     PostulacionProyectosComponent,
     VisualizacionNoticiasComponent,
     NoticiaComponent,
+    PerfilComponent,
  
     
     
@@ -39,5 +41,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     ReactiveFormsModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA], 
+  exports:[
+    PerfilComponent
+  ]
 })
 export class UserModule { }

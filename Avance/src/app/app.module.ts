@@ -1,4 +1,4 @@
-import { LOCALE_ID, NgModule  } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 
@@ -22,35 +22,37 @@ import { AdminModule } from './admin/admin.module';
 import { FormsModule } from '@angular/forms';
 import { CoordinadorModule } from './coordinador/coordinador.module';
 import { SecretarioModule } from './secretario/secretario.module';
-import { CalendarioComponent } from './calendario/calendario.component';
+
 
 
 
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, CalendarioComponent,
-    
+  declarations: [AppComponent, HomeComponent,
+
   ],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireModule.initializeApp(environment.firebaseConfig),
-        AngularFireAuthModule,
-        AngularFirestoreModule,FormsModule,
-        AuthModule,
-        HomeModule,
-        UserModule, // Ensure this module is correctly defined and imported
-        AdminModule,
-        CoordinadorModule,
-        SecretarioModule,
-        
-      ],
-  
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy  }, { provide: LOCALE_ID, useValue: 'es-CL' },
-    { provide: LocationStrategy, useClass: HashLocationStrategy },
-    provideAnimations(), // * Agregue provideAnimations para proporcionar transiciones y animaciones suaves
-    provideHttpClient(withInterceptorsFromDi()),],
+    AngularFireAuthModule,
+    FormsModule,
+    BrowserModule,
+    AppRoutingModule,
+    AuthModule,
+    HomeModule,
+    UserModule, // Ensure this module is correctly defined and imported
+    AdminModule,
+    CoordinadorModule,
+    SecretarioModule,
+
+  ],
+
+  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, { provide: LOCALE_ID, useValue: 'es-CL' },
+  { provide: LocationStrategy, useClass: HashLocationStrategy },
+  provideAnimations(), // * Agregue provideAnimations para proporcionar transiciones y animaciones suaves
+  provideHttpClient(withInterceptorsFromDi()),],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }
 
 
 

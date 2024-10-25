@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { SolicitudCertificadoResidenciaComponent } from './solicitud-certificado-residencia/solicitud-certificado-residencia.component';
 
-import { VisualizacionEspaciosPublicosComponent } from './visualizacion-espacios-publicos/visualizacion-espacios-publicos.component'; 
+import { VisualizacionEspaciosPublicosComponent } from './visualizacion-espacios-publicos/visualizacion-espacios-publicos.component';
 import { PostulacionEspaciosPublicosComponent } from './postulacion-espacios-publicos/postulacion-espacios-publicos.component';
 
 import { VisualizacionEventosComponent } from './visualizacion-eventos/visualizacion-eventos.component';
@@ -13,10 +13,11 @@ import { VisualizacionProyectosComponent } from './visualizacion-proyectos/visua
 import { PostulacionProyectosComponent } from './postulacion-proyectos/postulacion-proyectos.component';
 import { VisualizacionNoticiasComponent } from './visualizacion-noticias/visualizacion-noticias.component';
 import { NoticiaComponent } from './noticia/noticia.component';
+import { PerfilComponent } from './perfil/perfil.component';
 
 const routes: Routes = [
   {
-    path:'solicitud-certificado-residencia',
+    path: 'solicitud-certificado-residencia',
     component: SolicitudCertificadoResidenciaComponent,
   },
   {
@@ -29,29 +30,34 @@ const routes: Routes = [
   },
   {
     path: 'visualizacion-eventos',
-    component:VisualizacionEventosComponent,
+    component: VisualizacionEventosComponent,
   },
   {
     path: 'postulacion-eventos/:id',
-    component:PostulacionEventosComponent,
+    component: PostulacionEventosComponent,
   },
   {
     path: 'visualizacion-proyectos',
-    component:VisualizacionProyectosComponent,
+    component: VisualizacionProyectosComponent,
   },
   {
     path: 'postulacion-proyectos/:id',
-    component:PostulacionProyectosComponent,
+    component: PostulacionProyectosComponent,
   },
   {
     path: 'visualizacion-noticias',
-    component:VisualizacionNoticiasComponent,
+    component: VisualizacionNoticiasComponent,
   },
   {
     path: 'noticia/:id',
-    component:NoticiaComponent,
+    component: NoticiaComponent,
+  },
+  {
+    path: 'perfil',
+    component: PerfilComponent,
+
   }
-  
+
 ];
 
 @NgModule({

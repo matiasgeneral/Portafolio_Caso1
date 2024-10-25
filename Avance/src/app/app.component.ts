@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { auth } from './firebase-config';
 import { Title } from '@angular/platform-browser';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
-import { CalendarioComponent } from './calendario/calendario.component';
 
 @Component({
   selector: 'app-root',
@@ -91,7 +90,6 @@ export class AppComponent implements OnInit {
 
   getAdminPages() {
     return [
-      { title: 'Calendario', url: './calendario', icon: 'calendar' },
       { title: 'Home', url: './home', icon: 'home' },
       { title: 'Noticias', url: './visualizacion-noticias', icon: 'newspaper' },
       { title: 'Espacios públicos', url: './visualizacion-espacios-publicos', icon: 'basketball' },
@@ -109,6 +107,7 @@ export class AppComponent implements OnInit {
       { title: 'Buscar actividades', url: './buscador-actividades', icon: 'search' },
       { title: 'Buscar espacios públicos', url: './buscador-espacios-publicos', icon: 'search' },
       { title: 'Buscar proyectos', url: './buscador-proyectos', icon: 'search' },
+      {title: 'Perfil', url: './perfil', icon: 'person-circle'},
     ];
   }
 

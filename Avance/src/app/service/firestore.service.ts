@@ -138,8 +138,8 @@ export class FirestoreService {
     return this.afs.collection<T>(collection, (ref) => ref.where(field, operator, value)).valueChanges();
   }
 
-   // Método para actualizar un espacio público
-   async updateEspacioPublico(id: string, newData: any) {
+  // Método para actualizar un espacio público
+  async updateEspacioPublico(id: string, newData: any) {
     const path = 'espaciosPublicos'; // Asegúrate que este sea el nombre correcto de tu colección
     await this.updateDoc(newData, path, id);
   }
@@ -175,30 +175,50 @@ export class FirestoreService {
         resolve(true); // Si no hay datos, consideramos que está disponible
         return;
       }
-  
+
       const reservas = this.espacioPublico.fechasReservadas || [];
       const fechaSolicitada = fechaReservada.fecha;
       const horaInicioSolicitada = fechaReservada.horaInicio;
       const horaFinSolicitada = fechaReservada.horaFin;
-  
+
       const ocupada = reservas.some((reserva: any) => {
         return reserva.fecha === fechaSolicitada &&
-               (
-                 (horaInicioSolicitada >= reserva.horaInicio && horaInicioSolicitada < reserva.horaFin) ||
-                 (horaFinSolicitada > reserva.horaInicio && horaFinSolicitada <= reserva.horaFin) ||
-                 (horaInicioSolicitada <= reserva.horaInicio && horaFinSolicitada >= reserva.horaFin)
-               );
+          (
+            (horaInicioSolicitada >= reserva.horaInicio && horaInicioSolicitada < reserva.horaFin) ||
+            (horaFinSolicitada > reserva.horaInicio && horaFinSolicitada <= reserva.horaFin) ||
+            (horaInicioSolicitada <= reserva.horaInicio && horaFinSolicitada >= reserva.horaFin)
+          );
       });
-  
+
       console.log(`Fecha solicitada: ${fechaSolicitada}, Hora inicio: ${horaInicioSolicitada}, Hora fin: ${horaFinSolicitada}`);
       console.log(`Está ocupada: ${ocupada}`);
-      
+
       resolve(!ocupada); // Devuelve true si está disponible, false si está ocupada
     });
   }
 
-  
-  }
-  
-  
+
+
+
+// Método para obtener postulaciones de proyectos
+getPostulacionesProyectos(uid: string) {
+  return this.afs.collection('postulacionesProyectos', ref => ref.where('solicitante.uid', '==', uid))
+    .valueChanges(); // Devuelve un observable de las postulaciones
+}
+
+// Método para obtener postulaciones de eventos
+getPostulacionesEventos(uid: string) {
+  return this.afs.collection('postulacionesEventos', ref => ref.where('solicitante.uid', '==', uid))
+    .valueChanges(); // Devuelve un observable de las postulaciones
+}
+
+getPostulacionesUsuario(uid: string) {
+  // Obtiene todos los documentos de la colección `espaciosPublicos`
+  return this.afs.collection('espaciosPublicos').valueChanges({ idField: 'id' });
+}
+
+
+}
+
+
 

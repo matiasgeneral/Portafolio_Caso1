@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { FirestoreService } from 'src/app/service/firestore.service';
 import { AuthenticationService } from 'src/app/service/authentication.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ToastController } from '@ionic/angular'; // Importa ToastController
 
 @Component({
   selector: 'app-postulacion-espacios-publicos',
@@ -15,12 +16,14 @@ export class PostulacionEspaciosPublicosComponent implements OnInit {
   postulacionForm: FormGroup; // Formulario para la postulación
   horasDisponibles: string[] = []; // Almacena las horas disponibles
   minutosDisponibles: string[] = ['00', '30']; // Opciones de minutos disponibles
+  disponible: boolean = true; // Indica si la fecha/hora está disponible
 
   constructor(
     private route: ActivatedRoute,
     private firestoreService: FirestoreService,
     private authService: AuthenticationService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private toastController: ToastController // Inyecta el ToastController
   ) {
     // Inicializa el formulario con validaciones
     this.postulacionForm = this.fb.group({
@@ -40,6 +43,11 @@ export class PostulacionEspaciosPublicosComponent implements OnInit {
     }
     this.obtenerNombreSolicitante(); // Obtiene el nombre del solicitante
     this.generarHorasDisponibles(); // Genera las horas disponibles
+
+    // Verifica disponibilidad cuando cambia el formulario
+    this.postulacionForm.valueChanges.subscribe(() => {
+      this.verificarDisponibilidadAutomatico();
+    });
   }
 
   cargarEspacioPublico(id: string) {
@@ -88,17 +96,30 @@ export class PostulacionEspaciosPublicosComponent implements OnInit {
             this.firestoreService.addFechaReservada(this.espacioPublico.id, fechaReservada)
               .then(() => {
                 console.log('Postulación enviada exitosamente');
+                this.mostrarToast('Postulación enviada exitosamente'); // Muestra el mensaje de éxito
                 this.postulacionForm.reset(); // Limpiar el formulario
+                this.disponible = true; // Resetea la disponibilidad
               })
               .catch(error => console.error('Error al enviar la postulación:', error));
           } else {
             console.error('La fecha y hora ya están ocupadas.');
+            this.disponible = false; // Actualiza la disponibilidad
           }
         });
       } else {
         console.error('No se encontró el usuario autenticado.');
       }
     });
+  }
+
+  // Método para mostrar un toast
+  async mostrarToast(mensaje: string) {
+    const toast = await this.toastController.create({
+      message: mensaje,
+      duration: 3000, // Duración en milisegundos
+      position: 'top', // Posición del toast
+    });
+    await toast.present(); // Presenta el toast
   }
 
   obtenerFechaActual(): string {
@@ -146,13 +167,17 @@ export class PostulacionEspaciosPublicosComponent implements OnInit {
     });
   }
 
-  // Método para verificar si la fecha está disponible
-  async isFechaDisponible(): Promise<boolean> {
-    // Comprueba si la fecha y hora son válidas y si no hay conflictos de reserva
-    if (this.postulacionForm.valid) {
-      const disponible = await this.verificarDisponibilidad(this.postulacionForm.value);
-      return disponible;
-    }
-    return false; // Si el formulario no es válido, devuelve false
+  // Método para verificar la disponibilidad automáticamente
+  verificarDisponibilidadAutomatico() {
+    const fechaReservada = {
+      fecha: this.postulacionForm.value.fechaUso,
+      horaInicio: this.postulacionForm.value.horaInicio,
+      horaFin: this.postulacionForm.value.horaFin,
+    };
+
+    // Verifica disponibilidad y actualiza la propiedad 'disponible'
+    this.verificarDisponibilidad(fechaReservada).then(disponible => {
+      this.disponible = disponible;
+    });
   }
 }
