@@ -20,10 +20,10 @@
 
       <ion-card-content>
         <p><strong>Descripción:</strong> {{ evento.descripcion }}</p>
-        <p><strong>Fecha del Evento:</strong> {{ formatDate(evento.fechaEvento) }}</p>
-        <p><strong>Hora del Evento:</strong> {{ formatTime(evento.horaEvento) }}</p> <!-- Nueva línea para la hora -->
+        <p><strong>Fecha del Evento:</strong> {{ evento.fechaEvento }}</p>
+        <p><strong>Hora del Evento:</strong> {{ formatTime(evento.horaEvento) }}</p>
         <p><strong>Cantidad Máxima:</strong> {{ evento.cantidadMax }}</p>
-        <p><strong>Cantidad Disponible:</strong> {{ evento.cantidadDisponible }}</p> <!-- Nueva línea para la cantidad disponible -->
+        <p><strong>Cantidad Disponible:</strong> {{ evento.cantidadDisponible }}</p>
       </ion-card-content>
 
       <ion-button expand="block" [routerLink]="['/postulacion-eventos', evento.id]">Postular a Evento</ion-button>

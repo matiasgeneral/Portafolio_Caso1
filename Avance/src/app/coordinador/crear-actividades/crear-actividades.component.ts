@@ -13,7 +13,7 @@ import { AlertController } from '@ionic/angular';
 export class CrearActividadesComponent implements OnInit {
   actividadForm: FormGroup;
   selectedFile: File | null = null;
-  maxParticipants: number = 999; // Máximo de participantes
+  maxParticipants: number = 999;
 
   constructor(
     private firestore: FirestoreService,
@@ -40,15 +40,18 @@ export class CrearActividadesComponent implements OnInit {
       // Asignar la fecha de creación en formato día/mes/año
       actividadData.fechaCreacion = this.getCurrentDate();
 
+      // Depuración: Verificar el valor de fechaEvento antes del formato
+      console.log('Valor original de fechaEvento:', actividadData.fechaEvento);
+
       // Formatear fechaEvento a día/mes/año
       actividadData.fechaEvento = this.formatDate(actividadData.fechaEvento);
 
-      // Iniciar 'cantidadDisponible' igual a 'cantidadMax'
-      actividadData.cantidadDisponible = actividadData.cantidadMax;
+      // Depuración: Verificar el valor de fechaEvento después del formato
+      console.log('Valor formateado de fechaEvento:', actividadData.fechaEvento);
 
-      // Generar el UID de la actividad
+      actividadData.cantidadDisponible = actividadData.cantidadMax;
       const id = this.firestore.getId();
-      actividadData.id = id; // Añadir el UID a los datos de la actividad
+      actividadData.id = id;
 
       const filePath = `actividad/${this.selectedFile.name}`;
       const fileRef = this.storage.ref(filePath);
@@ -61,7 +64,6 @@ export class CrearActividadesComponent implements OnInit {
             const url = await fileRef.getDownloadURL().toPromise();
             actividadData.image = url;
 
-            // Crear la actividad en Firestore con el UID
             await this.createActividad(actividadData, id);
             this.showSuccessAlert();
             this.resetForm();
@@ -73,9 +75,8 @@ export class CrearActividadesComponent implements OnInit {
     }
   }
 
-  // Método para crear una actividad en Firestore con un UID
   async createActividad(actividadData: any, id: string) {
-    const path = 'actividades'; // Asegúrate de que el path sea correcto
+    const path = 'actividades';
     await this.firestore.createDoc(actividadData, path, id);
   }
 
@@ -105,14 +106,21 @@ export class CrearActividadesComponent implements OnInit {
   getCurrentDate(): string {
     const today = new Date();
     const day = String(today.getDate()).padStart(2, '0');
-    const month = String(today.getMonth() + 1).padStart(2, '0'); // Mes es 0-indexed
+    const month = String(today.getMonth() + 1).padStart(2, '0');
     const year = today.getFullYear();
-    return `${day}/${month}/${year}`; // Cambiado a formato día/mes/año
+    return `${day}/${month}/${year}`;
   }
 
   formatDate(dateString: string): string {
-    // Asumir que dateString está en formato 'YYYY-MM-DD'
+    if (!dateString) return 'Fecha no disponible';
+    
+    // Verificar el valor y formatear solo si tiene el formato esperado 'YYYY-MM-DD'
     const parts = dateString.split('-');
-    return `${parts[2]}/${parts[1]}/${parts[0]}`; // Cambiado a formato 'DD/MM/YYYY'
+    if (parts.length === 3) {
+      return `${parts[2]}/${parts[1]}/${parts[0]}`;
+    } else {
+      console.warn('Formato inesperado para fechaEvento:', dateString);
+      return 'Fecha no disponible';
+    }
   }
 }

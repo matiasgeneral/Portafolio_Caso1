@@ -32,6 +32,8 @@ export class PostulacionEventosComponent implements OnInit {
   ngOnInit() {
     // Obtiene el ID de la actividad desde la ruta
     const actividadId = this.route.snapshot.paramMap.get('id');
+    console.log('ID de actividad obtenido:', actividadId); // Log del ID de actividad
+
     if (actividadId) {
       this.cargarActividad(actividadId); // Carga la información de la actividad
     } else {
@@ -42,7 +44,9 @@ export class PostulacionEventosComponent implements OnInit {
 
   cargarActividad(id: string) {
     // Carga la información de la actividad desde Firestore
+    console.log('Cargando actividad con ID:', id); // Log al cargar la actividad
     this.firestoreService.getDoc<any>('actividades', id).subscribe(actividad => {
+      console.log('Actividad cargada:', actividad); // Log de la actividad cargada
       this.actividad = actividad; // Asigna la actividad
       if (!this.actividad) {
         console.error('No se encontró la actividad con ID:', id);
@@ -56,11 +60,19 @@ export class PostulacionEventosComponent implements OnInit {
     // Obtiene el nombre del usuario autenticado
     this.authService.stateAuth().subscribe(user => {
       if (user) {
+        console.log('Usuario autenticado:', user.uid); // Log del UID del usuario autenticado
         this.firestoreService.getDoc<any>('usuarios', user.uid).subscribe(userData => {
           if (userData) {
             this.nombreSolicitante = `${userData.nombre} ${userData.apellidoPaterno} ${userData.apellidoMaterno}`; // Concatenar nombres
+            console.log('Nombre del solicitante:', this.nombreSolicitante); // Log del nombre del solicitante
+          } else {
+            console.error('No se encontró información del usuario.');
           }
+        }, error => {
+          console.error('Error al obtener información del usuario:', error);
         });
+      } else {
+        console.error('No hay usuario autenticado.');
       }
     });
   }
@@ -69,27 +81,34 @@ export class PostulacionEventosComponent implements OnInit {
     // Envía la postulación a la actividad
     this.authService.stateAuth().subscribe(user => {
       if (user) {
-        const cantidadParticipantes = this.postulacionForm.value.cantidadParticipantes;
-        const cantidadDisponible = this.actividad.cantidadDisponible;
+        const cantidadParticipantes = this.postulacionForm.value.cantidadParticipantes; // Obtiene la cantidad de participantes
+        const cantidadDisponible = this.actividad.cantidadDisponible; // Obtiene la cantidad disponible
+
+        console.log('Cantidad de participantes:', cantidadParticipantes); // Log de la cantidad de participantes
+        console.log('Cantidad disponible:', cantidadDisponible); // Log de la cantidad disponible
 
         // Verifica si el usuario ya está inscrito
         if (this.usuarioYaPostulado(user.uid)) {
           this.mostrarToast('Ya estás inscrito en esta actividad.'); // Mensaje de error
+          console.log('El usuario ya está inscrito:', user.uid); // Log si el usuario ya está inscrito
           return; // No continuar con la postulación
         }
 
         // Verifica si hay lugares disponibles
         if (cantidadDisponible >= cantidadParticipantes) {
           const participante = {
-            uid: user.uid,
-            nombre: this.nombreSolicitante,
-            fechaInscripcion: this.obtenerFechaActual(),
-            cantidadParticipantes: cantidadParticipantes
+            uid: user.uid, // UID del usuario
+            nombre: this.nombreSolicitante, // Nombre del solicitante
+            fechaInscripcion: this.obtenerFechaActual(), // Fecha de inscripción
+            cantidadParticipantes: cantidadParticipantes // Cantidad de acompañantes
           };
+
+          console.log('Participante a agregar:', participante); // Log del participante
 
           // Actualiza la cantidad disponible de la actividad
           this.firestoreService.actualizarCantidadDisponible(this.actividad.id, cantidadParticipantes)
             .then(() => {
+              console.log('Cantidad disponible actualizada exitosamente'); // Log de éxito
               // Agrega el nuevo participante a la lista de participantes en la actividad
               this.firestoreService.agregarParticipante(this.actividad.id, participante)
                 .then(() => {
@@ -98,9 +117,13 @@ export class PostulacionEventosComponent implements OnInit {
                   this.postulacionForm.reset(); // Limpiar el formulario
                   this.disponible = true; // Resetea la disponibilidad
                 })
-                .catch(error => console.error('Error al agregar el participante:', error));
+                .catch(error => {
+                  console.error('Error al agregar el participante:', error);
+                });
             })
-            .catch(error => console.error('Error al actualizar cantidad disponible:', error));
+            .catch(error => {
+              console.error('Error al actualizar cantidad disponible:', error);
+            });
         } else {
           console.error('No hay suficientes lugares disponibles.');
           this.disponible = false; // Actualiza la disponibilidad
@@ -114,6 +137,11 @@ export class PostulacionEventosComponent implements OnInit {
 
   // Método para verificar si el usuario ya está postulado
   usuarioYaPostulado(uid: string): boolean {
+    console.log('Verificando si el usuario ya está postulado:', uid); // Log de verificación
+    if (!this.actividad.participantes) {
+      console.warn('No hay participantes en la actividad.'); // Advertencia si no hay participantes
+      return false; // Si no hay participantes, el usuario no está inscrito
+    }
     return this.actividad.participantes.some((participante: any) => participante.uid === uid);
   }
 

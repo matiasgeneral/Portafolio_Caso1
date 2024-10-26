@@ -40,21 +40,22 @@ export class PerfilComponent implements OnInit {
     this.authService.stateAuth().subscribe(user => {
       if (user) {
         this.firestoreService.getPostulacionesUsuario(user.uid).subscribe(postulaciones => {
-          this.postulacionesEspacios = postulaciones.map((post: any) => {
-            if (post.fechasReservadas && post.fechasReservadas.length > 0) {
-              const primeraReserva = post.fechasReservadas[0]; // Obtener la primera reserva
-              return {
-                ...post,
-                fechaReservada: this.formatDate(primeraReserva.fecha), // Formatear la fecha reservada
-                horaInicio: primeraReserva.horaInicio,
-                horaFin: primeraReserva.horaFin,
-                fechaSolicitud: this.formatDate(primeraReserva.solicitante.fechaSolicitud), // Formatear la fecha de solicitud
-                image: post.image // Asegúrate de tener la URL de la imagen aquí
-              };
-            }
-            return post; // Retorna el post original si no hay reservas
+          // Filtrar solo las postulaciones del usuario autenticado
+          this.postulacionesEspacios = postulaciones.filter((post: any) => 
+            post.fechasReservadas &&
+            post.fechasReservadas.some((reserva: any) => reserva.solicitante.uid === user.uid)
+          ).map((post: any) => {
+            const primeraReserva = post.fechasReservadas.find((reserva: any) => reserva.solicitante.uid === user.uid);
+            return {
+              ...post,
+              fechaReservada: this.formatDate(primeraReserva.fecha), // Formatear la fecha reservada
+              horaInicio: primeraReserva.horaInicio,
+              horaFin: primeraReserva.horaFin,
+              fechaSolicitud: this.formatDate(primeraReserva.solicitante.fechaSolicitud), // Formatear la fecha de solicitud
+              image: post.image // Asegúrate de tener la URL de la imagen aquí
+            };
           });
-          console.log('Postulaciones a espacios públicos cargadas:', this.postulacionesEspacios);
+          console.log('Postulaciones a espacios públicos del usuario autenticado:', this.postulacionesEspacios);
         }, error => {
           console.error('Error al cargar postulaciones de espacios públicos:', error);
         });
@@ -66,22 +67,25 @@ export class PerfilComponent implements OnInit {
   cargarPostulacionesActividades() {
     this.authService.stateAuth().subscribe(user => {
       if (user) {
-        // Aquí asumimos que tienes un método en tu FirestoreService que obtiene todas las actividades
         this.firestoreService.getActividades().subscribe(actividades => {
-          // Filtrar las actividades en las que el usuario está inscrito
           this.postulacionesActividades = actividades.filter((actividad: any) =>
+            Array.isArray(actividad.participantes) && 
             actividad.participantes.some((participante: any) => participante.uid === user.uid)
           ).map((actividad: any) => {
-            // Aquí extraemos la información necesaria
             const participante = actividad.participantes.find((p: any) => p.uid === user.uid);
+            
+            // Log para depuración
+            console.log('Actividad cargada:', actividad);
+            console.log('Fecha de evento original:', actividad.fechaEvento);
+
             return {
               ...actividad,
-              fechaInscripcion: this.formatDate(participante.fechaInscripcion), // Formatear la fecha de inscripción
-              fechaEvento: this.formatDate(actividad.fechaEvento), // Formatear la fecha del evento
-              cantidadParticipantes: participante.cantidadParticipantes // Cantidad de participantes
+              fechaInscripcion: this.formatDate(participante?.fechaInscripcion), // Formatear fecha de inscripción
+              fechaEvento: this.formatDate(actividad.fechaEvento), // Formatear fecha de evento
+              cantidadParticipantes: participante?.cantidadParticipantes
             };
           });
-          console.log('Postulaciones a actividades cargadas:', this.postulacionesActividades);
+          console.log('Postulaciones a actividades del usuario autenticado:', this.postulacionesActividades);
         }, error => {
           console.error('Error al cargar postulaciones de actividades:', error);
         });
@@ -89,12 +93,24 @@ export class PerfilComponent implements OnInit {
     });
   }
 
-  // Función para formatear fechas de 'DD/MM/YYYY'
+  // Función para formatear fechas de 'DD/MM/YYYY' a 'DD/MM/YYYY'
   formatDate(date: string): string {
     if (date) {
-      const [year, month, day] = date.split('-'); // Separa la cadena por "-"
-      return `${day}/${month}/${year}`; // Devuelve la fecha en el formato DD/MM/YYYY
+      // Verificar si la fecha está en formato DD/MM/YYYY
+      const partes = date.split('/');
+      if (partes.length === 3) {
+        const [day, month, year] = partes; // Asignar correctamente para el formato DD/MM/YYYY
+        return `${day}/${month}/${year}`; // Devuelve en el mismo formato, si es necesario
+      }
+      // Si la fecha está en formato YYYY-MM-DD
+      const partesAlternativas = date.split('-');
+      if (partesAlternativas.length === 3) {
+        const [yearAlt, monthAlt, dayAlt] = partesAlternativas;
+        return `${dayAlt}/${monthAlt}/${yearAlt}`; // Formatear a DD/MM/YYYY
+      }
+      console.error('Formato de fecha incorrecto:', date);
+      return 'Fecha no disponible';
     }
-    return 'Fecha no disponible'; // Mensaje si la fecha no está definida
+    return 'Fecha no disponible';
   }
 }
