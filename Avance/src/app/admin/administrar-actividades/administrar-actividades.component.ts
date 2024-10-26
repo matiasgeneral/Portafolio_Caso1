@@ -65,15 +65,15 @@ export class AdministrarActividadesComponent  implements OnInit {
   deleteDoc() {
     if (this.id) {
       // Obtén el espacioPublico  para acceder a los datos de la imagen antes de eliminarla
-      this.firestoreService.getDoc('actividad', this.id).subscribe((actividad: any) => {
-        const imageUrl = actividad.image;  // Suponiendo que 'noticia.image' contiene la URL completa de la imagen
+      this.firestoreService.getDoc('actividades', this.id).subscribe((actividades: any) => {
+        const imageUrl = actividades.image;  // Suponiendo que 'noticia.image' contiene la URL completa de la imagen
     
         // Primero elimina la imagen usando refFromURL
         this.FirestorageService.deleteImageFromUrl(imageUrl).subscribe(() => {
           console.log('Imagen borrada');
     
           // Luego elimina el documento
-          this.firestoreService.deleteDoc('actividad', this.id!).then(() => {
+          this.firestoreService.deleteDoc('actividades', this.id!).then(() => {
             console.log('actividad borrada');
             this.goBack(); // Regresa a la lista de noticias después de borrar
           }).catch((error: any) => {
@@ -89,7 +89,7 @@ export class AdministrarActividadesComponent  implements OnInit {
   // Método para deshabilitar la actividad
   deshabilitarDoc() {
     if (this.id) {
-      this.firestoreService.deshabilitarDoc('actividad', this.id).then(() => {
+      this.firestoreService.deshabilitarDoc('actividades', this.id).then(() => {
         console.log('actividad deshabilitada');
         this.goBack(); // Regresa a la lista de nactividades después de deshabilitar
       }).catch(error => {

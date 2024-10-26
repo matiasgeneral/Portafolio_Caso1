@@ -24,7 +24,7 @@ export class VisualizacionEventosComponent implements OnInit {
 
   formatDate(date: string): string {
     if (date) {
-      const [day, month, year] = date.split('/'); // Separa la cadena por "/"
+      const [year, month, day] = date.split('-'); // Separa la cadena por "-"
       return `${day}/${month}/${year}`; // Devuelve la fecha en el formato DD/MM/YYYY
     }
     return 'Fecha no disponible'; // Mensaje si la fecha no está definida

@@ -72,33 +72,29 @@ export class PostulacionEventosComponent implements OnInit {
         const cantidadParticipantes = this.postulacionForm.value.cantidadParticipantes;
         const cantidadDisponible = this.actividad.cantidadDisponible;
 
-        // Verifica si el usuario ya está inscrito
-        if (this.usuarioYaPostulado(user.uid)) {
-          this.mostrarToast('Ya estás inscrito en esta actividad.'); // Mensaje de error
-          return; // No continuar con la postulación
-        }
-
         // Verifica si hay lugares disponibles
         if (cantidadDisponible >= cantidadParticipantes) {
-          const participante = {
-            uid: user.uid,
-            nombre: this.nombreSolicitante,
-            fechaInscripcion: this.obtenerFechaActual(),
-            cantidadParticipantes: cantidadParticipantes
+          const postulacion = {
+            cantidadParticipantes: cantidadParticipantes,
+            solicitante: {
+              uid: user.uid,
+              nombre: this.nombreSolicitante,
+              fechaSolicitud: this.obtenerFechaActual(),
+            }
           };
 
           // Actualiza la cantidad disponible de la actividad
           this.firestoreService.actualizarCantidadDisponible(this.actividad.id, cantidadParticipantes)
             .then(() => {
-              // Agrega el nuevo participante a la lista de participantes en la actividad
-              this.firestoreService.agregarParticipante(this.actividad.id, participante)
+              // Guarda la postulación en la base de datos
+              this.firestoreService.addPostulacion(this.actividad.id, postulacion) // Cambia el argumento de la función
                 .then(() => {
-                  console.log('Participante agregado exitosamente');
+                  console.log('Postulación enviada exitosamente');
                   this.mostrarToast('Postulación enviada exitosamente'); // Muestra el mensaje de éxito
                   this.postulacionForm.reset(); // Limpiar el formulario
                   this.disponible = true; // Resetea la disponibilidad
                 })
-                .catch(error => console.error('Error al agregar el participante:', error));
+                .catch(error => console.error('Error al enviar la postulación:', error));
             })
             .catch(error => console.error('Error al actualizar cantidad disponible:', error));
         } else {
@@ -110,11 +106,6 @@ export class PostulacionEventosComponent implements OnInit {
         console.error('No se encontró el usuario autenticado.');
       }
     });
-  }
-
-  // Método para verificar si el usuario ya está postulado
-  usuarioYaPostulado(uid: string): boolean {
-    return this.actividad.participantes.some((participante: any) => participante.uid === uid);
   }
 
   // Método para mostrar un toast

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { firstValueFrom, Observable } from 'rxjs';
 import { WhereFilterOp, arrayUnion } from '@angular/fire/firestore';
+import firebase from 'firebase/compat/app';
 
 @Injectable({
   providedIn: 'root'
@@ -206,10 +207,14 @@ getPostulacionesProyectos(uid: string) {
     .valueChanges(); // Devuelve un observable de las postulaciones
 }
 
+ // Método para obtener todas las actividades
+ getActividades(): Observable<any[]> {
+  return this.afs.collection('actividades').valueChanges();
+}
 // Método para obtener postulaciones de eventos
 getPostulacionesEventos(uid: string) {
-  return this.afs.collection('postulacionesEventos', ref => ref.where('solicitante.uid', '==', uid))
-    .valueChanges(); // Devuelve un observable de las postulaciones
+  // Obtiene todos los documentos de la colección `eventos`
+  return this.afs.collection('actividades').valueChanges({ idField: 'id' });
 }
 
 getPostulacionesUsuario(uid: string) {
@@ -217,8 +222,24 @@ getPostulacionesUsuario(uid: string) {
   return this.afs.collection('espaciosPublicos').valueChanges({ idField: 'id' });
 }
 
-
+// Método para actualizar la cantidad disponible de una actividad
+actualizarCantidadDisponible(actividadId: string, cantidadParticipantes: number) {
+  const actividadRef = this.afs.collection('actividades').doc(actividadId);
+  return actividadRef.update({
+    cantidadDisponible: firebase.firestore.FieldValue.increment(-cantidadParticipantes), // Disminuye la cantidad disponible
+  });
 }
+
+// Método para agregar un participante a la actividad
+agregarParticipante(actividadId: string, participante: any) {
+  const actividadRef = this.afs.collection('actividades').doc(actividadId);
+  return actividadRef.update({
+    participantes: firebase.firestore.FieldValue.arrayUnion(participante), // Agrega el participante a la lista
+  });
+}
+}
+
+
 
 
 

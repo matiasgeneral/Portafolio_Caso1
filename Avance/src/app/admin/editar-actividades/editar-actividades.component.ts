@@ -32,6 +32,7 @@ export class EditarActividadesComponent implements OnInit {
       fechaEvento: ['', Validators.required],
       horaEvento: ['', Validators.required],
       cantidadMax: ['', [Validators.required, Validators.max(this.maxParticipants)]],
+      cantidadDisponible: [0], // Inicializar con 0 o con un valor por defecto
       image: [''], // La imagen puede no estar presente inicialmente
     });
   }
@@ -44,25 +45,22 @@ export class EditarActividadesComponent implements OnInit {
         // Cargar los detalles de la actividad y rellenar el formulario
         this.firestore.getDoc<any>('actividades', this.id).subscribe(actividades => {
           if (actividades) {
-            // Verificar si fechaEvento está definido
+            // Formatear fechaEvento a día/mes/año
             if (actividades.fechaEvento) {
-              let formattedDate: string | null = null; // Variable para almacenar la fecha formateada
-
-              
-
-              // Asignar la fecha formateada al formulario
-              if (formattedDate) {
-                actividades.fechaEvento = formattedDate;
-              } else {
-                console.error('Error al formatear la fecha de evento:', actividades.fechaEvento);
-              }
-            } else {
-              console.error('Fecha de evento no está definida en la actividad:', actividades);
+              actividades.fechaEvento = this.formatDate(actividades.fechaEvento);
             }
 
             // Rellenar el formulario con los datos actuales
             this.actividadForm.patchValue(actividades);
             console.log('Detalles de la actividad cargados:', actividades);
+
+            // Suscribirse a los cambios en cantidadMax
+            this.actividadForm.get('cantidadMax')?.valueChanges.subscribe((cantidadMax) => {
+              if (cantidadMax) {
+                // Actualizar cantidadDisponible igual a cantidadMax
+                this.actividadForm.patchValue({ cantidadDisponible: cantidadMax });
+              }
+            });
           } else {
             console.error('Actividad no encontrada');
           }
@@ -76,7 +74,6 @@ export class EditarActividadesComponent implements OnInit {
     if (this.actividadForm.valid) {
       const actividadData = this.actividadForm.value;
 
-     
       // Si hay una imagen seleccionada, se sube a Firebase Storage
       if (this.selectedFile) {
         this.uploadImageAndUpdate(actividadData);
@@ -151,5 +148,10 @@ export class EditarActividadesComponent implements OnInit {
     this.router.navigate(['/buscador-actividades']); // Asegúrate de que esta ruta sea correcta
   }
 
-
+  // Método para formatear la fecha
+  formatDate(dateString: string): string {
+    // Asumir que dateString está en formato 'DD/MM/YYYY'
+    const parts = dateString.split('/');
+    return `${parts[2]}-${parts[1]}-${parts[0]}`; // Cambiado a formato 'YYYY-MM-DD'
+  }
 }
