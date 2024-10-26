@@ -27,13 +27,12 @@
           </ion-thumbnail>
 
           <ion-label>
-            <strong>Título:</strong> {{ espacioPublico.titulo | titlecase }}<br />
+            <strong>Título: </strong> {{ espacioPublico.titulo | titlecase }}<br />
             <strong>Descripción:</strong> {{ espacioPublico.descripcion | titlecase }}<br />
 
-            <strong>Ubicación: </strong> 
-            <a href="{{ espacioPublico.ubicacion }}" target="_blank">{{ espacioPublico.ubicacion | slice:0:20 }}...</a><br />
+            <p><strong>Ubicación: </strong> <a href="{{ espacioPublico.ubicacion}}" target="_blank">Ver en mapa</a></p>
 
-            <strong>Fecha de Creación:</strong> {{ espacioPublico.fechaCreacion }}<br /> <!-- Se muestra directamente como string -->
+            <strong>Fecha de Creación: </strong> {{ espacioPublico.fechaCreacion }}<br /> <!-- Se muestra directamente como string -->
           </ion-label>
 
           <ion-button (click)="administrarEspacioPublicos(espacioPublico)" fill="outline" color="secondary" slot="end">

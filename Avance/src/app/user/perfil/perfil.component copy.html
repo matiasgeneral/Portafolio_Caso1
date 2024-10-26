@@ -29,10 +29,10 @@
             <img [src]="post.image" alt="Imagen del Espacio Público" />
           </ion-thumbnail>
           <ion-label>
+            <p><strong>Fecha de Solicitud:</strong> {{ post.fechaSolicitud }}</p> <br>
             <p><strong>Título:</strong> {{ post.titulo }}</p>
             <p><strong>Dirección:</strong> {{ post.ubicacion }}</p>
-            <p><strong>Fecha de Solicitud:</strong> {{ post.fechaSolicitud  }}</p> <!-- Formato de fecha de solicitud -->
-            <p><strong>Fecha Reservada:</strong> {{ post.fechaReservada}}</p> <!-- Formato de fecha reservada -->
+            <p><strong>Fecha Reservada:</strong> {{ post.fechaReservada }}</p>
             <p><strong>Hora Inicio:</strong> {{ post.horaInicio }}</p>
             <p><strong>Hora Fin:</strong> {{ post.horaFin }}</p>
           </ion-label>
@@ -47,5 +47,35 @@
       <p>No tienes postulaciones registradas para espacios públicos.</p>
     </ion-card-content>
   </ion-card>
-  
+
+  <!-- Mostrar Postulaciones a Actividades -->
+  <ion-card *ngIf="postulacionesActividades && postulacionesActividades.length > 0">
+    <ion-card-header>
+      <ion-card-title>Mis Postulaciones a Actividades</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item *ngFor="let actividad of postulacionesActividades">
+          <ion-thumbnail slot="start">
+            <img [src]="actividad.image" alt="Imagen de la Actividad" />
+          </ion-thumbnail>
+          <ion-label>
+            <p><strong>Fecha de Solicitud:</strong> {{ actividad.fechaInscripcion }}</p> <br>
+            <p><strong>Título:</strong> {{ actividad.titulo }}</p>
+            <p><strong>Descripción:</strong> {{ actividad.descripcion }}</p>
+            <p><strong>Fecha del Evento:</strong> {{ actividad.fechaEvento }}</p>
+            <p><strong>Hora del Evento:</strong> {{ actividad.horaEvento }}</p>
+            <p><strong>Cantidad de Participantes:</strong> {{ actividad.cantidadParticipantes }}</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Mensaje cuando no hay postulaciones a actividades -->
+  <ion-card *ngIf="postulacionesActividades && postulacionesActividades.length === 0">
+    <ion-card-content>
+      <p>No tienes postulaciones registradas para actividades.</p>
+    </ion-card-content>
+  </ion-card>
 </ion-content>
