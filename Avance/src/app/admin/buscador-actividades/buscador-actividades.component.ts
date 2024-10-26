@@ -17,10 +17,10 @@ export class BuscadorActividadesComponent  implements OnInit {
 
   
     ngOnInit() {
-      this.firestore.getdocs<any>('actividad').subscribe((data: any[]) => {
+      this.firestore.getdocs<any>('actividades').subscribe((data: any[]) => {
         console.log('Datos recibidos de Firestore:', data);
         this.actividades = data.map(actividad => {
-          console.log('Activdad:', actividad);
+          console.log('Activdades:', actividad);
           return actividad;
         });
         console.log('actividades después de map:', this.actividades);

@@ -16,7 +16,7 @@ export class VisualizacionEventosComponent implements OnInit {
   }
 
   cargarEventos() {
-    this.firestoreService.getdocs<any>('actividad').subscribe(eventos => {
+    this.firestoreService.getdocs<any>('actividades').subscribe(eventos => {
       this.eventos = eventos; // Almacenar los eventos obtenidos de Firestore
       console.log('Eventos cargados:', this.eventos); // Verifica la estructura de datos aquí
     });
@@ -28,5 +28,12 @@ export class VisualizacionEventosComponent implements OnInit {
       return `${day}/${month}/${year}`; // Devuelve la fecha en el formato DD/MM/YYYY
     }
     return 'Fecha no disponible'; // Mensaje si la fecha no está definida
+  }
+
+  formatTime(time: string): string {
+    if (time) {
+      return time; // Devuelve la hora en formato HH:MM
+    }
+    return 'Hora no disponible'; // Mensaje si la hora no está definida
   }
 }

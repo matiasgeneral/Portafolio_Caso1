@@ -27,7 +27,7 @@ export class AdministrarActividadesComponent  implements OnInit {
 
       if (this.id) {
         // Cargar los detalles de la actividad
-        this.firestoreService.getDoc<any>('actividad', this.id).subscribe(actividad => {
+        this.firestoreService.getDoc<any>('actividades', this.id).subscribe(actividad => {
           if (actividad) {
             this.actividadDetails = actividad;
             console.log('Detalles de la actividad:', this.actividadDetails);

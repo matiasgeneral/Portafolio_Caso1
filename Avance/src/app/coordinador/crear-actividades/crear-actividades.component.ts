@@ -13,7 +13,7 @@ import { AlertController } from '@ionic/angular';
 export class CrearActividadesComponent implements OnInit {
   actividadForm: FormGroup;
   selectedFile: File | null = null;
-  maxParticipants: number = 300; // Máximo de participantes
+  maxParticipants: number = 999; // Máximo de participantes
 
   constructor(
     private firestore: FirestoreService,
@@ -25,6 +25,7 @@ export class CrearActividadesComponent implements OnInit {
       titulo: ['', Validators.required],
       descripcion: ['', Validators.required],
       fechaEvento: ['', Validators.required],
+      horaEvento: ['', Validators.required],
       cantidadMax: ['', [Validators.required, Validators.max(this.maxParticipants)]],
       image: ['', Validators.required],
     });
@@ -74,7 +75,7 @@ export class CrearActividadesComponent implements OnInit {
 
   // Método para crear una actividad en Firestore con un UID
   async createActividad(actividadData: any, id: string) {
-    const path = 'actividad';
+    const path = 'actividades'; // Asegúrate de que el path sea correcto
     await this.firestore.createDoc(actividadData, path, id);
   }
 

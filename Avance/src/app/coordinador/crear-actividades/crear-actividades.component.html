@@ -31,6 +31,14 @@
     </ion-note>
 
     <ion-item>
+      <ion-label position="floating">Hora del Evento</ion-label>
+      <ion-input type="time" formControlName="horaEvento" required></ion-input>
+    </ion-item>
+    <ion-note *ngIf="actividadForm.get('horaEvento')?.touched && actividadForm.get('horaEvento')?.hasError('required')" color="danger">
+      La hora del evento es requerida.
+    </ion-note>
+
+    <ion-item>
       <ion-label position="floating">Cantidad Máxima de Participantes</ion-label>
       <ion-input type="number" formControlName="cantidadMax" required></ion-input>
     </ion-item>

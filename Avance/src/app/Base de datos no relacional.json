@@ -20,6 +20,7 @@
       "descripcion": "",              // Descripción de la actividad
       "fechaCreacion": "DD-MM-YYYY",  // Fecha en que se creó la actividad
       "fechaEvento": "DD-MM-YYYY",    // Fecha del evento
+      "horaEvento": "",               // Hora del evento
       "cantidadMax": 3,               // Cantidad máxima de participantes por actividad (máximo 3 incluyendo al usuario)
       "cantidadDisponible": 3,        // Cantidad de cupos disponibles
       "participantes": [              // Usuarios que se inscribieron en la actividad
@@ -120,6 +121,7 @@
       "descripcion": "",
       "fechaCreacion": "DD-MM-YYYY",
       "fechaEvento": "DD-MM-YYYY",
+      "horaEvento": "",
       "cantidadMax": 3,
       "cantidadDisponible": 3,
       "participantes": [
