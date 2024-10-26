@@ -127,6 +127,7 @@ export class AppComponent implements OnInit {
       { title: 'Buscar actividades', url: './buscador-actividades', icon: 'search' },
       { title: 'Buscar espacios públicos', url: './buscador-espacios-publicos', icon: 'search' },
       { title: 'Buscar proyectos', url: './buscador-proyectos', icon: 'search' },
+      {title: 'Perfil', url: './perfil', icon: 'person-circle'},
     ];
   }
 
@@ -141,6 +142,7 @@ export class AppComponent implements OnInit {
       { title: 'Solicitudes de espacios públicos', url: './lista-solicitudes-espacios-publicos', icon: 'list' },
       { title: 'Solicitudes de proyectos', url: './lista-solicitudes-proyectos', icon: 'list' },
       { title: 'Solicitud Certificado Residencia', url: './solicitud-certificado-residencia', icon: 'reader' },
+      {title: 'Perfil', url: './perfil', icon: 'person-circle'},
     ];
   }
 
@@ -152,6 +154,7 @@ export class AppComponent implements OnInit {
       { title: 'Actividades', url: './visualizacion-eventos', icon: 'star' },
       { title: 'Proyectos', url: './visualizacion-proyectos', icon: 'star' },
       { title: 'Solicitud Certificado Residencia', url: './solicitud-certificado-residencia', icon: 'reader' },
+      {title: 'Perfil', url: './perfil', icon: 'person-circle'},
     ];
   }
 
