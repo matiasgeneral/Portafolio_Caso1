@@ -1,18 +1,47 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
-    <ion-title>Postulacion de proyectos</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content *ngIf="proyecto">
+  <!-- Información del Proyecto -->
+  <div class="project-info">
+    <ion-card>
+      <ion-img [src]="proyecto.image"></ion-img>
+      <ion-card-header>
+        <ion-card-title>{{ proyecto.titulo }}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p>{{ proyecto.descripcion }}</p>
+        <p><strong>Fecha de inicio:</strong> {{ formatDate(proyecto.fechaInicio) }}</p>
+        <p><strong>Fecha de fin:</strong> {{ formatDate(proyecto.fechaFin) }}</p>
+      </ion-card-content>
+    </ion-card>
+  </div>
 
-<ion-content>
-  <p>
-    postulacion-proyectos works!
-  </p>
-  
+  <!-- Información del Solicitante -->
+  <div class="applicant-info">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Información del Solicitante</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p><strong>Nombre:</strong> {{ nombreSolicitante }}</p>
+        <p><strong>Fecha de Solicitud:</strong> {{ obtenerFechaActual() }}</p> <!-- Muestra la fecha actual -->
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- Formulario de Postulación -->
+  <form [formGroup]="postulacionForm" (ngSubmit)="postular()">
+    <ion-list>
+      <ion-item *ngFor="let doc of documentosArray.controls; let i = index">
+        <ion-label position="stacked">{{ documentosRequeridos[i].nombre }}</ion-label>
+        <input type="file" (change)="onFileChange($event, i)" accept="application/pdf,image/*" />
+        <div *ngIf="doc.get('file')?.value" class="uploaded-file">
+          <p>Archivo subido: {{ doc.get('file')?.value | slice: -15 }}</p>
+        </div>
+      </ion-item>
+    </ion-list>
+
+    <ion-button type="submit" [disabled]="loading || postulacionForm.invalid" expand="full">
+      <ion-spinner *ngIf="loading"></ion-spinner>
+      <span *ngIf="!loading">Enviar Postulación</span>
+    </ion-button>
+  </form>
 </ion-content>
-
-
-

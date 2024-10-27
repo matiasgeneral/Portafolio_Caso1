@@ -17,15 +17,25 @@ export class VisualizacionProyectosComponent implements OnInit {
 
   cargarProyectos() {
     this.firestoreService.getdocs<any>('proyectos').subscribe((proyectos) => {
-      this.proyectos = proyectos; // Almacenar los proyectos obtenidos de Firestore
+      // Convertir fechas al formato DD/MM/YYYY antes de asignar
+      this.proyectos = proyectos.map(proyecto => ({
+        ...proyecto,
+        fechaCreacion: this.formatDate(proyecto.fechaCreacion),
+        fechaInicio: this.formatDate(proyecto.fechaInicio),
+        fechaFin: this.formatDate(proyecto.fechaFin)
+      }));
       console.log('Proyectos cargados:', this.proyectos); // Verifica la estructura de datos aquí
     });
   }
 
   formatDate(date: string): string {
-    if (date) {
-      const [day, month, year] = date.split('/'); // Separa la cadena por "/"
-      return `${day}/${month}/${year}`; // Devuelve la fecha en el formato DD/MM/YYYY
+    // Validar si la fecha está en formato YYYY-MM-DD y convertirla
+    if (date && date.includes('-')) {
+      const [year, month, day] = date.split('-');
+      return `${day}/${month}/${year}`; // Convertir a DD/MM/YYYY
+    } else if (date && date.includes('/')) {
+      // Si la fecha ya está en formato DD/MM/YYYY, retornarla tal cual
+      return date;
     }
     return 'Fecha no disponible'; // Mensaje si la fecha no está definida
   }
