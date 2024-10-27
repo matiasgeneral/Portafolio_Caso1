@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { FirestoreService } from 'src/app/service/firestore.service';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { finalize } from 'rxjs/operators';
@@ -27,25 +27,38 @@ export class CrearProyectosComponent implements OnInit {
       descripcion: ['', Validators.required],
       fechaInicio: ['', Validators.required],
       fechaFin: ['', Validators.required],
-      image: ['', Validators.required], // Si decides mantener esto, asegúrate de sincronizar con `selectedFile`
-      fechaCreacion: [''], // Campo para la fecha de creación
+      image: ['', Validators.required],
+      fechaCreacion: [''],
+      documentosRequeridos: this.formBuilder.array([]) // FormArray para documentos
     });
+  }
+
+  // Getter para documentosRequeridos como FormArray
+  get documentosRequeridos() {
+    return this.proyectoForm.get('documentosRequeridos') as FormArray;
+  }
+
+  // Agregar un nuevo FormGroup de documento al FormArray
+  agregarDocumento() {
+    const documentoForm = this.formBuilder.group({
+      nombre: ['', Validators.required], // Nombre del documento
+    });
+    this.documentosRequeridos.push(documentoForm);
+  }
+
+  // Eliminar un documento del FormArray
+  eliminarDocumento(index: number) {
+    this.documentosRequeridos.removeAt(index);
   }
 
   async onSubmit() {
     if (this.proyectoForm.valid && this.selectedFile) {
       const proyectoData = this.proyectoForm.value;
-
-      // Asignar la fecha de creación en formato día/mes/año (fecha actual)
       proyectoData.fechaCreacion = this.getCurrentDate();
-      
-      //Asignar la fecha de inicio y fin en formato día/mes/año
       proyectoData.fechaInicio = this.formatDate(proyectoData.fechaInicio);
       proyectoData.fechaFin = this.formatDate(proyectoData.fechaFin);
-
-      // Generar el UID del proyecto
       const id = this.firestore.getId();
-      proyectoData.id = id; // Añadir el UID a los datos del proyecto
+      proyectoData.id = id;
 
       const filePath = `proyecto/${this.selectedFile.name}`;
       const fileRef = this.storage.ref(filePath);
@@ -58,7 +71,6 @@ export class CrearProyectosComponent implements OnInit {
             const url = await fileRef.getDownloadURL().toPromise();
             proyectoData.image = url;
 
-            // Crear el proyecto en Firestore con el UID
             await this.createProyecto(proyectoData, id);
             this.showSuccessAlert();
             this.resetForm();
@@ -71,7 +83,7 @@ export class CrearProyectosComponent implements OnInit {
   }
 
   async createProyecto(proyectoData: any, id: string) {
-    const path = 'proyecto';
+    const path = 'proyectos'; // Cambio del path a 'proyectos' en lugar de 'proyecto'
     await this.firestore.createDoc(proyectoData, path, id);
   }
 
@@ -89,28 +101,25 @@ export class CrearProyectosComponent implements OnInit {
       message: 'El proyecto ha sido creado correctamente.',
       buttons: ['OK'],
     });
-
     await alert.present();
   }
 
   resetForm() {
     this.proyectoForm.reset();
     this.selectedFile = null;
-    this.proyectoForm.markAsPristine(); // Restablecer el estado del formulario
-    this.proyectoForm.markAsUntouched(); // Marcar campos como no tocados
+    this.documentosRequeridos.clear();
   }
 
   getCurrentDate(): string {
     const today = new Date();
     const day = String(today.getDate()).padStart(2, '0');
-    const month = String(today.getMonth() + 1).padStart(2, '0'); // Mes es 0-indexed
+    const month = String(today.getMonth() + 1).padStart(2, '0');
     const year = today.getFullYear();
-    return `${day}/${month}/${year}`; // Formato día/mes/año
+    return `${day}/${month}/${year}`;
   }
 
   formatDate(dateString: string): string {
-    // Asumir que dateString está en formato 'YYYY-MM-DD'
     const parts = dateString.split('-');
-    return `${parts[2]}/${parts[1]}/${parts[0]}`; // Formato 'DD/MM/YYYY'
+    return `${parts[2]}/${parts[1]}/${parts[0]}`;
   }
 }

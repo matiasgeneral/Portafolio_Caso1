@@ -6,18 +6,19 @@ import { FirestoreService } from 'src/app/service/firestore.service';
   templateUrl: './visualizacion-proyectos.component.html',
   styleUrls: ['./visualizacion-proyectos.component.scss'],
 })
-export class VisualizacionProyectosComponent  implements OnInit {
-  proyectos: any[] = []; // Arreglo para almacenar los proyecto
-  constructor(private firestoreService: FirestoreService) { }
+export class VisualizacionProyectosComponent implements OnInit {
+  proyectos: any[] = []; // Arreglo para almacenar los proyectos
+
+  constructor(private firestoreService: FirestoreService) {}
 
   ngOnInit() {
     this.cargarProyectos(); // Cargar proyectos al iniciar el componente
   }
 
   cargarProyectos() {
-    this.firestoreService.getdocs<any>('proyecto').subscribe(proyectos => {
+    this.firestoreService.getdocs<any>('proyectos').subscribe((proyectos) => {
       this.proyectos = proyectos; // Almacenar los proyectos obtenidos de Firestore
-      console.log('proyectos cargados:', this.proyectos); // Verifica la estructura de datos aquí
+      console.log('Proyectos cargados:', this.proyectos); // Verifica la estructura de datos aquí
     });
   }
 

@@ -51,6 +51,21 @@
       Debes seleccionar una imagen.
     </ion-note>
 
+    <!-- Documentos solicitados -->
+    <div>
+      <h4>Documentos solicitados</h4>
+      <ion-button (click)="agregarDocumento()" expand="block">+</ion-button>
+      <div formArrayName="documentosRequeridos">
+        <div *ngFor="let doc of documentosRequeridos.controls; let i = index" [formGroupName]="i" class="documento-item">
+          <ion-item>
+            <ion-label position="floating">Nombre del documento</ion-label>
+            <ion-input formControlName="nombre" placeholder="Nombre del documento" required></ion-input>
+            <ion-button color="danger" (click)="eliminarDocumento(i)">-</ion-button>
+          </ion-item>
+        </div>
+      </div>
+    </div>
+
     <!-- Botón para crear el proyecto -->
     <ion-button expand="full" type="submit" class="crear-proyecto-button" [disabled]="!proyectoForm.valid || !selectedFile">
       Crear proyecto

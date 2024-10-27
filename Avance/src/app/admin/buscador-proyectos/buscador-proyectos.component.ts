@@ -14,7 +14,7 @@ export class BuscadorProyectosComponent  implements OnInit {
   constructor(private firestore: FirestoreService, private router: Router) { }
 
   ngOnInit() {
-    this.firestore.getdocs<any>('proyecto').subscribe((data: any[]) => {
+    this.firestore.getdocs<any>('proyectos').subscribe((data: any[]) => {
       console.log('Datos recibidos de Firestore:', data);
       this.proyectos = data.map(proyecto => {
         console.log('Noticia:', proyecto);

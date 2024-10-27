@@ -28,7 +28,7 @@ export class AdministrarProyectosComponent implements OnInit {
 
       if (this.id) {
         // Cargar los detalles del Proyecto
-        this.firestoreService.getDoc<any>('proyecto', this.id).subscribe(proyecto => {
+        this.firestoreService.getDoc<any>('proyectos', this.id).subscribe(proyecto => {
           if (proyecto) {
             this.proyectoDetails = proyecto;
             console.log('Detalles del Proyecto', this.proyectoDetails);
@@ -61,7 +61,7 @@ export class AdministrarProyectosComponent implements OnInit {
   deleteDoc() {
     if (this.id) {
       // Obtén el espacioPublico  para acceder a los datos de la imagen antes de eliminarla
-      this.firestoreService.getDoc('proyecto', this.id).subscribe((proyecto: any) => {
+      this.firestoreService.getDoc('proyectos', this.id).subscribe((proyecto: any) => {
         const imageUrl = proyecto.image;  // Suponiendo que 'noticia.image' contiene la URL completa de la imagen
 
         // Primero elimina la imagen usando refFromURL
@@ -69,7 +69,7 @@ export class AdministrarProyectosComponent implements OnInit {
           console.log('Imagen borrada');
 
           // Luego elimina el documento
-          this.firestoreService.deleteDoc('proyecto', this.id!).then(() => {
+          this.firestoreService.deleteDoc('proyectos', this.id!).then(() => {
             console.log('proyecto borrado');
             this.goBack(); // Regresa a la lista de noticias después de borrar
           }).catch((error: any) => {

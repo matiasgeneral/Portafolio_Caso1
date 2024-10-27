@@ -81,6 +81,7 @@
         {
           "uid": "usuario_2_uid",                // Identificador del postulante
           "nombre": "Carlos",                    // Nombre del postulante
+          "fechaSolicitud": "DD-MM-YYYY",          // Fecha de solicitud
           "documentosSubidos": [                 // Lista de documentos que el postulante ha subido
             {
               "documentoId": "doc_1",            // Identificador del documento subido
@@ -182,6 +183,7 @@
         {
           "uid": "usuario_2_uid",
           "nombre": "Carlos",
+          "fechaSolicitud": "DD-MM-YYYY",
           "documentosSubidos": [
             {
               "documentoId": "doc_1",
