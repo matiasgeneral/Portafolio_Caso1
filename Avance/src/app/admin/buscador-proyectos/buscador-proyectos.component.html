@@ -10,7 +10,7 @@
 <ion-content>
   <ion-card class="custom-card">
     <ion-card-header>
-      <ion-card-title>Lista de Noticias</ion-card-title>
+      <ion-card-title>Lista de Proyectos</ion-card-title>
       <div class="ion-text-end">
         <ion-button expand="full" routerLink="/visualizacion-proyectos" class="ver-noticias-button">
           Ver proyectos
@@ -20,7 +20,7 @@
     
     <ion-card-content>
       <ion-list>
-        <!-- Mostrar las noticias -->
+        <!-- Mostrar los proyectos -->
         <ion-item *ngFor="let proyecto of proyectos">
           <ion-thumbnail slot="start">
             <img *ngIf="proyecto.image" [src]="proyecto.image" alt="Documento" class="media-image"/>
@@ -28,7 +28,8 @@
 
           <ion-label>
             <strong>Título:</strong> {{ proyecto.titulo | titlecase }}<br />
-            <strong>Fecha de proyecto:</strong> {{ proyecto.fechaInicio}} - {{proyecto.fechaFin}}<br />
+            <strong>Fecha de inicio:</strong> {{ proyecto.fechaInicio }}<br />
+            <strong>Fecha de fin:</strong> {{ proyecto.fechaFin }}<br />
             <strong>Fecha de creación:</strong> {{ proyecto.fechaCreacion }}<br />
           </ion-label>
 
