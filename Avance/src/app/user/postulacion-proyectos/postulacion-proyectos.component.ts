@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FirestoreService } from 'src/app/service/firestore.service';
 import { AuthenticationService } from 'src/app/service/authentication.service';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
@@ -23,6 +23,7 @@ export class PostulacionProyectosComponent implements OnInit {
   fechaSolicitud: string | null = null; 
 
   constructor(
+    private router: Router,
     private route: ActivatedRoute,
     private firestoreService: FirestoreService,
     private authService: AuthenticationService,
@@ -194,4 +195,9 @@ export class PostulacionProyectosComponent implements OnInit {
     const fechaFormateada = fecha.toLocaleDateString('es-ES', opciones);
     return fechaFormateada.split('/').reverse().join('-'); 
   }
+
+ // Método para regresar   
+ goBack() {
+  this.router.navigate(['/visualizacion-proyectos']); // Asegúrate de que esta ruta sea correcta
+}
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FirestoreService } from 'src/app/service/firestore.service';
 import { AuthenticationService } from 'src/app/service/authentication.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -17,6 +17,7 @@ export class PostulacionEventosComponent implements OnInit {
   disponible: boolean = true; // Indica si hay lugares disponibles
 
   constructor(
+    private router: Router,
     private route: ActivatedRoute,
     private firestoreService: FirestoreService,
     private authService: AuthenticationService,
@@ -161,5 +162,10 @@ export class PostulacionEventosComponent implements OnInit {
     const opciones = { year: 'numeric' as const, month: '2-digit' as const, day: '2-digit' as const, timeZone: 'UTC' };
     const fechaFormateada = fecha.toLocaleDateString('es-ES', opciones);
     return fechaFormateada.split('/').reverse().join('-'); // Cambia de DD/MM/YYYY a YYYY-MM-DD
+  }
+
+  // Método para regresar a la lista de noticias
+  goBack() {
+    this.router.navigate(['/visualizacion-eventos']); // Asegúrate de que esta ruta sea correcta
   }
 }

@@ -13,8 +13,8 @@ export class NoticiaComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private route: ActivatedRoute, // Para obtener el ID de la noticia
     private firestoreService: FirestoreService,
-    private route: ActivatedRoute // Para obtener el ID de la noticia
   ) { }
 
   ngOnInit() {

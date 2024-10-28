@@ -1,47 +1,57 @@
-<ion-content *ngIf="proyecto">
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Postular a Proyecto</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="postular-proyecto-content" padding>
   <!-- Información del Proyecto -->
-  <div class="project-info">
-    <ion-card>
-      <ion-img [src]="proyecto.image"></ion-img>
-      <ion-card-header>
-        <ion-card-title>{{ proyecto.titulo }}</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <p>{{ proyecto.descripcion }}</p>
-        <p><strong>Fecha de inicio:</strong> {{ formatDate(proyecto.fechaInicio) }}</p>
-        <p><strong>Fecha de fin:</strong> {{ formatDate(proyecto.fechaFin) }}</p>
-      </ion-card-content>
-    </ion-card>
-  </div>
+  <ion-card *ngIf="proyecto">
+    <ion-card-header>
+      <ion-img [src]="proyecto.image" *ngIf="proyecto.image"></ion-img> <!-- Muestra la imagen -->
+      <ion-card-title>{{ proyecto.titulo }}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p><strong>Descripción:</strong> {{ proyecto.descripcion }}</p>
+      <p><strong>Fecha de inicio:</strong> {{ formatDate(proyecto.fechaInicio) }}</p>
+      <p><strong>Fecha de fin:</strong> {{ formatDate(proyecto.fechaFin) }}</p>
+    </ion-card-content>
+  </ion-card>
 
   <!-- Información del Solicitante -->
-  <div class="applicant-info">
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>Información del Solicitante</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <p><strong>Nombre:</strong> {{ nombreSolicitante }}</p>
-        <p><strong>Fecha de Solicitud:</strong> {{ obtenerFechaActual() }}</p> <!-- Muestra la fecha actual -->
-      </ion-card-content>
-    </ion-card>
-  </div>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Datos del Solicitante</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p><strong>Nombre Completo:</strong> {{ nombreSolicitante }}</p> <!-- Muestra el nombre completo del solicitante -->
+      <p><strong>Fecha de Solicitud:</strong> {{ obtenerFechaActual() }}</p> <!-- Muestra la fecha actual -->
+    </ion-card-content>
+  </ion-card>
 
   <!-- Formulario de Postulación -->
   <form [formGroup]="postulacionForm" (ngSubmit)="postular()">
-    <ion-list>
-      <ion-item *ngFor="let doc of documentosArray.controls; let i = index">
-        <ion-label position="stacked">{{ documentosRequeridos[i].nombre }}</ion-label>
-        <input type="file" (change)="onFileChange($event, i)" accept="application/pdf,image/*" />
-        <div *ngIf="doc.get('file')?.value" class="uploaded-file">
-          <p>Archivo subido: {{ doc.get('file')?.value | slice: -15 }}</p>
-        </div>
-      </ion-item>
-    </ion-list>
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Documentos Requeridos</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list>
+          <ion-item *ngFor="let doc of documentosArray.controls; let i = index">
+            <ion-label position="stacked">{{ documentosRequeridos[i].nombre }}</ion-label>
+            <input type="file" (change)="onFileChange($event, i)" accept="application/pdf,image/*" />
+            <div *ngIf="doc.get('file')?.value" class="uploaded-file">
+              <p>Archivo subido: {{ doc.get('file')?.value | slice: -15 }}</p>
+            </div>
+          </ion-item>
+        </ion-list>
 
-    <ion-button type="submit" [disabled]="loading || postulacionForm.invalid" expand="full">
-      <ion-spinner *ngIf="loading"></ion-spinner>
-      <span *ngIf="!loading">Enviar Postulación</span>
-    </ion-button>
+        <ion-button expand="full" type="submit" class="postular-proyecto-button" [disabled]="!postulacionForm.valid || loading">
+          <ion-spinner *ngIf="loading"></ion-spinner>
+          <span *ngIf="!loading">Enviar Postulación</span>
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+    <ion-button expand="full" color="primary" (click)="goBack()">Volver</ion-button> <!-- Botón para volver -->
   </form>
 </ion-content>

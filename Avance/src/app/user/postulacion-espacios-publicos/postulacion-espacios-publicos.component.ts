@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FirestoreService } from 'src/app/service/firestore.service';
 import { AuthenticationService } from 'src/app/service/authentication.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastController } from '@ionic/angular'; // Importa ToastController
+
 
 @Component({
   selector: 'app-postulacion-espacios-publicos',
@@ -19,6 +20,7 @@ export class PostulacionEspaciosPublicosComponent implements OnInit {
   disponible: boolean = true; // Indica si la fecha/hora está disponible
 
   constructor(
+    private router: Router,
     private route: ActivatedRoute,
     private firestoreService: FirestoreService,
     private authService: AuthenticationService,
@@ -179,5 +181,9 @@ export class PostulacionEspaciosPublicosComponent implements OnInit {
     this.verificarDisponibilidad(fechaReservada).then(disponible => {
       this.disponible = disponible;
     });
+  }
+   // Método para regresar a la lista de noticias
+   goBack() {
+    this.router.navigate(['/visualizacion-espacios-publicos']); // Asegúrate de que esta ruta sea correcta
   }
 }
