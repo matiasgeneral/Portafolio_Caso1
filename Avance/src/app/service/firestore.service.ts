@@ -237,6 +237,12 @@ agregarParticipante(actividadId: string, participante: any) {
     participantes: firebase.firestore.FieldValue.arrayUnion(participante), // Agrega el participante a la lista
   });
 }
+
+
+// Método para obtener todos los proyectos
+getProyectos(): Observable<any[]> {
+  return this.afs.collection('proyectos').valueChanges();
+}
 }
 
 

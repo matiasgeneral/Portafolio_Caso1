@@ -10,7 +10,7 @@ import { AuthenticationService } from 'src/app/service/authentication.service';
 export class PerfilComponent implements OnInit {
   usuario: any; // Almacena los datos personales del usuario
   postulacionesEspacios: any[] = []; // Lista de postulaciones a espacios públicos del usuario
-  postulacionesProyectos: any[] = []; // Lista de postulaciones a proyectos del usuario
+  postulacionesActividades: any[] = []; // Lista de postulaciones a actividades del usuario
 
   constructor(
     private firestoreService: FirestoreService,
@@ -19,8 +19,8 @@ export class PerfilComponent implements OnInit {
 
   ngOnInit() {
     this.cargarPerfilUsuario();
-    this.cargarPostulacionesUsuario(); // Cargar postulaciones a espacios públicos
-    this.cargarPostulacionesProyectos(); // Cargar postulaciones a proyectos
+    this.cargarPostulacionesUsuario();
+    this.cargarPostulacionesActividades(); // Cargar postulaciones a actividades
   }
 
   // Cargar datos del usuario autenticado
@@ -63,25 +63,31 @@ export class PerfilComponent implements OnInit {
     });
   }
 
-  // Cargar postulaciones a proyectos del usuario
-  cargarPostulacionesProyectos() {
+  // Cargar postulaciones a actividades del usuario
+  cargarPostulacionesActividades() {
     this.authService.stateAuth().subscribe(user => {
       if (user) {
-        this.firestoreService.getProyectos().subscribe(proyectos => {
-          this.postulacionesProyectos = proyectos.filter((proyecto: any) =>
-            Array.isArray(proyecto.postulantes) && 
-            proyecto.postulantes.some((postulante: any) => postulante.uid === user.uid)
-          ).map((proyecto: any) => {
-            const postulante = proyecto.postulantes.find((p: any) => p.uid === user.uid);
+        this.firestoreService.getActividades().subscribe(actividades => {
+          this.postulacionesActividades = actividades.filter((actividad: any) =>
+            Array.isArray(actividad.participantes) && 
+            actividad.participantes.some((participante: any) => participante.uid === user.uid)
+          ).map((actividad: any) => {
+            const participante = actividad.participantes.find((p: any) => p.uid === user.uid);
+            
+            // Log para depuración
+            console.log('Actividad cargada:', actividad);
+            console.log('Fecha de evento original:', actividad.fechaEvento);
+
             return {
-              ...proyecto,
-              fechaSolicitud: this.formatDate(postulante?.fechaSolicitud), // Formatear fecha de solicitud
-              documentosSubidos: postulante?.documentos // Obtener los documentos subidos
+              ...actividad,
+              fechaInscripcion: this.formatDate(participante?.fechaInscripcion), // Formatear fecha de inscripción
+              fechaEvento: this.formatDate(actividad.fechaEvento), // Formatear fecha de evento
+              cantidadParticipantes: participante?.cantidadParticipantes
             };
           });
-          console.log('Postulaciones a proyectos del usuario autenticado:', this.postulacionesProyectos);
+          console.log('Postulaciones a actividades del usuario autenticado:', this.postulacionesActividades);
         }, error => {
-          console.error('Error al cargar postulaciones de proyectos:', error);
+          console.error('Error al cargar postulaciones de actividades:', error);
         });
       }
     });
