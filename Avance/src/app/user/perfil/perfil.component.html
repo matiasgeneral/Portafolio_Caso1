@@ -7,7 +7,6 @@
   </ion-toolbar>
 </ion-header>
 
-
 <ion-content padding>
   <!-- Mostrar Datos Personales -->
   <ion-card *ngIf="usuario">
@@ -15,10 +14,14 @@
       <ion-card-title>Datos Personales</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <p><strong>Nombre Completo:</strong> {{ usuario.nombre }} {{ usuario.apellidoPaterno }} {{ usuario.apellidoMaterno
-        }}</p>
-      <p><strong>RUT:</strong> {{ usuario.rut }}</p>
-      <p><strong>Correo Electrónico:</strong> {{ usuario.email }}</p>
+      <p><strong>Nombre Completo:</strong></p>
+      <p>{{ usuario.nombre }} {{ usuario.apellidoPaterno }} {{ usuario.apellidoMaterno }}</p>
+      
+      <p><strong>RUT:</strong></p>
+      <p>{{ usuario.rut }}</p>
+      
+      <p><strong>Correo Electrónico:</strong></p>
+      <p>{{ usuario.email }}</p>
     </ion-card-content>
   </ion-card>
 
@@ -34,12 +37,23 @@
             <img [src]="post.image" alt="Imagen del Espacio Público" />
           </ion-thumbnail>
           <ion-label>
-            <p><strong>Fecha de Solicitud:</strong> {{ post.fechaSolicitud }}</p>
-            <p><strong>Título:</strong> {{ post.titulo }}</p>
-            <p><strong>Ubicación:</strong> <a href="{{ post.ubicacion }}" target="_blank">Ver en mapa</a></p>
-            <p><strong>Fecha Reservada:</strong> {{ post.fechaReservada }}</p>
-            <p><strong>Hora Inicio:</strong> {{ post.horaInicio }}</p>
-            <p><strong>Hora Fin:</strong> {{ post.horaFin }}</p>
+            <p><strong>Fecha de Solicitud:</strong></p>
+            <p>{{ post.fechaSolicitud }}</p>
+            
+            <p><strong>Título:</strong></p>
+            <p>{{ post.titulo }}</p>
+            
+            <p><strong>Ubicación:</strong></p>
+            <p><a href="{{ post.ubicacion }}" target="_blank">Ver en mapa</a></p>
+            
+            <p><strong>Fecha Reservada:</strong></p>
+            <p>{{ post.fechaReservada }}</p>
+            
+            <p><strong>Hora Inicio:</strong></p>
+            <p>{{ post.horaInicio }}</p>
+            
+            <p><strong>Hora Fin:</strong></p>
+            <p>{{ post.horaFin }}</p>
           </ion-label>
         </ion-item>
       </ion-list>
@@ -65,12 +79,23 @@
             <img [src]="actividad.image" alt="Imagen de la Actividad" />
           </ion-thumbnail>
           <ion-label>
-            <p><strong>Fecha de Solicitud:</strong> {{ actividad.fechaInscripcion }}</p>
-            <p><strong>Título:</strong> {{ actividad.titulo }}</p>
-            <p><strong>Descripción:</strong> {{ actividad.descripcion }}</p>
-            <p><strong>Fecha del Evento:</strong> {{ actividad.fechaEvento }}</p>
-            <p><strong>Hora del Evento:</strong> {{ actividad.horaEvento }}</p>
-            <p><strong>Cantidad de Participantes:</strong> {{ actividad.cantidadParticipantes }}</p>
+            <p><strong>Fecha de Solicitud:</strong></p>
+            <p>{{ actividad.fechaInscripcion }}</p>
+            
+            <p><strong>Título:</strong></p>
+            <p>{{ actividad.titulo }}</p>
+            
+            <p><strong>Descripción:</strong></p>
+            <p>{{ actividad.descripcion }}</p>
+            
+            <p><strong>Fecha del Evento:</strong></p>
+            <p>{{ actividad.fechaEvento }}</p>
+            
+            <p><strong>Hora del Evento:</strong></p>
+            <p>{{ actividad.horaEvento }}</p>
+            
+            <p><strong>Cantidad de Participantes:</strong></p>
+            <p>{{ actividad.cantidadParticipantes }}</p>
           </ion-label>
         </ion-item>
       </ion-list>
@@ -84,54 +109,52 @@
     </ion-card-content>
   </ion-card>
 
-
   <!-- Mostrar Postulaciones a Proyectos -->
-<ion-card *ngIf="postulacionesProyectos && postulacionesProyectos.length > 0">
-  <ion-card-header>
-    <ion-card-title>Mis Postulaciones a Proyectos</ion-card-title>
-  </ion-card-header>
-  <ion-card-content>
-    <ion-list>
-      <ion-item *ngFor="let proyecto of postulacionesProyectos">
-        <ion-thumbnail slot="start">
-          <img [src]="proyecto.image" alt="Imagen del Proyecto" />
-        </ion-thumbnail>
-        <ion-label>
-          <p><strong>Fecha de Solicitud:</strong> {{ proyecto.fechaSolicitud }}</p>
-          <p><strong>Título:</strong> {{ proyecto.titulo }}</p>
-          <p><strong>Descripción:</strong> {{ proyecto.descripcion }}</p>
-          <p><strong>Fecha de Inicio:</strong> {{ proyecto.fechaInicio }}</p>
-          <p><strong>Fecha de Fin:</strong> {{ proyecto.fechaFin }}</p>
-          <p><strong>Documentos Subidos:</strong></p>
+  <ion-card *ngIf="postulacionesProyectos && postulacionesProyectos.length > 0">
+    <ion-card-header>
+      <ion-card-title>Mis Postulaciones a Proyectos</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item *ngFor="let proyecto of postulacionesProyectos">
+          <ion-thumbnail slot="start">
+            <img [src]="proyecto.image" alt="Imagen del Proyecto" />
+          </ion-thumbnail>
+          <ion-label>
+            <p><strong>Fecha de Solicitud:</strong></p>
+            <p>{{ proyecto.fechaSolicitud }}</p>
+            
+            <p><strong>Título:</strong></p>
+            <p>{{ proyecto.titulo }}</p>
+            
+            <p><strong>Descripción:</strong></p>
+            <p>{{ proyecto.descripcion }}</p>
+            
+            <p><strong>Fecha de Inicio:</strong></p>
+            <p>{{ proyecto.fechaInicio }}</p>
+            
+            <p><strong>Fecha de Fin:</strong></p>
+            <p>{{ proyecto.fechaFin }}</p>
+            
+            <p><strong>Documentos Subidos:</strong></p>
 
-          <ion-list *ngIf="proyecto.documentosSubidos.length > 0">
-            <ion-item *ngFor="let documento of proyecto.documentosSubidos">
-              <div>
-                <p><strong>{{ documento.nombre }}</strong></p>
-                <a [href]="documento.url" download="{{ documento.nombre }}" (click)="onDownload(documento.url)">
-                  Descargar Documento
-                </a>
-              </div>
-            </ion-item>
-          </ion-list>
+            <ion-list *ngIf="proyecto.documentosSubidos.length > 0">
+              <ion-item *ngFor="let documento of proyecto.documentosSubidos">
+                <div>
+                  <p><strong>{{ documento.nombre }}</strong></p>
+                  <a [href]="documento.url" download="{{ documento.nombre }}" (click)="onDownload(documento.url)">
+                    Descargar Documento
+                  </a>
+                </div>
+              </ion-item>
+            </ion-list>
 
-          <p *ngIf="proyecto.documentosSubidos.length === 0">No se han subido documentos.</p>
-        </ion-label>
-      </ion-item>
-    </ion-list>
-  </ion-card-content>
-</ion-card>
-
-<!-- Mensaje cuando no hay postulaciones a proyectos -->
-<ion-card *ngIf="postulacionesProyectos && postulacionesProyectos.length === 0">
-  <ion-card-content>
-    <p>No tienes postulaciones registradas para proyectos.</p>
-  </ion-card-content>
-</ion-card>
-
-
-
-
+            <p *ngIf="proyecto.documentosSubidos.length === 0">No se han subido documentos.</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
 
   <!-- Mensaje cuando no hay postulaciones a proyectos -->
   <ion-card *ngIf="postulacionesProyectos && postulacionesProyectos.length === 0">
