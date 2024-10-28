@@ -11,7 +11,8 @@
       <ion-card-title>Datos Personales</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <p><strong>Nombre Completo:</strong> {{ usuario.nombre }} {{ usuario.apellidoPaterno }} {{ usuario.apellidoMaterno }}</p>
+      <p><strong>Nombre Completo:</strong> {{ usuario.nombre }} {{ usuario.apellidoPaterno }} {{ usuario.apellidoMaterno
+        }}</p>
       <p><strong>RUT:</strong> {{ usuario.rut }}</p>
       <p><strong>Correo Electrónico:</strong> {{ usuario.email }}</p>
     </ion-card-content>
@@ -40,11 +41,42 @@
       </ion-list>
     </ion-card-content>
   </ion-card>
-  
+
   <!-- Mensaje cuando no hay postulaciones a espacios públicos -->
   <ion-card *ngIf="postulacionesEspacios && postulacionesEspacios.length === 0">
     <ion-card-content>
       <p>No tienes postulaciones registradas para espacios públicos.</p>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Mostrar Postulaciones a Actividades -->
+  <ion-card *ngIf="postulacionesActividades && postulacionesActividades.length > 0">
+    <ion-card-header>
+      <ion-card-title>Mis Postulaciones a Actividades</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item *ngFor="let actividad of postulacionesActividades">
+          <ion-thumbnail slot="start">
+            <img [src]="actividad.image" alt="Imagen de la Actividad" />
+          </ion-thumbnail>
+          <ion-label>
+            <p><strong>Fecha de Solicitud:</strong> {{ actividad.fechaInscripcion }}</p>
+            <p><strong>Título:</strong> {{ actividad.titulo }}</p>
+            <p><strong>Descripción:</strong> {{ actividad.descripcion }}</p>
+            <p><strong>Fecha del Evento:</strong> {{ actividad.fechaEvento }}</p>
+            <p><strong>Hora del Evento:</strong> {{ actividad.horaEvento }}</p>
+            <p><strong>Cantidad de Participantes:</strong> {{ actividad.cantidadParticipantes }}</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Mensaje cuando no hay postulaciones a actividades -->
+  <ion-card *ngIf="postulacionesActividades && postulacionesActividades.length === 0">
+    <ion-card-content>
+      <p>No tienes postulaciones registradas para actividades.</p>
     </ion-card-content>
   </ion-card>
 
@@ -65,12 +97,23 @@
             <p><strong>Descripción:</strong> {{ proyecto.descripcion }}</p>
             <p><strong>Fecha de Inicio:</strong> {{ proyecto.fechaInicio }}</p>
             <p><strong>Fecha de Fin:</strong> {{ proyecto.fechaFin }}</p>
-            <p><strong>Documentos Subidos:</strong> {{ proyecto.documentosSubidos.length }} / {{ proyecto.documentosRequeridos.length }}</p>
+            <p><strong>Documentos Subidos:</strong> {{ proyecto.documentosSubidos.length }} / {{
+              proyecto.documentosRequeridos.length }}</p>
+            <ion-list *ngIf="proyecto.documentosSubidos.length > 0">
+              <ion-item *ngFor="let documento of proyecto.documentosSubidos">
+                <p>{{ documento.nombre }}</p>
+                <a [href]="documento.url" download="{{ documento.nombre }}"  (click)="onDownload(documento.url)"> <br>
+                    Descargar Documento
+                </a>
+              </ion-item>
+            </ion-list>
           </ion-label>
         </ion-item>
       </ion-list>
     </ion-card-content>
   </ion-card>
+
+
 
   <!-- Mensaje cuando no hay postulaciones a proyectos -->
   <ion-card *ngIf="postulacionesProyectos && postulacionesProyectos.length === 0">
@@ -78,5 +121,4 @@
       <p>No tienes postulaciones registradas para proyectos.</p>
     </ion-card-content>
   </ion-card>
-
 </ion-content>

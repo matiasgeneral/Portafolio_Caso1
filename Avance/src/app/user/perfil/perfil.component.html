@@ -80,38 +80,52 @@
     </ion-card-content>
   </ion-card>
 
+
   <!-- Mostrar Postulaciones a Proyectos -->
-  <ion-card *ngIf="postulacionesProyectos && postulacionesProyectos.length > 0">
-    <ion-card-header>
-      <ion-card-title>Mis Postulaciones a Proyectos</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-list>
-        <ion-item *ngFor="let proyecto of postulacionesProyectos">
-          <ion-thumbnail slot="start">
-            <img [src]="proyecto.image" alt="Imagen del Proyecto" />
-          </ion-thumbnail>
-          <ion-label>
-            <p><strong>Fecha de Solicitud:</strong> {{ proyecto.fechaSolicitud }}</p>
-            <p><strong>Título:</strong> {{ proyecto.titulo }}</p>
-            <p><strong>Descripción:</strong> {{ proyecto.descripcion }}</p>
-            <p><strong>Fecha de Inicio:</strong> {{ proyecto.fechaInicio }}</p>
-            <p><strong>Fecha de Fin:</strong> {{ proyecto.fechaFin }}</p>
-            <p><strong>Documentos Subidos:</strong> {{ proyecto.documentosSubidos.length }} / {{
-              proyecto.documentosRequeridos.length }}</p>
-            <ion-list *ngIf="proyecto.documentosSubidos.length > 0">
-              <ion-item *ngFor="let documento of proyecto.documentosSubidos">
-                <p>{{ documento.nombre }}</p>
-                <a [href]="documento.url" download="{{ documento.nombre }}"  (click)="onDownload(documento.url)"> <br>
-                    Descargar Documento
+<ion-card *ngIf="postulacionesProyectos && postulacionesProyectos.length > 0">
+  <ion-card-header>
+    <ion-card-title>Mis Postulaciones a Proyectos</ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+    <ion-list>
+      <ion-item *ngFor="let proyecto of postulacionesProyectos">
+        <ion-thumbnail slot="start">
+          <img [src]="proyecto.image" alt="Imagen del Proyecto" />
+        </ion-thumbnail>
+        <ion-label>
+          <p><strong>Fecha de Solicitud:</strong> {{ proyecto.fechaSolicitud }}</p>
+          <p><strong>Título:</strong> {{ proyecto.titulo }}</p>
+          <p><strong>Descripción:</strong> {{ proyecto.descripcion }}</p>
+          <p><strong>Fecha de Inicio:</strong> {{ proyecto.fechaInicio }}</p>
+          <p><strong>Fecha de Fin:</strong> {{ proyecto.fechaFin }}</p>
+          <p><strong>Documentos Subidos:</strong></p>
+
+          <ion-list *ngIf="proyecto.documentosSubidos.length > 0">
+            <ion-item *ngFor="let documento of proyecto.documentosSubidos">
+              <div>
+                <p><strong>{{ documento.nombre }}</strong></p>
+                <a [href]="documento.url" download="{{ documento.nombre }}" (click)="onDownload(documento.url)">
+                  Descargar Documento
                 </a>
-              </ion-item>
-            </ion-list>
-          </ion-label>
-        </ion-item>
-      </ion-list>
-    </ion-card-content>
-  </ion-card>
+              </div>
+            </ion-item>
+          </ion-list>
+
+          <p *ngIf="proyecto.documentosSubidos.length === 0">No se han subido documentos.</p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </ion-card-content>
+</ion-card>
+
+<!-- Mensaje cuando no hay postulaciones a proyectos -->
+<ion-card *ngIf="postulacionesProyectos && postulacionesProyectos.length === 0">
+  <ion-card-content>
+    <p>No tienes postulaciones registradas para proyectos.</p>
+  </ion-card-content>
+</ion-card>
+
+
 
 
 
