@@ -43,6 +43,15 @@
             <div *ngIf="doc.get('file')?.value" class="uploaded-file">
               <p>Archivo subido: {{ doc.get('file')?.value | slice: -15 }}</p>
             </div>
+            <div *ngIf="!doc.get('file')?.value && !loading" class="error-message">
+              <p style="color: red;">Archivo no subido. Por favor, sube el documento.</p>
+            </div>
+            <div *ngIf="!doc.valid" class="error-message">
+              <p style="color: red;">El archivo subido no es válido. Por favor, sube un PDF o una imagen.</p>
+            </div>
+            <div *ngIf="doc.valid" class="success-message">
+              <p style="color: green;">El archivo es válido.</p>
+            </div>
           </ion-item>
         </ion-list>
 

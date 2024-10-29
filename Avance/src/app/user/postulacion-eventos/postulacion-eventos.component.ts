@@ -149,11 +149,16 @@ export class PostulacionEventosComponent implements OnInit {
   // Método para mostrar un toast
   async mostrarToast(mensaje: string) {
     const toast = await this.toastController.create({
-      message: mensaje,
-      duration: 3000, // Duración en milisegundos
-      position: 'top', // Posición del toast
-    });
-    await toast.present(); // Presenta el toast
+      message: 'Postulación enviada exitosamente. será dirigido a la pagina anterior',
+      duration: 2000, // Duración en milisegundos
+      position: 'middle',
+      });
+      await toast.present();
+
+      // Redirigir a la página anterior después de 2 segundos
+      setTimeout(() => {
+        this.goBack();
+      }, 1000);
   }
 
   obtenerFechaActual(): string {

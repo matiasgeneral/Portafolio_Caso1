@@ -82,6 +82,7 @@ export class AdministrarProyectosComponent implements OnInit {
     }
   }
 
+/*
   // Método para deshabilitar el Proyecto
   deshabilitarDoc() {
     if (this.id) {
@@ -93,4 +94,5 @@ export class AdministrarProyectosComponent implements OnInit {
       });
     }
   }
+*/
 }

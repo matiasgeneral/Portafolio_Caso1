@@ -44,6 +44,12 @@ export class RegisterComponent {
         return;
       }
 
+      // Validar archivos antes de continuar con el registro
+      if (!this.filesAreValid(fotoCarnetUrl, documentoResidenciaUrl)) {
+        this.interaction.presentToast('Los archivos no cumplen con los requisitos. Asegúrate de que sean de los tipos y tamaños permitidos.');
+        return;
+      }
+
       this.interaction.openLoading('Registrando usuario...');
 
       try {
@@ -99,6 +105,14 @@ export class RegisterComponent {
     }
   }
 
+  // Método para validar la subida de archivos
+  filesAreValid(fotoCarnetUrl: string, documentoResidenciaUrl: string): boolean {
+    const validDocumentTypes = ['application/pdf', 'image/png', 'image/jpeg']; // Tipos de archivo válidos
+    const isFotoCarnetValid = typeof fotoCarnetUrl === 'string' && validDocumentTypes.includes(fotoCarnetUrl.split(';')[0]);
+    const isDocumentoResidenciaValid = typeof documentoResidenciaUrl === 'string' && validDocumentTypes.includes(documentoResidenciaUrl.split(';')[0]);
+    return isFotoCarnetValid && isDocumentoResidenciaValid;
+  }
+
   // Método para verificar si las contraseñas coinciden
   passwordsDontMatch(): boolean {
     return this.signup.get('password')?.value !== this.signup.get('password2')?.value;
@@ -108,27 +122,32 @@ export class RegisterComponent {
   onFileChange(event: any, controlName: string) {
     const file = event.target.files[0];
     if (file) {
-      // Validar tipo de archivo
-      const validImageTypes = ['image/png', 'image/jpeg']; // Tipos válidos para foto
-      const validDocumentTypes = ['application/pdf', 'image/png', 'image/jpeg']; // Tipos válidos para documento
+      // Definir tipos de archivo válidos exclusivamente para PDF, PNG y JPG
+      const validDocumentTypes = ['application/pdf', 'image/png', 'image/jpeg']; // Solo PDF, PNG y JPG
 
-      const isImage = validImageTypes.includes(file.type);
-      const isDocument = validDocumentTypes.includes(file.type);
+      const isValidType = validDocumentTypes.includes(file.type);
 
-      if (controlName === 'fotoCarnetUrl' && !isImage) {
-        this.interaction.presentToast('La foto debe ser una imagen (PNG o JPG)');
+      // Verificar tipo de archivo
+      if (!isValidType) {
+        this.interaction.presentToast('El archivo debe ser PDF, PNG o JPG');
         return;
       }
 
-      if (controlName === 'documentoResidenciaUrl' && !isDocument) {
-        this.interaction.presentToast('El documento debe ser un archivo (PNG, JPG o PDF)');
+      // Verificar tamaño del archivo (5 MB para foto y 6 MB para documento)
+      if (controlName === 'fotoCarnetUrl' && file.size > 5242880) { // 5 MB en bytes
+        this.interaction.presentToast('La foto no debe superar los 5 MB');
         return;
       }
 
-      // Aquí puedes implementar la lógica para subir el archivo a Firebase Storage y obtener la URL
+      if (controlName === 'documentoResidenciaUrl' && file.size > 6291456) { // 6 MB en bytes
+        this.interaction.presentToast('El documento no debe superar los 6 MB');
+        return;
+      }
+
+      // Lógica para leer y cargar el archivo
       const reader = new FileReader();
       reader.onload = () => {
-        // Por ejemplo, puedes establecer la URL del archivo en el control correspondiente
+        // Establecer la URL del archivo en el control correspondiente
         this.signup.patchValue({
           [controlName]: reader.result
         });

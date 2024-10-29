@@ -62,7 +62,7 @@ export class AdministrarEspaciosPublicosComponent implements OnInit {
       });
     }
   }
-
+/*
   deshabilitarDoc() {
     if (this.id) {
       this.firestoreService.updateDoc({ habilitado: false }, 'espaciosPublicos', this.id).then(() => {
@@ -72,6 +72,8 @@ export class AdministrarEspaciosPublicosComponent implements OnInit {
       });
     }
   }
+*/
+
 
   // Método para formatear el título y la descripción correctamente
   formatTitle(title: string): string {

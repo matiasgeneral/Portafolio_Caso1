@@ -14,13 +14,13 @@ import firebase from 'firebase/compat/app';
   styleUrls: ['./postulacion-proyectos.component.scss'],
 })
 export class PostulacionProyectosComponent implements OnInit {
-  proyecto: any; 
-  nombreSolicitante: string = ''; 
-  postulacionForm: FormGroup; 
-  documentosRequeridos: any[] = []; 
-  loading = false; 
-  userId = ''; 
-  fechaSolicitud: string | null = null; 
+  proyecto: any;
+  nombreSolicitante: string = '';
+  postulacionForm: FormGroup;
+  documentosRequeridos: any[] = [];
+  loading = false;
+  userId = '';
+  fechaSolicitud: string | null = null;
 
   constructor(
     private router: Router,
@@ -32,7 +32,7 @@ export class PostulacionProyectosComponent implements OnInit {
     private storage: AngularFireStorage
   ) {
     this.postulacionForm = this.fb.group({
-      documentos: this.fb.array([], Validators.required) 
+      documentos: this.fb.array([], Validators.required)
     });
   }
 
@@ -43,15 +43,15 @@ export class PostulacionProyectosComponent implements OnInit {
     } else {
       console.error('No se encontró el ID del proyecto.');
     }
-    this.obtenerNombreSolicitante(); 
+    this.obtenerNombreSolicitante();
   }
 
   cargarProyecto(id: string) {
     this.firestoreService.getDoc<any>('proyectos', id).subscribe(proyectoData => {
       if (proyectoData) {
         this.proyecto = proyectoData;
-        this.documentosRequeridos = proyectoData.documentosRequeridos; 
-        this.populateDocumentosForm(); 
+        this.documentosRequeridos = proyectoData.documentosRequeridos;
+        this.populateDocumentosForm();
       } else {
         console.error('No se encontró el proyecto con ID:', id);
       }
@@ -77,11 +77,10 @@ export class PostulacionProyectosComponent implements OnInit {
 
   populateDocumentosForm() {
     const documentosArray = this.postulacionForm.get('documentos') as FormArray;
-    // Limpia el array antes de llenarlo
     documentosArray.clear();
     this.documentosRequeridos.forEach(doc => {
       documentosArray.push(this.fb.group({
-        nombre: [doc.nombre, Validators.required], // Asegúrate de asignar el nombre correcto
+        nombre: [doc.nombre, Validators.required],
         file: [null, Validators.required]
       }));
     });
@@ -89,7 +88,27 @@ export class PostulacionProyectosComponent implements OnInit {
 
   async onFileChange(event: any, index: number) {
     const file = event.target.files[0];
+    const maxSizeMB = 6; // Límite de tamaño de archivo de 6 MB
+    const maxSizeBytes = maxSizeMB * 1024 * 1024;
+
+    // Limpiar el campo del archivo antes de validar
+    const documentosArray = this.postulacionForm.get('documentos') as FormArray;
+    documentosArray.at(index).patchValue({ file: null });
+
     if (file) {
+      // Validar el tipo de archivo
+      const allowedTypes = ['application/pdf', 'image/jpeg', 'image/png'];
+      if (!allowedTypes.includes(file.type)) {
+        this.mostrarToast('Solo se permiten archivos PDF, JPG o PNG.');
+        return;
+      }
+
+      // Validar el tamaño del archivo
+      if (file.size > maxSizeBytes) {
+        this.mostrarToast(`El archivo debe ser menor a ${maxSizeMB} MB.`);
+        return;
+      }
+
       const filePath = `proyectos/${this.proyecto.id}/documentos/${this.userId}_${file.name}`;
       const fileRef = this.storage.ref(filePath);
       const task = this.storage.upload(filePath, file);
@@ -101,7 +120,6 @@ export class PostulacionProyectosComponent implements OnInit {
       await task.snapshotChanges().pipe(
         finalize(async () => {
           const downloadUrl = await fileRef.getDownloadURL().toPromise();
-          const documentosArray = this.postulacionForm.get('documentos') as FormArray;
           documentosArray.at(index).patchValue({ file: downloadUrl });
           this.loading = false;
         })
@@ -121,11 +139,11 @@ export class PostulacionProyectosComponent implements OnInit {
   async postular() {
     const documentosArray = this.postulacionForm.get('documentos') as FormArray;
 
-    // Verifica si todos los documentos han sido subidos
-    const todosLosDocumentosSubidos = documentosArray.controls.every(doc => doc.get('file')?.value);
-  
-    // Log para ver qué documentos se han subido
-    console.log('Documentos subidos:', documentosArray.controls.map(doc => doc.get('file')?.value));
+    // Validación de documentos subidos
+    const todosLosDocumentosSubidos = documentosArray.controls.every(doc => {
+      const file = doc.get('file')?.value;
+      return file != null; // Comprobamos que el archivo no sea null
+    });
 
     if (!todosLosDocumentosSubidos) {
       this.mostrarToast('Por favor, sube todos los documentos requeridos.');
@@ -133,11 +151,17 @@ export class PostulacionProyectosComponent implements OnInit {
     }
 
     this.fechaSolicitud = new Date().toLocaleDateString('es-ES');
-    console.log('Fecha de solicitud:', this.fechaSolicitud);
 
     if (!this.proyecto) {
       console.error('El proyecto no está definido.');
       this.mostrarToast('El proyecto no está definido.');
+      return;
+    }
+
+    // Verificar si el usuario ya postuló al proyecto
+    const yaPostulo = this.proyecto.postulantes?.some((postulante: any) => postulante.uid === this.userId);
+    if (yaPostulo) {
+      this.mostrarToast('Ya has postulado a este proyecto anteriormente.');
       return;
     }
 
@@ -157,9 +181,19 @@ export class PostulacionProyectosComponent implements OnInit {
         postulantes: firebase.firestore.FieldValue.arrayUnion(postulante)
       }, 'proyectos', this.proyecto.id);
 
-      this.mostrarToast('Postulación enviada exitosamente.');
+      // Mostrar mensaje de éxito
+      const toast = await this.toastController.create({
+        message: 'Postulación enviada exitosamente. será dirigido a la pagina anterior',
+        duration: 2000,
+        position: 'middle',
+      });
+      await toast.present();
 
-      // Reiniciar el formulario
+      // Redirigir a la página anterior después de 2 segundos
+      setTimeout(() => {
+        this.goBack();
+      }, 1000);
+
       this.resetForm();
 
     } catch (error) {
@@ -169,9 +203,7 @@ export class PostulacionProyectosComponent implements OnInit {
   }
 
   resetForm() {
-    // Limpiar el formulario de postulación
     this.postulacionForm.reset();
-    // Volver a inicializar el array de documentos
     this.populateDocumentosForm();
   }
 
@@ -186,18 +218,17 @@ export class PostulacionProyectosComponent implements OnInit {
     } else if (date && date.includes('/')) {
       return date;
     }
-    return 'Fecha no disponible'; 
+    return 'Fecha no disponible';
   }
 
   obtenerFechaActual(): string {
     const fecha = new Date();
     const opciones = { year: 'numeric' as const, month: '2-digit' as const, day: '2-digit' as const, timeZone: 'UTC' };
     const fechaFormateada = fecha.toLocaleDateString('es-ES', opciones);
-    return fechaFormateada.split('/').reverse().join('-'); 
+    return fechaFormateada.split('/').reverse().join('-');
   }
 
- // Método para regresar   
- goBack() {
-  this.router.navigate(['/visualizacion-proyectos']); // Asegúrate de que esta ruta sea correcta
-}
+  goBack() {
+    this.router.navigate(['/visualizacion-proyectos']);
+  }
 }

@@ -103,14 +103,23 @@ export class PerfilComponent implements OnInit {
     }, error => {
       console.error('Error al cargar postulaciones de proyectos:', error);
     });
-    
   }
+
+  // Método para descargar documentos
   onDownload(url: string) {
-    // Seguimiento de la descarga
-    console.log(`Descargando desde: ${url}`);
+    // Verifica si la URL no está vacía
+    if (url) {
+      // Crear un enlace temporal para la descarga
+      const a = document.createElement('a');
+      a.href = url; // Asignar la URL del documento
+      a.download = ''; // Este atributo indica que se debe descargar el archivo
+      document.body.appendChild(a); // Agregar el enlace al documento
+      a.click(); // Simular un clic en el enlace
+      document.body.removeChild(a); // Eliminar el enlace del documento
+    } else {
+      console.error('La URL del documento no es válida.');
+    }
   }
-  
-    
   
   // Función para formatear fechas de 'DD/MM/YYYY' a 'DD/MM/YYYY'
   formatDate(date: string): string {
@@ -131,7 +140,4 @@ export class PerfilComponent implements OnInit {
     }
     return 'Fecha no disponible';
   }
-
-  
-  }
-
+}

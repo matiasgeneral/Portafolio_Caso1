@@ -85,8 +85,8 @@ export class AdministrarNoticiasComponent implements OnInit {
 
 
 
-
-  // Método para deshabilitar la noticia
+/*  
+// Método para deshabilitar la noticia
   deshabilitarDoc() {
     if (this.id) {
       this.firestoreService.deshabilitarDoc('noticias', this.id).then(() => {
@@ -97,4 +97,6 @@ export class AdministrarNoticiasComponent implements OnInit {
       });
     }
   }
+    */
+
 }

@@ -85,7 +85,7 @@ export class AdministrarActividadesComponent  implements OnInit {
       });
     }
   }
-
+/*
   // Método para deshabilitar la actividad
   deshabilitarDoc() {
     if (this.id) {
@@ -97,4 +97,6 @@ export class AdministrarActividadesComponent  implements OnInit {
       });
     }
   }
+*/ 
+
 }
