@@ -4,7 +4,7 @@ Se ha realizado una actualización a la base de datos, por lo cual se debe utili
 
 https://sistema-unidad-terrritorial.web.app/#/login
 
-ultima apk( app-debug-29-10-2024.apk)
+ultima apk( app-debug-30-10-2024.apk)
 
 -Se actualizo la base de datos, para mejorar la sintaxis,
 
