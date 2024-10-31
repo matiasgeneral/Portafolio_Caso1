@@ -29,6 +29,16 @@ verDetalles(usuarios: any) {
     console.error('RUT de usuario no definido');
   }
   }
+  verPostulaciones(usuario: any) {
+    console.log('Detalles del usuario:', usuario);
+    // Asegúrate de que `usuario.rut` existe antes de navegar
+    if (usuario && usuario.uid) {
+        // Redirige a la pantalla de detalles del usuario, pasando su RUT
+        this.router.navigate(['/postulaciones', usuario.uid]); 
+    } else {
+        console.error('RUT de usuario no definido o usuario inválido');
+    }
+}
 
 }
 

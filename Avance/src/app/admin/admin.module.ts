@@ -19,12 +19,13 @@ import { EditarActividadesComponent } from './editar-actividades/editar-activida
 import { EditarEspaciosPublicosComponent } from './editar-espacios-publicos/editar-espacios-publicos.component';
 import { EditarNoticiasComponent } from './editar-noticias/editar-noticias.component';
 import { EditarProyectosComponent } from './editar-proyectos/editar-proyectos.component';
+import { PostulacionesComponent } from './postulaciones/postulaciones.component';
 // Importa tus componentes aquí
 
 
 @NgModule({
   declarations: [
-    
+
     AdministrarActividadesComponent,
     AdministrarEspaciosPublicosComponent,
     AdministrarProyectosComponent,
@@ -36,12 +37,14 @@ import { EditarProyectosComponent } from './editar-proyectos/editar-proyectos.co
     BuscadorProyectosComponent,
     BuscadorUsuariosComponent,
     BuscadorNoticiasComponent,
-    
+
     EditarActividadesComponent,
     EditarEspaciosPublicosComponent,
     EditarNoticiasComponent,
     EditarProyectosComponent,
-    EditarUsuariosComponent
+    EditarUsuariosComponent,
+    PostulacionesComponent,
+
 
 
   ],
@@ -49,9 +52,15 @@ import { EditarProyectosComponent } from './editar-proyectos/editar-proyectos.co
   imports: [
     CommonModule,
     AdminRoutingModule,
-    IonicModule ,
+    IonicModule,
     FormsModule, // Formularios Template-Driven
     ReactiveFormsModule // Formularios Reactivos (necesario para formGroup)
+
+  ],  
+  exports:[
+    PostulacionesComponent
   ]
+
+
 })
 export class AdminModule { }

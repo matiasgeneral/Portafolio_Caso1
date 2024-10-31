@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { firstValueFrom, Observable } from 'rxjs';
+import { firstValueFrom, Observable, combineLatest } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { WhereFilterOp, arrayUnion } from '@angular/fire/firestore';
 import firebase from 'firebase/compat/app';
 
@@ -243,6 +244,26 @@ agregarParticipante(actividadId: string, participante: any) {
 getProyectos(): Observable<any[]> {
   return this.afs.collection('proyectos').valueChanges();
 }
+
+getUsuario(uid: string): Observable<any> {
+  return this.afs.collection('usuarios').doc(uid).valueChanges();
+}
+
+
+// Método para obtener todas las postulaciones del usuario
+  getPostulacionesPorUid(uid: string): Observable<any[]> {
+    const postulacionesProyectos$ = this.afs.collection('postulacionesProyectos', ref => ref.where('solicitante.uid', '==', uid)).valueChanges();
+    const postulacionesActividades$ = this.afs.collection('actividades', ref => ref.where('solicitante.uid', '==', uid)).valueChanges();
+    const postulacionesEspaciosPublicos$ = this.afs.collection('espaciosPublicos', ref => ref.where('solicitante.uid', '==', uid)).valueChanges();
+
+    return combineLatest([postulacionesProyectos$, postulacionesActividades$, postulacionesEspaciosPublicos$]).pipe(
+      map(([proyectos, actividades, espaciosPublicos]) => {
+        return [...proyectos, ...actividades, ...espaciosPublicos];
+      })
+    );
+  }
+
+
 }
 
 

@@ -15,7 +15,7 @@ import { EditarActividadesComponent } from './editar-actividades/editar-activida
 import { EditarEspaciosPublicosComponent } from './editar-espacios-publicos/editar-espacios-publicos.component';
 import { EditarNoticiasComponent } from './editar-noticias/editar-noticias.component';
 import { EditarProyectosComponent } from './editar-proyectos/editar-proyectos.component';
-
+import { PostulacionesComponent } from './postulaciones/postulaciones.component';
 const routes: Routes = [
   {
     path: 'administrar-actividades',
@@ -78,7 +78,10 @@ const routes: Routes = [
     path: 'editar-usuarios/:id',
     component: EditarUsuariosComponent
   },
-
+{
+  path: 'postulaciones/:uid',
+  component: PostulacionesComponent
+}
 ];
 
 @NgModule({

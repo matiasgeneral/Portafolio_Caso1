@@ -15,7 +15,7 @@
 
     <ion-card-content>
       <ion-list>
-        <ion-item *ngFor="let user of users">
+        <ion-item *ngFor="let user of users" class="user-item">
           <ion-thumbnail slot="start">
             <img *ngIf="user.foto" [src]="user.foto" alt="Imagen de {{ user.foto }}" class="media-image" />
           </ion-thumbnail>
@@ -27,10 +27,16 @@
             <strong>Estado de la cuenta:</strong> {{ user.estado }}<br />
           </ion-label>
 
-          <ion-button (click)="verDetalles(user)" fill="outline" color="secondary" slot="end">
-            <ion-icon slot="start" name="eye"></ion-icon>
-            Editar
-          </ion-button>
+          <ion-buttons slot="end" class="vertical-buttons">
+            <ion-button (click)="verDetalles(user)" fill="outline" color="secondary">
+              <ion-icon slot="start" name="eye"></ion-icon>
+              Editar
+            </ion-button>
+            <ion-button (click)="verPostulaciones(user)" fill="outline" color="secondary">
+              <ion-icon slot="start" name="eye"></ion-icon>
+              Postulaciones
+            </ion-button>
+          </ion-buttons>
         </ion-item>
       </ion-list>
     </ion-card-content>
