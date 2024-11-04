@@ -101,24 +101,20 @@
       <!-- Subida de archivos -->
       <ion-item>
         <ion-label position="stacked">Foto Carnet</ion-label>
-        <div class="file-upload-container">
-          <ion-input type="file" (change)="onFileChange($event, 'fotoCarnetUrl')" accept="image/png, image/jpeg"></ion-input>
-        </div>
+        <input type="file" (change)="onImageSelected($event)" accept="image/png, image/jpeg" />
       </ion-item>
       <ion-text color="medium">
         <p>Nota: Solo se admiten archivos PNG o JPG con un tamaño máximo de 5 MB.</p>
       </ion-text>
-      
+
       <ion-item>
         <ion-label position="stacked">Documento de Residencia</ion-label>
-        <div class="file-upload-container">
-          <ion-input type="file" (change)="onFileChange($event, 'documentoResidenciaUrl')" accept="image/png, image/jpeg, application/pdf"></ion-input>
-        </div>
+        <input type="file" (change)="onDocumentSelected($event)" accept="image/png, image/jpeg, application/pdf" />
       </ion-item>
       <ion-text color="medium">
         <p>Nota: Solo se admiten archivos PNG, JPG o PDF con un tamaño máximo de 6 MB.</p>
       </ion-text>
-      
+
       <!-- Botón de registro -->
       <ion-button expand="full" type="submit" [disabled]="signup.invalid || passwordsDontMatch()">
         Registrar

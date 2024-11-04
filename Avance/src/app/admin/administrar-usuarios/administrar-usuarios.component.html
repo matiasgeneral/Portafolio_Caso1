@@ -13,6 +13,8 @@
   </ion-button>
 
   <ion-card *ngIf="userDetails">
+    <ion-card-title style="text-align: center;">Datos del usuario</ion-card-title>
+
     <ion-card-header>
       <div class="media-previews">
         <ion-card class="preview-card">
@@ -59,9 +61,7 @@
   <ion-button expand="full" color="danger" (click)="deleteUser2()">
     Borrar Usuario
   </ion-button>
-  <ion-button expand="full" color="warning" (click)="deshabilitarDoc()">
-    Deshabilitar Usuario
-  </ion-button>
+
   <ion-button  expand="full" color="secondary" (click)="verDetalles(userDetails)">Editar Usuario</ion-button>
   <br><br><br>
 

@@ -2,51 +2,48 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { InteractionService } from '../../service/interaction.service';
-import { AuthenticationService } from '../../service/authentication.service'; 
-import { FirestoreService } from '../../service/firestore.service'; 
+import { AuthenticationService } from '../../service/authentication.service';
+import { FirestoreService } from '../../service/firestore.service';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.scss']
+  styleUrls: ['./register.component.scss'],
 })
 export class RegisterComponent {
-  signup: FormGroup;
+  signup: FormGroup; // FormGroup para el formulario de registro
+  rut: string | null = null; // Para almacenar el RUT del usuario
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private interaction: InteractionService,
     private auth: AuthenticationService,
-    private database: FirestoreService
+    private database: FirestoreService,
+    private alertController: AlertController // Inyectar AlertController
   ) {
     this.signup = this.fb.group({
       nombre: ['', Validators.required],
       apellidoPaterno: ['', Validators.required],
       apellidoMaterno: ['', Validators.required],
-      rut: ['', [Validators.required, this.rutValidator]], // Validar RUT
+      rut: ['', [Validators.required, this.rutValidator]],
       direccion: ['', Validators.required],
-      telefono: ['', [Validators.required, Validators.pattern(/^\d{9}$/)]], // Validar que tenga 9 dígitos
+      telefono: ['', [Validators.required, Validators.pattern(/^\d{9}$/)]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8)]],
       password2: ['', Validators.required],
-      fotoCarnetUrl: [''],
-      documentoResidenciaUrl: ['']
+      foto: [''], // Campo para la foto
+      documento: [''] // Campo para el documento
     });
   }
 
   async onSubmit() {
     if (this.signup.valid) {
-      const { nombre, apellidoPaterno, apellidoMaterno, rut, direccion, telefono, email, password, password2, fotoCarnetUrl, documentoResidenciaUrl } = this.signup.value;
+      const { nombre, apellidoPaterno, apellidoMaterno, rut, direccion, telefono, email, password } = this.signup.value;
 
       if (this.passwordsDontMatch()) {
         this.interaction.presentToast('Las contraseñas no coinciden');
-        return;
-      }
-
-      // Validar archivos antes de continuar con el registro
-      if (!this.filesAreValid(fotoCarnetUrl, documentoResidenciaUrl)) {
-        this.interaction.presentToast('Los archivos no cumplen con los requisitos. Asegúrate de que sean de los tipos y tamaños permitidos.');
         return;
       }
 
@@ -54,10 +51,9 @@ export class RegisterComponent {
 
       try {
         const path = 'usuarios';
-        
+
         // Verificar si el RUT ya está registrado
         const rutExists = await this.database.checkRUTExists(rut, path);
-
         if (rutExists) {
           this.interaction.closeLoading();
           this.interaction.presentToast('El RUT ya se encuentra registrado en el sistema');
@@ -80,15 +76,22 @@ export class RegisterComponent {
           telefono,
           email,
           uid,
-          foto: fotoCarnetUrl,
-          documento: documentoResidenciaUrl,
+          foto: this.signup.value.foto,
+          documento: this.signup.value.documento,
           rol: 'Usuario Registrado',
-          estado: 'Pendiente' // Agregar estado pendiente para que el administrador lo apruebe
+          estado: 'Pendiente'
         };
 
         await this.database.createDoc(data, path, uid);
         this.interaction.presentToast('Usuario creado con éxito');
-        this.router.navigate(['/home']);
+
+        // Mostrar alerta de éxito
+        await this.showSuccessAlert();
+        
+        // Redirigir y refrescar la página
+        this.router.navigate(['/home']).then(() => {
+          window.location.reload(); // Refresca la página
+        });
 
       } catch (err) {
         console.error('Error durante el registro:', err);
@@ -105,12 +108,14 @@ export class RegisterComponent {
     }
   }
 
-  // Método para validar la subida de archivos
-  filesAreValid(fotoCarnetUrl: string, documentoResidenciaUrl: string): boolean {
-    const validDocumentTypes = ['application/pdf', 'image/png', 'image/jpeg']; // Tipos de archivo válidos
-    const isFotoCarnetValid = typeof fotoCarnetUrl === 'string' && validDocumentTypes.includes(fotoCarnetUrl.split(';')[0]);
-    const isDocumentoResidenciaValid = typeof documentoResidenciaUrl === 'string' && validDocumentTypes.includes(documentoResidenciaUrl.split(';')[0]);
-    return isFotoCarnetValid && isDocumentoResidenciaValid;
+  // Método para mostrar la alerta de éxito
+  async showSuccessAlert() {
+    const alert = await this.alertController.create({
+      header: 'Éxito',
+      message: 'El usuario ha sido registrado correctamente.',
+      buttons: ['OK'],
+    });
+    await alert.present();
   }
 
   // Método para verificar si las contraseñas coinciden
@@ -118,38 +123,28 @@ export class RegisterComponent {
     return this.signup.get('password')?.value !== this.signup.get('password2')?.value;
   }
 
-  // Método para manejar el cambio de archivos
-  onFileChange(event: any, controlName: string) {
+  // Método para manejar la selección de la imagen de la foto
+  onImageSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
-      // Definir tipos de archivo válidos exclusivamente para PDF, PNG y JPG
-      const validDocumentTypes = ['application/pdf', 'image/png', 'image/jpeg']; // Solo PDF, PNG y JPG
-
-      const isValidType = validDocumentTypes.includes(file.type);
-
-      // Verificar tipo de archivo
-      if (!isValidType) {
-        this.interaction.presentToast('El archivo debe ser PDF, PNG o JPG');
-        return;
-      }
-
-      // Verificar tamaño del archivo (5 MB para foto y 6 MB para documento)
-      if (controlName === 'fotoCarnetUrl' && file.size > 5242880) { // 5 MB en bytes
-        this.interaction.presentToast('La foto no debe superar los 5 MB');
-        return;
-      }
-
-      if (controlName === 'documentoResidenciaUrl' && file.size > 6291456) { // 6 MB en bytes
-        this.interaction.presentToast('El documento no debe superar los 6 MB');
-        return;
-      }
-
-      // Lógica para leer y cargar el archivo
       const reader = new FileReader();
-      reader.onload = () => {
-        // Establecer la URL del archivo en el control correspondiente
+      reader.onload = (e: any) => {
         this.signup.patchValue({
-          [controlName]: reader.result
+          foto: e.target.result // Guarda la imagen en el formulario
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  // Método para manejar la selección de la imagen del documento
+  onDocumentSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.signup.patchValue({
+          documento: e.target.result // Guarda la imagen en el formulario
         });
       };
       reader.readAsDataURL(file);
@@ -168,7 +163,7 @@ export class RegisterComponent {
     const suma = [...cuerpo].reverse().reduce((acc, curr, index) => {
       return acc + (parseInt(curr) * (index % 6 + 2));
     }, 0);
-    
+
     const calculatedDv = 11 - (suma % 11);
     const dvCalculado = calculatedDv === 10 ? 'K' : calculatedDv === 11 ? '0' : calculatedDv.toString();
 

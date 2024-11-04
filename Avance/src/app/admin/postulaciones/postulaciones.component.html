@@ -3,15 +3,17 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>Mis Postulaciones</ion-title>
+    <ion-title>Postulaciones del usuario</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
+  <ion-card-title style="text-align: center;">Datos Personales</ion-card-title>
+
     <!-- Mostrar Datos Personales -->
     <ion-card *ngIf="usuario">
       <ion-card-header>
-        <ion-card-title>Datos Personales</ion-card-title>
+    
       </ion-card-header>
       <ion-card-content>
         <p><strong>Nombre Completo:</strong></p>
@@ -24,8 +26,10 @@
         <p>{{ usuario.email }}</p>
       </ion-card-content>
     </ion-card>
+    <ion-card-title style="text-align: center;"> Postulaciones</ion-card-title>
   <!-- Mostrar Postulaciones a Espacios Públicos -->
   <ion-card *ngIf="postulacionesEspacios && postulacionesEspacios.length > 0">
+
     <ion-card-header>
       <ion-card-title>Mis Postulaciones a Espacios Públicos</ion-card-title>
     </ion-card-header>

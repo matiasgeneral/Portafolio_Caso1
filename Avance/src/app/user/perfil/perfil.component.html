@@ -8,11 +8,10 @@
 </ion-header>
 
 <ion-content padding>
+  <ion-card-title style="text-align: center;">Datos Personales</ion-card-title>
   <!-- Mostrar Datos Personales -->
   <ion-card *ngIf="usuario">
-    <ion-card-header>
-      <ion-card-title>Datos Personales</ion-card-title>
-    </ion-card-header>
+
     <ion-card-content>
       <p><strong>Nombre Completo:</strong></p>
       <p>{{ usuario.nombre }} {{ usuario.apellidoPaterno }} {{ usuario.apellidoMaterno }}</p>
@@ -22,10 +21,16 @@
       
       <p><strong>Correo Electrónico:</strong></p>
       <p>{{ usuario.email }}</p>
+
+
+      <p><strong>Estado:</strong></p>
+      <p>{{ usuario.rol }}  <br> Estado: {{ usuario.estado }} </p>
     </ion-card-content>
   </ion-card>
 
   <!-- Mostrar Postulaciones a Espacios Públicos -->
+  <ion-card-title style="text-align: center;">Mis postulaciones</ion-card-title>
+
   <ion-card *ngIf="postulacionesEspacios && postulacionesEspacios.length > 0">
     <ion-card-header>
       <ion-card-title>Mis Postulaciones a Espacios Públicos</ion-card-title>
@@ -86,7 +91,8 @@
             <p>{{ actividad.titulo }}</p>
             
             <p><strong>Descripción:</strong></p>
-            <p>{{ actividad.descripcion }}</p>
+            <p>{{ actividad.descripcion.length > 45 ? (actividad.descripcion | slice:0:45) + '...' : actividad.descripcion }}</p>
+            
             
             <p><strong>Fecha del Evento:</strong></p>
             <p>{{ actividad.fechaEvento }}</p>
@@ -127,7 +133,7 @@
             <p>{{ proyecto.titulo }}</p>
             
             <p><strong>Descripción:</strong></p>
-            <p>{{ proyecto.descripcion }}</p>
+            <p>{{ proyecto.descripcion.length > 45 ? ( proyecto.descripcion | slice:0:45) + '...' :proyecto.descripcion }}</p>
             
             <p><strong>Fecha de Inicio:</strong></p>
             <p>{{ proyecto.fechaInicio }}</p>
