@@ -26,3 +26,7 @@ pass: 123456789
 Cuenta secretario
 secretario@secretario.cl
 pass: 123456789
+
+Cuenta coordinador
+coordinador@coordinador.cl
+pass: 123456789
