@@ -14,6 +14,8 @@ import { AlertController } from '@ionic/angular';
 export class RegisterComponent {
   signup: FormGroup; // FormGroup para el formulario de registro
   rut: string | null = null; // Para almacenar el RUT del usuario
+  fotoValida: boolean = false; // Para el estado de la validación de la foto
+  documentoValido: boolean = false; // Para el estado de la validación del documento
 
   constructor(
     private fb: FormBuilder,
@@ -39,7 +41,7 @@ export class RegisterComponent {
   }
 
   async onSubmit() {
-    if (this.signup.valid) {
+    if (this.signup.valid && this.fotoValida && this.documentoValido) {
       const { nombre, apellidoPaterno, apellidoMaterno, rut, direccion, telefono, email, password } = this.signup.value;
 
       if (this.passwordsDontMatch()) {
@@ -104,7 +106,7 @@ export class RegisterComponent {
         this.interaction.closeLoading();
       }
     } else {
-      this.interaction.presentToast('Complete los campos correctamente');
+      this.interaction.presentToast('Complete los campos correctamente y asegúrese de que los archivos sean válidos.');
     }
   }
 
@@ -127,13 +129,21 @@ export class RegisterComponent {
   onImageSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.signup.patchValue({
-          foto: e.target.result // Guarda la imagen en el formulario
-        });
-      };
-      reader.readAsDataURL(file);
+      const valid = this.validateFile(file, ['image/jpeg', 'image/png'], 5);
+      if (valid) {
+        this.fotoValida = true; // Marcamos la foto como válida
+        const reader = new FileReader();
+        reader.onload = (e: any) => {
+          this.signup.patchValue({
+            foto: e.target.result // Guarda la imagen en el formulario
+          });
+        };
+        reader.readAsDataURL(file);
+        this.interaction.presentToast('La foto es válida.');
+      } else {
+        this.fotoValida = false; // Marcamos la foto como no válida
+        this.interaction.presentToast('La foto debe ser un archivo JPG o PNG de máximo 5 MB.');
+      }
     }
   }
 
@@ -141,14 +151,29 @@ export class RegisterComponent {
   onDocumentSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.signup.patchValue({
-          documento: e.target.result // Guarda la imagen en el formulario
-        });
-      };
-      reader.readAsDataURL(file);
+      const valid = this.validateFile(file, ['image/jpeg', 'image/png', 'application/pdf'], 5);
+      if (valid) {
+        this.documentoValido = true; // Marcamos el documento como válido
+        const reader = new FileReader();
+        reader.onload = (e: any) => {
+          this.signup.patchValue({
+            documento: e.target.result // Guarda la imagen en el formulario
+          });
+        };
+        reader.readAsDataURL(file);
+        this.interaction.presentToast('El documento es válido.');
+      } else {
+        this.documentoValido = false; // Marcamos el documento como no válido
+        this.interaction.presentToast('El documento debe ser un archivo JPG, PNG o PDF de máximo 5 MB.');
+      }
     }
+  }
+
+  // Método para validar el tamaño y tipo de archivo
+  validateFile(file: File, validTypes: string[], maxSizeMB: number): boolean {
+    const isValidType = validTypes.includes(file.type);
+    const isValidSize = file.size <= maxSizeMB * 1024 * 1024; // Convertir MB a bytes
+    return isValidType && isValidSize;
   }
 
   // Método para validar el RUT
