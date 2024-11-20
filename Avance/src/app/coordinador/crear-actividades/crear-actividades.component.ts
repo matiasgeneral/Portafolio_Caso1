@@ -4,6 +4,7 @@ import { FirestoreService } from 'src/app/service/firestore.service';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { finalize } from 'rxjs/operators';
 import { AlertController } from '@ionic/angular';
+import { FcmService } from '../../service/Fcm.Service';
 
 @Component({
   selector: 'app-crear-actividades',
@@ -14,12 +15,14 @@ export class CrearActividadesComponent implements OnInit {
   actividadForm: FormGroup;
   selectedFile: File | null = null;
   maxParticipants: number = 999;
+  maxFileSize = 5 * 1024 * 1024; // 5MB en bytes
 
   constructor(
     private firestore: FirestoreService,
     private formBuilder: FormBuilder,
     private storage: AngularFireStorage,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private fcmService: FcmService
   ) {
     this.actividadForm = this.formBuilder.group({
       titulo: ['', Validators.required],
@@ -35,56 +38,127 @@ export class CrearActividadesComponent implements OnInit {
 
   async onSubmit() {
     if (this.actividadForm.valid && this.selectedFile) {
-      const actividadData = this.actividadForm.value;
+      try {
+        // Mostrar loading
+        const loading = await this.alertController.create({
+          message: 'Subiendo actividad...',
+        });
+        await loading.present();
 
-      // Asignar la fecha de creación en formato día/mes/año
-      actividadData.fechaCreacion = this.getCurrentDate();
+        if (!this.validateFile(this.selectedFile)) {
+          await loading.dismiss();
+          return;
+        }
 
-      // Depuración: Verificar el valor de fechaEvento antes del formato
-      console.log('Valor original de fechaEvento:', actividadData.fechaEvento);
+        const actividadData = this.actividadForm.value;
+        actividadData.fechaCreacion = this.getCurrentDate();
+        actividadData.fechaEvento = this.formatDate(actividadData.fechaEvento);
+        actividadData.cantidadDisponible = actividadData.cantidadMax;
+        const id = this.firestore.getId();
+        actividadData.id = id;
 
-      // Formatear fechaEvento a día/mes/año
-      actividadData.fechaEvento = this.formatDate(actividadData.fechaEvento);
+        // Subir imagen primero
+        try {
+          const filePath = `actividad/${Date.now()}_${this.selectedFile.name}`;
+          const fileRef = this.storage.ref(filePath);
+          const uploadTask = await this.storage.upload(filePath, this.selectedFile);
+          const url = await fileRef.getDownloadURL().toPromise();
+          console.log('URL de imagen obtenida:', url);
+          actividadData.image = url;
+        } catch (error) {
+          console.error('Error en subida de imagen:', error);
+          await loading.dismiss();
+          this.showErrorAlert('Error al subir la imagen. Por favor, intente nuevamente.');
+          return;
+        }
 
-      // Depuración: Verificar el valor de fechaEvento después del formato
-      console.log('Valor formateado de fechaEvento:', actividadData.fechaEvento);
+        // Crear documento
+        try {
+          await this.createActividad(actividadData, id);
+        } catch (error) {
+          console.error('Error al crear actividad:', error);
+          await loading.dismiss();
+          this.showErrorAlert('Error al crear la actividad. Por favor, intente nuevamente.');
+          return;
+        }
 
-      actividadData.cantidadDisponible = actividadData.cantidadMax;
-      const id = this.firestore.getId();
-      actividadData.id = id;
+        // Todo exitoso
+        await loading.dismiss();
+        await this.showSuccessAlert();
 
-      const filePath = `actividad/${this.selectedFile.name}`;
-      const fileRef = this.storage.ref(filePath);
-      const uploadTask = this.storage.upload(filePath, this.selectedFile);
+        // Limpiar y recargar de manera forzada
+        this.resetForm();
+        const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+        if (fileInput) {
+          fileInput.value = '';
+        }
 
-      uploadTask
-        .snapshotChanges()
-        .pipe(
-          finalize(async () => {
-            const url = await fileRef.getDownloadURL().toPromise();
-            actividadData.image = url;
-
-            await this.createActividad(actividadData, id);
-            this.showSuccessAlert();
-            this.resetForm();
-          })
-        )
-        .subscribe();
+        // Esperar un momento y recargar
+        setTimeout(() => {
+          window.location.href = window.location.href;
+        }, 1000);
+      } catch (error) {
+        console.error('Error general:', error);
+        this.showErrorAlert('Error inesperado. Por favor, intente nuevamente.');
+      }
     } else {
-      console.log('El formulario no es válido o no hay archivo seleccionado');
+      this.showErrorAlert('Por favor, complete todos los campos y seleccione una imagen.');
     }
   }
 
+  validateFile(file: File): boolean {
+    console.log('Validando archivo:', file);
+    const validTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+
+    if (!validTypes.includes(file.type)) {
+      this.showErrorAlert('Solo se permiten archivos PNG o JPG/JPEG.');
+      return false;
+    }
+
+    if (file.size > this.maxFileSize) {
+      this.showErrorAlert('El archivo no debe superar los 5MB.');
+      return false;
+    }
+
+    console.log('Archivo válido');
+    return true;
+  }
+
   async createActividad(actividadData: any, id: string) {
-    const path = 'actividades';
-    await this.firestore.createDoc(actividadData, path, id);
+    try {
+      const path = 'actividades';
+      await this.firestore.createDoc(actividadData, path, id);
+      console.log('Documento creado exitosamente');
+
+      // Enviar notificación solo si el documento se creó correctamente
+      try {
+        await this.fcmService.sendNotification(
+          'Nueva Actividad',
+          `Se ha creado la actividad: ${actividadData.titulo}`,
+          'usuariosLogueados'
+        );
+        console.log('Notificación enviada exitosamente');
+      } catch (notifError) {
+        console.error('Error al enviar notificación:', notifError);
+        // No detenemos el proceso si falla la notificación
+      }
+    } catch (error) {
+      console.error('Error en createActividad:', error);
+      throw error;
+    }
   }
 
   onImageSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
-      this.selectedFile = file;
-      this.actividadForm.patchValue({ image: file.name });
+      if (this.validateFile(file)) {
+        this.selectedFile = file;
+        this.actividadForm.patchValue({ image: file.name });
+      } else {
+        event.target.value = '';
+        this.selectedFile = null;
+        this.actividadForm.patchValue({ image: '' });
+      }
     }
   }
 
@@ -92,9 +166,23 @@ export class CrearActividadesComponent implements OnInit {
     const alert = await this.alertController.create({
       header: 'Éxito',
       message: 'La actividad ha sido creada correctamente.',
+      buttons: [{
+        text: 'OK',
+        handler: () => {
+          // Forzar recarga después de cerrar el alert
+          window.location.reload();
+        }
+      }]
+    });
+    await alert.present();
+  }
+
+  async showErrorAlert(message: string) {
+    const alert = await this.alertController.create({
+      header: 'Error',
+      message: message,
       buttons: ['OK'],
     });
-
     await alert.present();
   }
 
@@ -113,14 +201,7 @@ export class CrearActividadesComponent implements OnInit {
 
   formatDate(dateString: string): string {
     if (!dateString) return 'Fecha no disponible';
-    
-    // Verificar el valor y formatear solo si tiene el formato esperado 'YYYY-MM-DD'
     const parts = dateString.split('-');
-    if (parts.length === 3) {
-      return `${parts[2]}/${parts[1]}/${parts[0]}`;
-    } else {
-      console.warn('Formato inesperado para fechaEvento:', dateString);
-      return 'Fecha no disponible';
-    }
+    return parts.length === 3 ? `${parts[2]}/${parts[1]}/${parts[0]}` : 'Fecha no disponible';
   }
 }

@@ -1,3 +1,44 @@
-<p>
-  lista-solicitudes-proyectos works!
-</p>
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>Listado de Proyectos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-button expand="block" routerLink="/visualizacion-proyectos" class="ver-noticias-button">
+    Ver proyectos
+  </ion-button>
+  <!-- Título de la sección -->
+  <h2 style="text-align: center; margin-top: 15px;">Solicitudes a Proyectos</h2>
+
+  <ion-list *ngIf="proyectos && proyectos.length; else noProyectos">
+    <ion-item *ngFor="let proyecto of proyectos">
+      <!-- Imagen del proyecto -->
+      <ion-avatar slot="start">
+        <img *ngIf="proyecto.image" [src]="proyecto.image" alt="Imagen del Proyecto" />
+      </ion-avatar>
+
+      <!-- Detalles del proyecto -->
+      <ion-label>
+        <h2>{{ proyecto.titulo | titlecase }}</h2>
+        <p>Fecha de Inicio: {{ proyecto.fechaInicio }}</p>
+        <p>Fecha de Fin: {{ proyecto.fechaFin }}</p>
+        <p>Descripción: {{ proyecto.descripcion }}</p>
+        <p>Participantes: {{ proyecto.cantidadParticipantes }}</p>
+      </ion-label>
+
+      <!-- Botón para ver participantes -->
+      <ion-button fill="outline" slot="end" (click)="verParticipantes(proyecto.id)">
+        Ver Participantes
+      </ion-button>
+    </ion-item>
+  </ion-list>
+
+  <ng-template #noProyectos>
+    <ion-card>
+      <ion-card-content>
+        <h3>No hay proyectos disponibles.</h3>
+      </ion-card-content>
+    </ion-card>
+  </ng-template>
+</ion-content>

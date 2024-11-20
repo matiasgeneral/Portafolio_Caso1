@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthenticationService } from '../../service/authentication.service';
 import { FirestoreService } from 'src/app/service/firestore.service';
+import { FcmService } from '../../service/Fcm.Service'; // Importa FcmService
 import { ToastController } from '@ionic/angular'; // Importa ToastController
 
 @Component({
@@ -18,6 +19,7 @@ export class LoginComponent {
     private formBuilder: FormBuilder,
     private auth: AuthenticationService,
     private firestore: FirestoreService,
+    private fcmService: FcmService, // Inyecta FcmService
     private toastController: ToastController // Inyecta ToastController
   ) {
     this.loginForm = this.formBuilder.group({
@@ -31,6 +33,14 @@ export class LoginComponent {
       const result = await this.auth.login(this.email, this.password);
 
       if (result) {
+        const user = await this.auth.getCurrentUser(); // Obtiene el usuario actual logueado
+
+        if (user) {
+          const uid = user.uid; // Obtén el UID del usuario
+          // Solicita permisos para notificaciones y guarda el token
+          await this.fcmService.requestPermission();
+        }
+
         await this.presentToast('Inicio de sesión exitoso', 'success');
         // Forzar la recarga de la página para actualizar el menú y la interfaz
         window.location.reload();
@@ -68,4 +78,3 @@ export class LoginComponent {
     return this.firestore.createDoc(data, path, this.firestore.getId());
   }
 }
-

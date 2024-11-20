@@ -99,6 +99,9 @@
         <ion-button expand="full" type="submit" [disabled]="usuarioForm.invalid" color="secondary">
           Guardar cambios
         </ion-button>
+        <ion-button expand="full" color="danger" (click)="deleteUser2()">
+          Cancelar solicitud (<strong>Eliminar usuario</strong>)
+        </ion-button>
         
         <ion-button expand="full" color="warning" (click)="goBack()">Cancelar</ion-button>
       </form>

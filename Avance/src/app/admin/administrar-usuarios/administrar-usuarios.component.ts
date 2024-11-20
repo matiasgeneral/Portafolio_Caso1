@@ -45,33 +45,45 @@ export class AdministrarUsuariosComponent implements OnInit {
     this.router.navigate(['/buscador-usuarios']); // Asegúrate de que esta ruta sea correcta
   }
   
-  // Método para borrar el usuario, restringido a Administradores activos
+
+  // Método para borrar la usuario
   deleteUser2() {
-    if (
-      this.userDetails &&
-      this.userDetails.rol === 'Administrador' &&
-      this.userDetails.estado === 'Activo' &&
-      this.rut
-    ) {
+    if (this.rut) {
       this.firestoreService.deleteDoc('Usuario', this.rut).then(() => {
         console.log('Usuario Borrado');
         this.goBack(); // Regresa a la lista de usuarios después de borrar
       }).catch(error => {
         console.error('Error al borrar la noticia:', error);
       });
-    } else {
-      console.warn('Acceso denegado. Solo los administradores activos pueden eliminar usuarios.');
     }
   }
 
-  // Método para ver los detalles de un usuario y luego editar
-  verDetalles(usuarios: any) {
-    console.log('Detalles del usuario:', usuarios);
-    // Asegúrate de que `usuario.rut` existe antes de navegar
-    if (usuarios.rut) {
-      this.router.navigate(['/editar-usuarios', usuarios.rut]); // Redirige a la pantalla de detalles del usuario, pasando su RUT
-    } else {
-      console.error('RUT de usuario no definido');
+
+
+  /**
+     // Método para deshabilitar 
+  deshabilitarDoc() {
+    if (this.rut) {
+      this.firestoreService.deshabilitarDoc('usuarios', this.rut).then(() => {
+        console.log('Noticia deshabilitada');
+        this.goBack(); // Regresa a la lista de usuarios después de deshabilitar
+      }).catch(error => {
+        console.error('Error al deshabilitar al usuario:', error);
+      });
     }
+  }
+
+   * **/
+
+  
+  // Método para ver los detalles de un usuario y luego editar
+verDetalles(usuarios: any) {
+  console.log('Detalles del usuario:', usuarios);
+  // Asegúrate de que `usuario.rut` existe antes de navegar
+  if (usuarios.rut) {
+    this.router.navigate(['/editar-usuarios', usuarios.rut]); // Redirige a la pantalla de detalles del usuario, pasando su RUT
+  } else {
+    console.error('RUT de usuario no definido');
+  }
   }
 }

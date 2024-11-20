@@ -1,6 +1,8 @@
+// Importa las librerías de Firebase necesarias
 importScripts('https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js');
 importScripts('https://www.gstatic.com/firebasejs/9.22.0/firebase-messaging-compat.js');
 
+// Inicializa Firebase en el Service Worker
 firebase.initializeApp({
     apiKey: "AIzaSyBWD_S-ixA0gQn6pWEMQl81Juvj6FlU1F0",
     authDomain: "sistema-unidad-terrritorial.firebaseapp.com",
@@ -12,18 +14,14 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
+// Maneja mensajes en segundo plano
 messaging.onBackgroundMessage((payload) => {
   console.log('[firebase-messaging-sw.js] Recibió mensaje en segundo plano', payload);
-  try {
-    const notificationTitle = payload.notification.title;
-    const notificationOptions = {
-      body: payload.notification.body,
-      data: payload.data || {},
-      requireInteraction: true
-    };
+  const notificationTitle = payload.notification.title;
+  const notificationOptions = {
+    body: payload.notification.body,
+    // Se elimina la referencia al ícono ya que no lo estamos usando
+  };
 
-    return self.registration.showNotification(notificationTitle, notificationOptions);
-  } catch (error) {
-    console.error('Error mostrando notificación:', error);
-  }
+  self.registration.showNotification(notificationTitle, notificationOptions);
 });

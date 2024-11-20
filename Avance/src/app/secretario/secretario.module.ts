@@ -12,6 +12,7 @@ import { ListaSolicitudesEspaciosPublicosComponent } from './lista-solicitudes-e
 import { ListaSolicitudesProyectosComponent } from './lista-solicitudes-proyectos/lista-solicitudes-proyectos.component';
 import { VerificacionSolicitudesProyectosComponent } from './verificacion-solicitudes-proyectos/verificacion-solicitudes-proyectos.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { VerParticipantesComponent } from './ver-participantes/ver-participantes.component';
 
 
 @NgModule({
@@ -25,6 +26,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     ListaSolicitudesProyectosComponent,
     
     VerificacionSolicitudesProyectosComponent,
+    VerParticipantesComponent,
     
   ],
   imports: [

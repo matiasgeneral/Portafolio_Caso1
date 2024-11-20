@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Filesystem, Directory } from '@capacitor/filesystem';
-import * as pdfMake from 'pdfmake/build/pdfmake';
-import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { Platform } from '@ionic/angular';
 import { TDocumentDefinitions } from 'pdfmake/interfaces';
-import { AlertController } from '@ionic/angular'; // Importar el controlador de alertas
+import { AlertController } from '@ionic/angular';
+import * as pdfMake from 'pdfmake/build/pdfmake';
+import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +12,12 @@ import { AlertController } from '@ionic/angular'; // Importar el controlador de 
 export class PdfService {
   constructor(private platform: Platform, private alertController: AlertController) {
     // Inicializar las fuentes para PDFMake
-    (pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
+    try {
+      (pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
+      console.log('vfs asignado correctamente a pdfMake.');
+    } catch (error) {
+      console.error('Error al asignar vfs a pdfMake:', error);
+    }
   }
 
   async generateCertificate(userData: any) {
@@ -25,7 +30,7 @@ export class PdfService {
     const documentDefinition: TDocumentDefinitions = {
       content: [
         { text: 'Certificado de Residencia', style: 'header' },
-        { text: 'Junta de Vecinos San Bernardo', style: 'subheader', margin: [0, 10, 0, 20] }, // Agregar la junta de vecinos
+        { text: 'Junta de Vecinos San Bernardo', style: 'subheader', margin: [0, 10, 0, 20] },
         { text: `\nNombre completo: ${fullName}`, style: 'details' },
         { text: `Dirección: ${userData.direccion}`, style: 'details' },
         { text: `RUT: ${userData.rut}`, style: 'details' },
@@ -72,7 +77,7 @@ export class PdfService {
       // En Android/iOS, guardar el PDF en el dispositivo
       pdfDocGenerator.getBase64(async (data) => {
         try {
-          const fileName = `certificado_residencia_${fullName.replace(/\s+/g, '_')}_${formattedDate}_${formattedTime}.pdf`; // Crear el nombre del archivo
+          const fileName = `certificado_residencia_${fullName.replace(/\s+/g, '_')}_${formattedDate}_${formattedTime}.pdf`;
           await this.savePdfToDevice(data, fileName);
           console.log('PDF guardado correctamente.');
 
@@ -86,7 +91,7 @@ export class PdfService {
       });
     } else {
       // En la web, descargar el archivo directamente
-      const fileName = `certificado_residencia_${fullName.replace(/\s+/g, '_')}_${formattedDate}_${formattedTime}.pdf`; // Crear el nombre del archivo
+      const fileName = `certificado_residencia_${fullName.replace(/\s+/g, '_')}_${formattedDate}_${formattedTime}.pdf`;
       pdfDocGenerator.download(fileName);
     }
   }
@@ -111,7 +116,8 @@ export class PdfService {
   private async showDownloadAlert() {
     const alert = await this.alertController.create({
       header: 'PDF Guardado',
-      message: 'Recuerda ver la carpeta Documentos para ver el archivo, la carpeta donde se guarda su certificado de residencia puede variar dependiendo del dispositivo.',
+      message:
+        'Recuerda ver la carpeta Documentos para ver el archivo, la carpeta donde se guarda su certificado de residencia puede variar dependiendo del dispositivo.',
       buttons: ['OK'],
     });
 

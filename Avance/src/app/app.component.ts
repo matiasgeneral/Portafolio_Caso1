@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { auth } from './firebase-config';
 import { Title } from '@angular/platform-browser';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
+import { FcmService } from './service/Fcm.Service';
 
 @Component({
   selector: 'app-root',
@@ -12,43 +13,56 @@ import { getFirestore, doc, getDoc } from 'firebase/firestore';
 })
 export class AppComponent implements OnInit {
   isLoggedIn: boolean = false;
-  userRole: string = ''; // Variable para almacenar el rol del usuario
-  userStatus: string = ''; // Variable para almacenar el estado del usuario
+  userRole: string = '';
+  userStatus: string = '';
   public appPages: { title: string; url: string; icon: string }[] = [];
-
   public accountPages = [
     { title: 'Registrar cuenta', url: '/register', icon: 'person-add' },
     { title: 'Iniciar sesión', url: '/login', icon: 'log-in' },
   ];
-
   public accountMenuOpen = false;
 
-  constructor(private router: Router) { }
+  constructor(
+    private router: Router, 
+    private fcmService: FcmService
+  ) { }
 
   ngOnInit() {
+    // Inicializar FCM antes de monitorear la autenticación
+    this.initializeFCM();
+    
     // Monitorea el estado de autenticación del usuario
     onAuthStateChanged(auth, async (user) => {
-      this.isLoggedIn = !!user; // Si hay un usuario, isLoggedIn será true
+      this.isLoggedIn = !!user;
       if (this.isLoggedIn && user) {
-        await this.loadUserRole(user.uid); // Carga el rol y estado del usuario
-        this.setupPagesByRole(); // Configura las páginas según el rol y estado
-        this.router.navigate(['/home']); // Redirige a home si está autenticado
+        await this.loadUserRole(user.uid);
+        this.setupPagesByRole();
+        this.router.navigate(['/home']);
       } else {
-        this.resetMenu(); // Resetea el menú si el usuario no está autenticado
+        this.resetMenu();
       }
     });
   }
 
+  private async initializeFCM() {
+    try {
+      await this.fcmService.requestPermission();
+      console.log('FCM inicializado correctamente');
+    } catch (error) {
+      console.error('Error al inicializar FCM:', error);
+    }
+  }
+
   async loadUserRole(uid: string) {
     const db = getFirestore();
-    console.log('UID del usuario:', uid); // Imprime el UID para verificar
+    console.log('UID del usuario:', uid);
     try {
-      const userDoc = await getDoc(doc(db, 'usuarios', uid)); // Cargar el documento del usuario
+      const userDoc = await getDoc(doc(db, 'usuarios', uid));
       if (userDoc.exists()) {
-        const userData = userDoc.data(); // Obtener los datos del usuario
-        this.userRole = userData["rol"]; // Asigna el rol del usuario a la variable
-        this.userStatus = userData["estado"]; // Asigna el estado del usuario (activo o pendiente)
-        console.log('Datos del usuario:', userData); // Imprime los datos del usuario para verificar
+        const userData = userDoc.data();
+        this.userRole = userData["rol"];
+        this.userStatus = userData["estado"];
+        console.log('Datos del usuario:', userData);
       } else {
         console.log('No se encontró el documento del usuario'); 
       }
@@ -58,11 +72,9 @@ export class AppComponent implements OnInit {
   }
 
   setupPagesByRole() {
-    // Si el usuario está pendiente, mostrar solo el menú básico
     if (this.userStatus === 'Pendiente') {
-      this.appPages = this.getUserPages(); // Mostrar opciones limitadas
+      this.appPages = this.getUserPendientePages();
     } else {
-      // Configura las páginas según el rol del usuario
       switch (this.userRole) {
         case 'Administrador':
           this.appPages = this.getAdminPages();
@@ -77,15 +89,15 @@ export class AppComponent implements OnInit {
           this.appPages = this.getUserRegistradoPages();
           break;
         default:
-          this.appPages = this.getUserPages(); // Para usuarios no registrados o roles desconocidos
+          this.appPages = this.getUserPages();
           break;
       }
     }
   }
 
   resetMenu() {
-    this.userRole = ''; // Limpia el rol del usuario
-    this.appPages = this.getUserPages(); // Resetea las opciones a las predeterminadas
+    this.userRole = '';
+    this.appPages = this.getUserPages();
   }
 
   getAdminPages() {
@@ -96,18 +108,16 @@ export class AppComponent implements OnInit {
       { title: 'Actividades', url: './visualizacion-eventos', icon: 'star' },
       { title: 'Proyectos', url: './visualizacion-proyectos', icon: 'star' },
       { title: 'Solicitud Certificado Residencia', url: './solicitud-certificado-residencia', icon: 'reader' },
-      
       { title: 'Crear noticia', url: './crear-noticias', icon: 'newspaper' },
       { title: 'Crear actividades', url: './crear-actividades', icon: 'heart' },
       { title: 'Crear Espacios públicos', url: './crear-espacios-publicos', icon: 'flower' },
       { title: 'Crear Proyectos', url: './crear-proyectos', icon: 'star' },
-      
       { title: 'Buscar usuarios', url: './buscador-usuarios', icon: 'id-card' },
       { title: 'Buscar noticias', url: './buscador-noticias', icon: 'file-tray-full' },
       { title: 'Buscar actividades', url: './buscador-actividades', icon: 'search' },
       { title: 'Buscar espacios públicos', url: './buscador-espacios-publicos', icon: 'search' },
       { title: 'Buscar proyectos', url: './buscador-proyectos', icon: 'search' },
-      {title: 'Perfil', url: './perfil', icon: 'person-circle'},
+      { title: 'Perfil', url: './perfil', icon: 'person-circle' },
     ];
   }
 
@@ -127,7 +137,7 @@ export class AppComponent implements OnInit {
       { title: 'Buscar actividades', url: './buscador-actividades', icon: 'search' },
       { title: 'Buscar espacios públicos', url: './buscador-espacios-publicos', icon: 'search' },
       { title: 'Buscar proyectos', url: './buscador-proyectos', icon: 'search' },
-      {title: 'Perfil', url: './perfil', icon: 'person-circle'},
+      { title: 'Perfil', url: './perfil', icon: 'person-circle' },
     ];
   }
 
@@ -142,7 +152,7 @@ export class AppComponent implements OnInit {
       { title: 'Solicitudes de espacios públicos', url: './lista-solicitudes-espacios-publicos', icon: 'list' },
       { title: 'Solicitudes de proyectos', url: './lista-solicitudes-proyectos', icon: 'list' },
       { title: 'Solicitud Certificado Residencia', url: './solicitud-certificado-residencia', icon: 'reader' },
-      {title: 'Perfil', url: './perfil', icon: 'person-circle'},
+      { title: 'Perfil', url: './perfil', icon: 'person-circle' },
     ];
   }
 
@@ -154,7 +164,15 @@ export class AppComponent implements OnInit {
       { title: 'Actividades', url: './visualizacion-eventos', icon: 'star' },
       { title: 'Proyectos', url: './visualizacion-proyectos', icon: 'star' },
       { title: 'Solicitud Certificado Residencia', url: './solicitud-certificado-residencia', icon: 'reader' },
-      {title: 'Perfil', url: './perfil', icon: 'person-circle'},
+      { title: 'Perfil', url: './perfil', icon: 'person-circle' },
+    ];
+  }
+
+  getUserPendientePages() {
+    return [
+      { title: 'Home', url: './home', icon: 'home' },
+      { title: 'Noticias', url: './visualizacion-noticias', icon: 'newspaper' },
+      { title: 'Perfil', url: './perfil', icon: 'person-circle' },
     ];
   }
 
@@ -173,9 +191,24 @@ export class AppComponent implements OnInit {
     signOut(auth).then(() => {
       this.isLoggedIn = false;
       this.router.navigate(['/login']);
-      this.resetMenu(); // Resetea el menú al salir
+      this.resetMenu();
     }).catch((error) => {
       console.error('Error al cerrar sesión:', error);
     });
+  }
+
+  async processPayment() {
+    try {
+      const paymentResponse = await this.fcmService.transbankPayment(
+        1000,
+        'buyOrder123',
+        'sessionId456',
+        'https://tusitio.com/return'
+      );
+      console.log('Respuesta de Transbank:', paymentResponse);
+      window.location.href = paymentResponse.url;
+    } catch (error) {
+      console.error('Error al procesar el pago:', error);
+    }
   }
 }

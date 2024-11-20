@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1732065915011,
+  "timestamp": 1732129283674,
   "index": "/index.html",
   "assetGroups": [
     {
@@ -74,7 +74,8 @@
         "/common.7a6a585749fe6d01.js",
         "/firebase-messaging-sw.js",
         "/index.html",
-        "/main.50ab828f813118a8.js",
+        "/main.aa607e17d782aa83.js",
+        "/manifest.webmanifest",
         "/polyfills-core-js.9b17e8c75eeccf74.js",
         "/polyfills-dom.bf542500b6fca113.js",
         "/polyfills.45b15749fa958a1d.js",
@@ -1518,9 +1519,10 @@
     "/assets/icon/favicon.png": "7798b8e0eb61d7375c245af78bbf5c916932bf13",
     "/assets/shapes.svg": "638f87e27e6fc7ddfd6e6b262ea70d690f6c7011",
     "/common.7a6a585749fe6d01.js": "1774f69184f6d7ef23c05e4781235617bb35a279",
-    "/firebase-messaging-sw.js": "9d6c133c54923c8a7a842051432ea4e5d4fb4783",
-    "/index.html": "f01faa92c8491a6bf73fc20b99698974987515e7",
-    "/main.50ab828f813118a8.js": "4e16400afb9f0d6f56ade24f6c288df7f61d84ea",
+    "/firebase-messaging-sw.js": "d92d97f8fc2778d73a6d26f78e0966f516e881a0",
+    "/index.html": "f9a53fa52e8dcba9f36cea852df13ead8425a74f",
+    "/main.aa607e17d782aa83.js": "3a1be6ba1f636364a48bb556e2ac86da508318dc",
+    "/manifest.webmanifest": "ed7be5d3d2279ef9d11a26cf31e6a6f78126ce12",
     "/polyfills-core-js.9b17e8c75eeccf74.js": "79c38229b37c1b018dc0427b03319da272d1c3bf",
     "/polyfills-dom.bf542500b6fca113.js": "3fa333db66c8050f12e99d977f5098a6de8dd593",
     "/polyfills.45b15749fa958a1d.js": "8f7a68085cf3b9bab686804366cd6cb9e456dec3",

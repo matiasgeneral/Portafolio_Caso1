@@ -7,6 +7,7 @@ import { ListaRegistrosUsuariosComponent } from './lista-registros-usuarios/list
 import { ListaSolicitudesEspaciosPublicosComponent } from './lista-solicitudes-espacios-publicos/lista-solicitudes-espacios-publicos.component';
 import { ListaSolicitudesProyectosComponent } from './lista-solicitudes-proyectos/lista-solicitudes-proyectos.component';
 import { VerificacionSolicitudesProyectosComponent } from './verificacion-solicitudes-proyectos/verificacion-solicitudes-proyectos.component';
+import { VerParticipantesComponent } from './ver-participantes/ver-participantes.component';
 
 const routes: Routes = [
   {
@@ -36,6 +37,10 @@ const routes: Routes = [
   {
     path: 'verificacion-solicitudes-proyectos',
     component:VerificacionSolicitudesProyectosComponent,
+  },
+  {
+    path: 'ver-participantes/:id',
+    component:VerParticipantesComponent,
   }
 ];
 

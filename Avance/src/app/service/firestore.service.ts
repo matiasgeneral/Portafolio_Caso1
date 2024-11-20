@@ -43,11 +43,7 @@ export class FirestoreService {
     return collection.doc(id).delete();
   }
 
-  // Borrar usuario
-  deleteUser2(path: string, uid: string) {
-    const collection = this.afs.collection(path);
-    return collection.doc(uid).delete();
-  }
+
 
   // Deshabilitar un documento
   deshabilitarDoc(path: string, id: string) {
@@ -262,6 +258,42 @@ getUsuario(uid: string): Observable<any> {
       })
     );
   }
+
+
+
+
+// Verificar si un RUT ya existe en la colección
+async checkUserExists(rut: string, path: string): Promise<boolean> {
+  try {
+    // Realizamos una consulta para verificar si existe el documento con ese RUT
+    const querySnapshot = await this.afs.collection(path, ref => ref.where('rut', '==', rut)).get().toPromise();
+
+    // Si la consulta devuelve algún resultado, significa que el RUT existe
+    return querySnapshot ? !querySnapshot.empty : false;
+  } catch (error) {
+    console.error('Error al verificar si el RUT existe:', error);
+    return false; // En caso de error, se asume que el RUT no existe
+  }
+}
+
+// Método para borrar el usuario
+deleteUser2(path: string, rut: string) {
+  const collection = this.afs.collection(path);
+  return collection.ref.where('rut', '==', rut).get().then(snapshot => {
+    if (snapshot.empty) {
+      throw new Error('El usuario no existe'); // Si no hay documentos con ese RUT, lanzamos un error
+    } else {
+      // Si el documento existe, lo eliminamos
+      snapshot.forEach(doc => {
+        doc.ref.delete(); // Borra el documento
+      });
+      console.log('Usuario borrado');
+    }
+  }).catch(error => {
+    console.error('Error al borrar el usuario:', error);
+    throw error; // Rethrow para ser manejado en el componente
+  });
+}
 
 
 }

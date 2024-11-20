@@ -14,6 +14,8 @@ import { VisualizacionNoticiasComponent } from './visualizacion-noticias/visuali
 import { NoticiaComponent } from './noticia/noticia.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { PerfilComponent } from './perfil/perfil.component';
+import { PdfService } from '../service/pdf.service';
+import { FcmService } from '../service/Fcm.Service';
 
 
 
@@ -39,6 +41,10 @@ import { PerfilComponent } from './perfil/perfil.component';
     UserRoutingModule,
     IonicModule,
     ReactiveFormsModule
+  ],
+  providers: [
+    PdfService,
+    FcmService,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA], 
   exports:[

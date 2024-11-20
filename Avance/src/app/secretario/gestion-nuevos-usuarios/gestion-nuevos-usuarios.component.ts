@@ -123,4 +123,29 @@ export class GestionNuevosUsuariosComponent  implements OnInit {
 goBack() {
   this.router.navigate(['/lista-registros-usuarios']); // Asegúrate de que esta ruta sea correcta
 }
+  // Método para borrar la usuario
+  deleteUser2() {
+    if (this.rut) {
+      // Primero verificar si el usuario con ese RUT existe
+      this.firestoreService.checkUserExists(this.rut, 'usuarios').then(exists => {
+        if (exists) {
+          // Si el RUT existe, proceder con la eliminación
+          this.firestoreService.deleteUser2('usuarios', this.rut!).then(() => {
+            console.log('Usuario Borrado');
+            this.goBack(); // Regresa a la lista de usuarios después de borrar
+          }).catch(error => {
+            console.error('Error al borrar al usuario:', error);
+          });
+        } else {
+          console.error('El usuario no existe');
+        }
+      }).catch(error => {
+        console.error('Error al verificar si el RUT existe:', error);
+      });
+    } else {
+      console.error('No se ha especificado un RUT válido');
+    }
+  }
+  
+  
 }
