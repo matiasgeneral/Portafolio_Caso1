@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="ic_launcher_background">#FFFFFF</color>
+    <string name="app_name">sistema-unidad-territorial</string>
+    <string name="custom_url_scheme">io.ionic.starter</string>
+    <string name="default_web_client_id" translatable="false">110154609263-mogqu4alagamt11pqojpnq646b3flr7e.apps.googleusercontent.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">110154609263</string>
+    <string name="google_api_key" translatable="false">AIzaSyBeh67w4wlWkZML39OrvcgBXQjhu8FXV-U</string>
+    <string name="google_app_id" translatable="false">1:110154609263:android:a363c55662deee19ca539a</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyBeh67w4wlWkZML39OrvcgBXQjhu8FXV-U</string>
+    <string name="google_storage_bucket" translatable="false">sistema-unidad-terrritorial.appspot.com</string>
+    <string name="package_name">io.ionic.starter</string>
+    <string name="project_id" translatable="false">sistema-unidad-terrritorial</string>
+    <string name="title_activity_main">sistema-unidad-territorial</string>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:background">@null</item>
+    </style>
+    <style name="AppTheme.NoActionBarLaunch" parent="Theme.SplashScreen">
+        <item name="android:background">@drawable/splash</item>
+    </style>
+</resources>

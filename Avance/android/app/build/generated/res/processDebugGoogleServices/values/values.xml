@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">110154609263-mogqu4alagamt11pqojpnq646b3flr7e.apps.googleusercontent.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">110154609263</string>
+    <string name="google_api_key" translatable="false">AIzaSyBeh67w4wlWkZML39OrvcgBXQjhu8FXV-U</string>
+    <string name="google_app_id" translatable="false">1:110154609263:android:a363c55662deee19ca539a</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyBeh67w4wlWkZML39OrvcgBXQjhu8FXV-U</string>
+    <string name="google_storage_bucket" translatable="false">sistema-unidad-terrritorial.appspot.com</string>
+    <string name="project_id" translatable="false">sistema-unidad-terrritorial</string>
+</resources>
