@@ -11,10 +11,10 @@ INJECTED from C:\Portafolio-nodejs\Portafolio_Caso1\Avance\android\app\src\main\
 	android:name
 		ADDED from C:\Portafolio-nodejs\Portafolio_Caso1\Avance\android\app\src\main\AndroidManifest.xml:28:13-62
 manifest
-ADDED from C:\Portafolio-nodejs\Portafolio_Caso1\Avance\android\app\src\main\AndroidManifest.xml:2:1-44:12
-INJECTED from C:\Portafolio-nodejs\Portafolio_Caso1\Avance\android\app\src\main\AndroidManifest.xml:2:1-44:12
-INJECTED from C:\Portafolio-nodejs\Portafolio_Caso1\Avance\android\app\src\main\AndroidManifest.xml:2:1-44:12
-INJECTED from C:\Portafolio-nodejs\Portafolio_Caso1\Avance\android\app\src\main\AndroidManifest.xml:2:1-44:12
+ADDED from C:\Portafolio-nodejs\Portafolio_Caso1\Avance\android\app\src\main\AndroidManifest.xml:2:1-47:12
+INJECTED from C:\Portafolio-nodejs\Portafolio_Caso1\Avance\android\app\src\main\AndroidManifest.xml:2:1-47:12
+INJECTED from C:\Portafolio-nodejs\Portafolio_Caso1\Avance\android\app\src\main\AndroidManifest.xml:2:1-47:12
+INJECTED from C:\Portafolio-nodejs\Portafolio_Caso1\Avance\android\app\src\main\AndroidManifest.xml:2:1-47:12
 MERGED from [:capacitor-app] C:\Portafolio-nodejs\Portafolio_Caso1\Avance\node_modules\@capacitor\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-7:12
 MERGED from [:capacitor-filesystem] C:\Portafolio-nodejs\Portafolio_Caso1\Avance\node_modules\@capacitor\filesystem\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-7:12
 MERGED from [:capacitor-haptics] C:\Portafolio-nodejs\Portafolio_Caso1\Avance\node_modules\@capacitor\haptics\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
@@ -247,6 +247,18 @@ MERGED from [com.google.android.gms:play-services-cloud-messaging:17.2.0] C:\Use
 MERGED from [com.google.android.gms:play-services-cloud-messaging:17.2.0] C:\Users\DemWolf\.gradle\caches\transforms-3\5458d780bdb2a2ae97ce2e6a86465f1f\transformed\play-services-cloud-messaging-17.2.0\AndroidManifest.xml:9:5-68
 	android:name
 		ADDED from C:\Portafolio-nodejs\Portafolio_Caso1\Avance\android\app\src\main\AndroidManifest.xml:43:22-65
+uses-permission#android.permission.FOREGROUND_SERVICE
+ADDED from C:\Portafolio-nodejs\Portafolio_Caso1\Avance\android\app\src\main\AndroidManifest.xml:44:5-77
+	android:name
+		ADDED from C:\Portafolio-nodejs\Portafolio_Caso1\Avance\android\app\src\main\AndroidManifest.xml:44:22-74
+uses-permission#com.google.android.c2dm.permission.RECEIVE
+ADDED from C:\Portafolio-nodejs\Portafolio_Caso1\Avance\android\app\src\main\AndroidManifest.xml:45:5-82
+MERGED from [com.google.firebase:firebase-messaging:24.1.0] C:\Users\DemWolf\.gradle\caches\transforms-3\d70dc91ef0f228efde4c80d95f102b08\transformed\firebase-messaging-24.1.0\AndroidManifest.xml:26:5-82
+MERGED from [com.google.firebase:firebase-messaging:24.1.0] C:\Users\DemWolf\.gradle\caches\transforms-3\d70dc91ef0f228efde4c80d95f102b08\transformed\firebase-messaging-24.1.0\AndroidManifest.xml:26:5-82
+MERGED from [com.google.android.gms:play-services-cloud-messaging:17.2.0] C:\Users\DemWolf\.gradle\caches\transforms-3\5458d780bdb2a2ae97ce2e6a86465f1f\transformed\play-services-cloud-messaging-17.2.0\AndroidManifest.xml:11:5-82
+MERGED from [com.google.android.gms:play-services-cloud-messaging:17.2.0] C:\Users\DemWolf\.gradle\caches\transforms-3\5458d780bdb2a2ae97ce2e6a86465f1f\transformed\play-services-cloud-messaging-17.2.0\AndroidManifest.xml:11:5-82
+	android:name
+		ADDED from C:\Portafolio-nodejs\Portafolio_Caso1\Avance\android\app\src\main\AndroidManifest.xml:45:22-79
 meta-data#android.support.FILE_PROVIDER_PATHS
 ADDED from C:\Portafolio-nodejs\Portafolio_Caso1\Avance\android\app\src\main\AndroidManifest.xml:32:13-34:64
 	android:resource
@@ -503,12 +515,6 @@ MERGED from [io.grpc:grpc-android:1.62.2] C:\Users\DemWolf\.gradle\caches\transf
 MERGED from [io.grpc:grpc-android:1.62.2] C:\Users\DemWolf\.gradle\caches\transforms-3\6fc8e26a1b694e051927cb86cb943094\transformed\grpc-android-1.62.2\AndroidManifest.xml:7:5-79
 	android:name
 		ADDED from [com.google.firebase:firebase-messaging:24.1.0] C:\Users\DemWolf\.gradle\caches\transforms-3\d70dc91ef0f228efde4c80d95f102b08\transformed\firebase-messaging-24.1.0\AndroidManifest.xml:22:22-76
-uses-permission#com.google.android.c2dm.permission.RECEIVE
-ADDED from [com.google.firebase:firebase-messaging:24.1.0] C:\Users\DemWolf\.gradle\caches\transforms-3\d70dc91ef0f228efde4c80d95f102b08\transformed\firebase-messaging-24.1.0\AndroidManifest.xml:26:5-82
-MERGED from [com.google.android.gms:play-services-cloud-messaging:17.2.0] C:\Users\DemWolf\.gradle\caches\transforms-3\5458d780bdb2a2ae97ce2e6a86465f1f\transformed\play-services-cloud-messaging-17.2.0\AndroidManifest.xml:11:5-82
-MERGED from [com.google.android.gms:play-services-cloud-messaging:17.2.0] C:\Users\DemWolf\.gradle\caches\transforms-3\5458d780bdb2a2ae97ce2e6a86465f1f\transformed\play-services-cloud-messaging-17.2.0\AndroidManifest.xml:11:5-82
-	android:name
-		ADDED from [com.google.firebase:firebase-messaging:24.1.0] C:\Users\DemWolf\.gradle\caches\transforms-3\d70dc91ef0f228efde4c80d95f102b08\transformed\firebase-messaging-24.1.0\AndroidManifest.xml:26:22-79
 receiver#com.google.firebase.iid.FirebaseInstanceIdReceiver
 ADDED from [com.google.firebase:firebase-messaging:24.1.0] C:\Users\DemWolf\.gradle\caches\transforms-3\d70dc91ef0f228efde4c80d95f102b08\transformed\firebase-messaging-24.1.0\AndroidManifest.xml:29:9-40:20
 	android:exported

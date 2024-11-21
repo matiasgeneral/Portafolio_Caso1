@@ -178,7 +178,7 @@ export const notifyNewNews = onDocumentCreated('noticias/{newsId}', async (event
 
     const message = {
       notification: {
-        title: 'Nueva Noticia Disponible',
+        title: 'Nueva Noticia disponible',
         body: `Se ha publicado una nueva noticia: ${title}`,
       },
       android: {
@@ -220,7 +220,7 @@ export const notifyNewActivity = onDocumentCreated('actividades/{activityId}', a
 
     const message = {
       notification: {
-        title: 'Nueva Actividad Disponible',
+        title: 'Nueva Actividad disponible',
         body: `Se ha publicado una nueva actividad: ${activityData.titulo}`,
       },
       android: {
@@ -258,8 +258,8 @@ export const notifyNewSpace = onDocumentCreated('espaciosPublicos/{spaceId}', as
 
     const message = {
       notification: {
-        title: 'Nuevo Espacio Público',
-        body: `Se ha agregado: ${spaceData.titulo}`,
+        title: 'Nuevo Espacio Público disponible',
+        body: `Se ha publicado un nuevo espacio público: ${spaceData.titulo}`,
       },
       android: {
         priority: 'high' as const,
@@ -300,8 +300,8 @@ export const notifyNewProject = onDocumentCreated('proyectos/{projectId}', async
 
     const message = {
       notification: {
-        title: 'Nuevo Proyecto',
-        body: `Se ha creado: ${projectData.titulo}`,
+        title: 'Nuevo Proyecto disponible',
+        body: `Se ha publicado un nuevo proyecto: ${projectData.titulo}`,
       },
       android: {
         priority: 'high' as const,

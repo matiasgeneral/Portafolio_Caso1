@@ -87,14 +87,8 @@ export class RegisterComponent {
         await this.database.createDoc(data, path, uid);
         this.interaction.presentToast('Usuario creado con éxito');
 
-        // Mostrar alerta de éxito
-        await this.showSuccessAlert();
-        
-        // Redirigir y refrescar la página
-        this.router.navigate(['/home']).then(() => {
-          window.location.reload(); // Refresca la página
-        });
-
+        // Mostrar alerta de éxito personalizada
+        await this.showCustomSuccessAlert();
       } catch (err) {
         console.error('Error durante el registro:', err);
         if ((err as any).code === 'auth/email-already-in-use') {
@@ -110,12 +104,24 @@ export class RegisterComponent {
     }
   }
 
-  // Método para mostrar la alerta de éxito
-  async showSuccessAlert() {
+  // Método para mostrar la alerta de éxito personalizada
+  async showCustomSuccessAlert() {
     const alert = await this.alertController.create({
-      header: 'Éxito',
-      message: 'El usuario ha sido registrado correctamente.',
-      buttons: ['OK'],
+      header: 'Bienvenido',
+      message: 'Gracias por registrarse al sistema de Unidad Territorial Junta de Vecinos. Su registro se demorará hasta 3 días hábiles en ser revisado y confirmado para que pueda acceder a todas las funciones de la aplicación.',
+      buttons: [
+        {
+          text: 'OK',
+          handler: () => {
+            // Redirigir y refrescar la página solo después de presionar OK
+            this.router.navigate(['/home']).then(() => {
+              window.location.reload(); // Refresca la página
+            });
+          }
+        }
+      ],
+      backdropDismiss: false,
+      cssClass: 'custom-alert'
     });
     await alert.present();
   }
@@ -195,3 +201,4 @@ export class RegisterComponent {
     return dv === dvCalculado ? null : { invalidRut: true }; // Devuelve un error si el RUT es inválido
   }
 }
+

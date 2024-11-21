@@ -1,3 +1,4 @@
+// firebase-messaging-sw.js
 // Importa las librerías de Firebase necesarias
 importScripts('https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js');
 importScripts('https://www.gstatic.com/firebasejs/9.22.0/firebase-messaging-compat.js');
@@ -20,7 +21,7 @@ messaging.onBackgroundMessage((payload) => {
   const notificationTitle = payload.notification.title;
   const notificationOptions = {
     body: payload.notification.body,
-    // Se elimina la referencia al ícono ya que no lo estamos usando
+    icon: '/firebase-logo.png', // Puedes agregar un ícono aquí para personalizar las notificaciones.
   };
 
   self.registration.showNotification(notificationTitle, notificationOptions);
