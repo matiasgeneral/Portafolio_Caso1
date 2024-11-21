@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
@@ -22,6 +23,9 @@ import { FormsModule } from '@angular/forms';
 import { CoordinadorModule } from './coordinador/coordinador.module';
 import { SecretarioModule } from './secretario/secretario.module';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { PagosModule } from './pagos/pagos.module';
+import { PagoCertificadoService } from './pagos/services/pago-certificado.service';
+import { MercadoPagoService } from './pagos/services/mercadopago.service';
 
 @NgModule({
   declarations: [
@@ -32,11 +36,12 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     BrowserModule,
     IonicModule.forRoot(),
     AppRoutingModule,
+    HttpClientModule, // Agregado para MercadoPago
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireMessagingModule,
     AngularFireAuthModule,
     AngularFirestoreModule,
-    AngularFireFunctionsModule, // Añadido para las Cloud Functions
+    AngularFireFunctionsModule,
     FormsModule,
     AuthModule,
     HomeModule,
@@ -44,15 +49,19 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     AdminModule,
     CoordinadorModule,
     SecretarioModule,
+    PagosModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: !isDevMode(),
       registrationStrategy: 'registerWhenStable:30000'
-    })
+    }),
+    
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: LOCALE_ID, useValue: 'es-CL' },
     { provide: LocationStrategy, useClass: HashLocationStrategy },
+    MercadoPagoService, // Agregado servicio MercadoPago
+    PagoCertificadoService, // Agregado servicio PagoCertificado
     provideAnimations(),
     provideHttpClient(withInterceptorsFromDi())
   ],

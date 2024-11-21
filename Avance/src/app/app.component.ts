@@ -197,18 +197,5 @@ export class AppComponent implements OnInit {
     });
   }
 
-  async processPayment() {
-    try {
-      const paymentResponse = await this.fcmService.transbankPayment(
-        1000,
-        'buyOrder123',
-        'sessionId456',
-        'https://tusitio.com/return'
-      );
-      console.log('Respuesta de Transbank:', paymentResponse);
-      window.location.href = paymentResponse.url;
-    } catch (error) {
-      console.error('Error al procesar el pago:', error);
-    }
-  }
+  
 }

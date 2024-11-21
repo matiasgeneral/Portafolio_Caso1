@@ -80,7 +80,7 @@ export class FcmService {
           title: notification.title || 'Sin título',
           body: notification.body || 'Sin contenido',
         },
-        data: notification.data
+        data: notification.data,
       };
       this.currentMessage.next(messagePayload);
     });
@@ -103,38 +103,15 @@ export class FcmService {
       }
 
       const callable = this.afFunctions.httpsCallable('sendNotification');
-      const response = await callable({ 
+      const response = await callable({
         title,
-        body, 
+        body,
         topic,
       }).toPromise();
-      
+
       console.log('Notificación enviada:', response);
     } catch (error) {
       console.error('Error al enviar la notificación:', error);
-      throw error;
-    }
-  }
-
-  async transbankPayment(amount: number, buyOrder: string, sessionId: string, returnUrl: string): Promise<{ token_ws: string; url: string }> {
-    try {
-      console.log('Procesando pago Transbank...');
-      if (!amount || !buyOrder.trim() || !sessionId.trim() || !returnUrl.trim()) {
-        throw new Error('Monto, buyOrder, sessionId y returnUrl son obligatorios.');
-      }
-
-      const payment = this.afFunctions.httpsCallable('transbankPayment');
-      const response = await payment({
-        amount,
-        buyOrder,
-        sessionId,
-        returnUrl,
-      }).toPromise();
-      console.log('Respuesta de Transbank:', response);
-
-      return response;
-    } catch (error) {
-      console.error('Error al procesar el pago con Transbank:', error);
       throw error;
     }
   }

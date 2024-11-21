@@ -1,7 +1,6 @@
 import * as functions from 'firebase-functions/v2';
 import { onDocumentCreated } from 'firebase-functions/v2/firestore';
 import * as admin from 'firebase-admin';
-import * as Transbank from 'transbank-sdk';
 import * as cors from 'cors';
 
 admin.initializeApp();
@@ -18,13 +17,6 @@ interface NotificationData {
   title: string;
   body: string;
   topic: string;
-}
-
-interface TransbankPaymentData {
-  amount: number;
-  buyOrder: string;
-  sessionId: string;
-  returnUrl: string;
 }
 
 export const subscribeToTopic = functions.https.onRequest((req, res) => {
@@ -111,49 +103,6 @@ export const sendNotification = functions.https.onRequest((req, res) => {
     } catch (error) {
       console.error('Error al enviar la notificación:', error);
       res.status(500).send('Error al enviar la notificación');
-    }
-  });
-});
-
-export const transbankPayment = functions.https.onRequest((req, res) => {
-  corsHandler(req, res, async () => {
-    if (req.method !== 'POST') {
-      return res.status(405).send('Método no permitido');
-    }
-
-    try {
-      if (!req.body.auth) {
-        res.status(401).send('El usuario debe estar autenticado para procesar pagos.');
-        return;
-      }
-
-      const { amount, buyOrder, sessionId, returnUrl } = req.body;
-
-      if (!amount || !buyOrder || !sessionId || !returnUrl) {
-        res.status(400).send('Faltan datos necesarios para procesar el pago.');
-        return;
-      }
-
-      const commerceCode = process.env.TRANSBANK_COMMERCE_CODE;
-      const apiKey = process.env.TRANSBANK_API_KEY;
-
-      if (!commerceCode || !apiKey) {
-        res.status(500).send('Credenciales de Transbank no configuradas correctamente.');
-        return;
-      }
-
-      const tbk = new Transbank.WebpayPlus.Transaction({
-        commerceCode: commerceCode,
-        apiKey: apiKey,
-        environment: 'TEST',
-        timeout: 60000
-      });
-
-      const response = await tbk.create(buyOrder, sessionId, amount, returnUrl);
-      res.status(200).send({ token_ws: response.token_ws, url: response.url });
-    } catch (error) {
-      console.error('Error al procesar el pago con Transbank:', error);
-      res.status(500).send('Error al procesar el pago con Transbank');
     }
   });
 });

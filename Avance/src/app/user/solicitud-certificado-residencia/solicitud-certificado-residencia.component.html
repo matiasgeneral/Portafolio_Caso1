@@ -7,7 +7,6 @@
   </ion-toolbar>
 </ion-header>
 
-
 <ion-content class="ion-padding">
   <ion-card class="certificate-card">
     <ion-card-header class="ion-text-center">
@@ -28,16 +27,22 @@
           <ion-label class="label-bold">RUT:</ion-label>
           <ion-note>{{ userData.rut }}</ion-note>
         </ion-item>
+        <ion-item>
+          <ion-label class="label-bold">Valor:</ion-label>
+          <ion-note>$1.000 CLP</ion-note>
+        </ion-item>
       </ion-list>
 
-      <!-- Botón para generar el PDF -->
+      <!-- Botón para generar el PDF y pagar -->
       <div class="button-container">
-        <ion-button expand="block" color="primary" (click)="generatePDF()">Generar Certificado PDF</ion-button>
+        <ion-button expand="block" color="primary" (click)="generatePDF()" [disabled]="isProcessing">
+          Generar y Pagar Certificado
+        </ion-button>
       </div>
-      
 
       <!-- Mensaje de éxito o error -->
-      <div *ngIf="pdfGenerationStatus" class="pdf-status-message" [ngClass]="{ 'success': pdfGenerationStatus.success, 'error': !pdfGenerationStatus.success }">
+      <div *ngIf="pdfGenerationStatus" class="pdf-status-message" 
+           [ngClass]="{ 'success': pdfGenerationStatus.success, 'error': !pdfGenerationStatus.success }">
         {{ pdfGenerationStatus.message }}
       </div>
     </ion-card-content>
