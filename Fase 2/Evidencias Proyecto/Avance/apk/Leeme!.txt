@@ -1,0 +1,77 @@
+/////////////22-11-2024/////////////////////////////////
+
+Se ha realizado una actualización a la base de datos, por lo cual se debe utilizar la ultima versión de la apk(mientras que la versión web funciona sin inconvenientes)
+
+https://sistema-unidad-terrritorial.web.app/#/login
+
+ultima apk( app-debug-21-11-2024.apk)
+
+-la api de mercadopago solo está funcionando con la aplicación de escritorio. Para poder hacer el uso de la api no tiene que estar la sesión iniciada con el mismo navegador
+
+-Se actualizo la base de datos, para mejorar la sintaxis,
+
+-Recordar que la creación de usuarios o registro después de completarse debe ser aprobada por un rol de administrador, coordinador o secretario para que pueda acceder a las funcionalidades correspondientes.
+
+-Se habilitaron las notificaciones push para sistema android, cada vez que se crea un proyecto, noticia, actividad o espacio publico, llegará una notifiación directamente a la aplicación.
+ejemplo:
+usuario ya aceptado previamente, puede acceder a las funciones del usuario registrado
+usuario@usuairo.cl
+pass: 123456789
+
+usuario no aceptado, menú limitado hasta que no se apruebe su estado de usuario 
+usuario2@usuairo.cl
+pass: 123456789
+
+Cuenta administrador
+admin@admin.cl
+pass: 123456789
+
+Cuenta secretario
+secretario@secretario.cl
+pass: 123456789
+
+Cuenta coordinador
+coordinador@coordinador.cl
+pass: 123456789
+
+Tarjeta	Número	Código de seguridad	Fecha de caducidad
+Mastercard
+5416 7526 0258 2580
+123
+11/25
+Visa
+4168 8188 4444 7115
+123
+11/25
+American Express
+3757 781744 61804
+1234
+11/25
+Para probar diferentes resultados de pago, completa el estado deseado en el nombre del titular de la tarjeta:
+
+Estado de pago	Descripción	Documento de identidad
+APRO
+Pago aprobado
+(otro) 123456789
+OTHE
+Rechazado por error general
+CONT
+Pendiente de pago
+-
+CALL
+Rechazado con validación para autorizar
+-
+FUND
+Rechazado por importe insuficiente
+
+https://www.mercadopago.cl/developers/panel/app/5657629847525687/test-cards
+-
+SECU
+Rechazado por código de seguridad inválido
+-
+EXPI
+Rechazado debido a un problema de fecha de vencimiento
+-
+FORM
+Rechazado debido a un error de formulario
+-

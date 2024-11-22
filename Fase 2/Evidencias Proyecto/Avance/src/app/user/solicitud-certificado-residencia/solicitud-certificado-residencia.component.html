@@ -36,7 +36,14 @@
       <!-- Botón para iniciar el pago -->
       <div class="button-container">
         <ion-button expand="block" color="primary" (click)="iniciarProcesoPago()" [disabled]="isProcessing">
-          Pagar Certificado
+          Pagar Certificado (integracion funcional, mas no descarga pdf)
+        </ion-button>
+      </div>
+
+      <!-- Botón para generar PDF sin pago -->
+      <div class="button-container">
+        <ion-button expand="block" color="secondary" (click)="generarPdfSinPago()" [disabled]="isProcessing">
+          Generar PDF sin Pago
         </ion-button>
       </div>
 

@@ -10,6 +10,9 @@ import * as pdfFonts from 'pdfmake/build/vfs_fonts';
   providedIn: 'root'
 })
 export class PdfService {
+  generarPdf(userData: any) {
+    throw new Error('Method not implemented.');
+  }
   constructor(
     private platform: Platform,
     private alertController: AlertController
