@@ -33,14 +33,14 @@
         </ion-item>
       </ion-list>
 
-      <!-- Botón para generar el PDF y pagar -->
+      <!-- Botón para iniciar el pago -->
       <div class="button-container">
-        <ion-button expand="block" color="primary" (click)="generatePDF()" [disabled]="isProcessing">
-          Generar y Pagar Certificado
+        <ion-button expand="block" color="primary" (click)="iniciarProcesoPago()" [disabled]="isProcessing">
+          Pagar Certificado
         </ion-button>
       </div>
 
-      <!-- Mensaje de éxito o error -->
+      <!-- Mensaje de estado -->
       <div *ngIf="pdfGenerationStatus" class="pdf-status-message" 
            [ngClass]="{ 'success': pdfGenerationStatus.success, 'error': !pdfGenerationStatus.success }">
         {{ pdfGenerationStatus.message }}

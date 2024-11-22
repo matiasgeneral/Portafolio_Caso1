@@ -46,33 +46,43 @@ export class SolicitudCertificadoResidenciaComponent implements OnInit {
       });
   }
 
-  async generatePDF() {
+  async iniciarProcesoPago() {
     if (this.userData) {
       try {
-        const pdfBase64 = await this.pdfService.generateCertificate(this.userData);
+        this.isProcessing = true;
         
         // Iniciar proceso de pago
-        const urlPago = await this.pagoCertificadoService.procesarPagoYRegistro(
-          this.userData,
-          pdfBase64
-        );
+        const urlPago = await this.pagoCertificadoService.iniciarPago(this.userData);
         window.open(urlPago, '_blank');
         
         this.pdfGenerationStatus = { 
           success: true, 
-          message: 'PDF generado y pago iniciado correctamente' 
+          message: 'Pago iniciado correctamente. Complete el pago para continuar.' 
         };
       } catch (error) {
         this.pdfGenerationStatus = { 
           success: false, 
-          message: 'Error en el proceso: ' + (error as Error).message 
+          message: 'Error al iniciar el proceso de pago: ' + (error as Error).message 
         };
+        this.showAlert('Error', this.pdfGenerationStatus.message);
+      } finally {
+        this.isProcessing = false;
       }
     } else {
       this.pdfGenerationStatus = { 
         success: false, 
         message: 'No se encontraron datos del usuario.' 
       };
+      this.showAlert('Error', this.pdfGenerationStatus.message);
     }
+  }
+
+  async showAlert(header: string, message: string) {
+    const alert = await this.alertController.create({
+      header,
+      message,
+      buttons: ['OK'],
+    });
+    await alert.present();
   }
 }

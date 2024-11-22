@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MercadoPagoService {
-  private accessToken = 'APP_USR-5657629847525687-112112-5766f9f1263f255506ceba16a2705a64-689743348';
+  private accessToken = environment.mercadoPagoToken;
   
   constructor(private http: HttpClient) {}
 
@@ -27,9 +28,9 @@ export class MercadoPagoService {
         currency_id: 'CLP'
       }],
       back_urls: {
-        success: 'http://localhost:8100/pagos/exitoso',
-        failure: 'http://localhost:8100/pagos/fallido',
-        pending: 'http://localhost:8100/pagos/pendiente'
+        success: `${environment.appUrl}/pagos/exitoso`,
+        failure: `${environment.appUrl}/pagos/fallido`,
+        pending: `${environment.appUrl}/pagos/pendiente`
       },
       auto_return: "approved"
     };

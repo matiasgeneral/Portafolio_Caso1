@@ -1,27 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { PagoCertificadoService } from '../../services/pago-certificado.service';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-pago-fallido',
   templateUrl: './pago-fallido.component.html',
   styleUrls: ['./pago-fallido.component.scss']
 })
-export class PagoFallidoComponent implements OnInit {
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private pagoCertificadoService: PagoCertificadoService
-  ) {}
+export class PagoFallidoComponent {
+  constructor(private router: Router) {}
 
-  ngOnInit() {
-    const certificadoId = this.route.snapshot.queryParams['certificado_id'];
-    if (certificadoId) {
-      this.pagoCertificadoService.actualizarEstadoPago(certificadoId, 'cancelado');
-    }
-  }
-
-  reintentar() {
+  volver() {
     this.router.navigate(['/solicitar-certificado']);
   }
 }

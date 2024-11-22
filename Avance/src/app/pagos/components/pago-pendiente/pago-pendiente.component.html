@@ -1,11 +1,13 @@
-<ion-content>
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>Pago en Proceso</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <p>Su pago está siendo procesado. Le notificaremos cuando se complete.</p>
-        <ion-button expand="block" (click)="volver()">Volver al inicio</ion-button>
-      </ion-card-content>
-    </ion-card>
-  </ion-content>
+<ion-header>
+  <ion-toolbar color="warning">
+    <ion-title>Pago Pendiente</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="content ion-text-center">
+    <h2>Pago Pendiente</h2>
+    <p>Tu pago está en proceso de revisión. Recibirás una notificación cuando se confirme.</p>
+    <ion-button expand="block" (click)="volver()">Volver al inicio</ion-button>
+  </div>
+</ion-content>
