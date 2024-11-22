@@ -1,13 +1,14 @@
 "use strict";
 // functions/src/index.ts
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.notifyNewNews = exports.transbankPayment = exports.sendNotification = exports.helloWorld = exports.unsubscribeFromTopic = exports.subscribeToTopic = void 0;
+exports.notifyNewNews = exports.sendNotification = exports.helloWorld = exports.unsubscribeFromTopic = exports.subscribeToTopic = void 0;
 const functions = require("firebase-functions/v2");
 const firestore_1 = require("firebase-functions/v2/firestore");
 const admin = require("firebase-admin");
-const Transbank = require("transbank-sdk"); // Asegúrate de haber instalado esta dependencia
+
 // Inicializamos la aplicación de administrador de Firebase
 admin.initializeApp();
+
 /**
  * Función para suscribir un token a un topic específico.
  */
@@ -26,6 +27,7 @@ exports.subscribeToTopic = functions.https.onCall(async (request) => {
         throw new functions.https.HttpsError('unknown', 'Error al suscribir al topic', error);
     }
 });
+
 /**
  * Función para desuscribir un token de un topic específico.
  */
@@ -44,12 +46,14 @@ exports.unsubscribeFromTopic = functions.https.onCall(async (request) => {
         throw new functions.https.HttpsError('unknown', 'Error al desuscribir del topic', error);
     }
 });
+
 /**
  * Función de ejemplo: Responde con un saludo.
  */
 exports.helloWorld = functions.https.onRequest((request, response) => {
     response.send("¡Hola desde Firebase!");
 });
+
 /**
  * Función para enviar una notificación a un topic específico.
  */
@@ -76,37 +80,7 @@ exports.sendNotification = functions.https.onCall(async (request) => {
         throw new functions.https.HttpsError('unknown', 'Error al enviar la notificación', error);
     }
 });
-/**
- * Función para procesar pagos con Transbank.
- */
-exports.transbankPayment = functions.https.onCall(async (request) => {
-    if (!request.auth) {
-        throw new functions.https.HttpsError('unauthenticated', 'El usuario debe estar autenticado para procesar pagos.');
-    }
-    const { amount, buyOrder, sessionId, returnUrl } = request.data;
-    if (!amount || !buyOrder || !sessionId || !returnUrl) {
-        throw new functions.https.HttpsError('invalid-argument', 'Faltan datos necesarios para procesar el pago.');
-    }
-    try {
-        const commerceCode = process.env.TRANSBANK_COMMERCE_CODE;
-        const apiKey = process.env.TRANSBANK_API_KEY;
-        if (!commerceCode || !apiKey) {
-            throw new Error('Credenciales de Transbank no configuradas correctamente.');
-        }
-        const tbk = new Transbank.WebpayPlus.Transaction({
-            commerceCode: commerceCode,
-            apiKey: apiKey,
-            environment: 'TEST', // Cambia a 'PRODUCTION' en producción
-            timeout: 60000 // Tiempo de espera en milisegundos (opcional)
-        });
-        const response = await tbk.create(buyOrder, sessionId, amount, returnUrl);
-        return { token_ws: response.token_ws, url: response.url };
-    }
-    catch (error) {
-        console.error('Error al procesar el pago con Transbank:', error);
-        throw new functions.https.HttpsError('unknown', 'Error al procesar el pago con Transbank', error);
-    }
-});
+
 /**
  * Función para Notificar la Creación de Nuevas Noticias.
  */
@@ -142,4 +116,3 @@ exports.notifyNewNews = (0, firestore_1.onDocumentCreated)('noticias/{newsId}', 
         console.error(`Error al enviar la notificación para la noticia con ID: ${newsId}`, error);
     }
 });
-//# sourceMappingURL=index.js.map
