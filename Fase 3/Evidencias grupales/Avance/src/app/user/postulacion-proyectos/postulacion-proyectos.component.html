@@ -1,0 +1,66 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Postular a Proyecto</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="postular-proyecto-content" padding>
+  <!-- Información del Proyecto -->
+  <ion-card *ngIf="proyecto">
+    <ion-card-header>
+      <ion-img [src]="proyecto.image" *ngIf="proyecto.image"></ion-img> <!-- Muestra la imagen -->
+      <ion-card-title>{{ proyecto.titulo }}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p><strong>Descripción:</strong> {{ proyecto.descripcion }}</p>
+      <p><strong>Fecha de inicio:</strong> {{ formatDate(proyecto.fechaInicio) }}</p>
+      <p><strong>Fecha de fin:</strong> {{ formatDate(proyecto.fechaFin) }}</p>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Información del Solicitante -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Datos del Solicitante</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p><strong>Nombre Completo:</strong> {{ nombreSolicitante }}</p> <!-- Muestra el nombre completo del solicitante -->
+      <p><strong>Fecha de Solicitud:</strong> {{ obtenerFechaActual() }}</p> <!-- Muestra la fecha actual -->
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Formulario de Postulación -->
+  <form [formGroup]="postulacionForm" (ngSubmit)="postular()">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Documentos Requeridos</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list>
+          <ion-item *ngFor="let doc of documentosArray.controls; let i = index">
+            <ion-label position="stacked">{{ documentosRequeridos[i].nombre }}</ion-label>
+            <input type="file" (change)="onFileChange($event, i)" accept="application/pdf,image/*" />
+            <div *ngIf="doc.get('file')?.value" class="uploaded-file">
+              <p>Archivo subido: {{ doc.get('file')?.value | slice: -15 }}</p>
+            </div>
+            <div *ngIf="!doc.get('file')?.value && !loading" class="error-message">
+              <p style="color: red;">Archivo no subido. Por favor, sube el documento.</p>
+            </div>
+            <div *ngIf="!doc.valid" class="error-message">
+              <p style="color: red;">El archivo subido no es válido. Por favor, sube un PDF o una imagen.</p>
+            </div>
+            <div *ngIf="doc.valid" class="success-message">
+              <p style="color: green;">El archivo es válido.</p>
+            </div>
+          </ion-item>
+        </ion-list>
+
+        <ion-button expand="full" type="submit" class="postular-proyecto-button" [disabled]="!postulacionForm.valid || loading">
+          <ion-spinner *ngIf="loading"></ion-spinner>
+          <span *ngIf="!loading">Enviar Postulación</span>
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+    <ion-button expand="full" color="primary" (click)="goBack()">Volver</ion-button> <!-- Botón para volver -->
+  </form>
+</ion-content>

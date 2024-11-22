@@ -1,0 +1,45 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Buscador de Usuarios</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card class="custom-card">
+    <ion-card-header>
+      <ion-card-title style="text-align: center;">Lista de usuarios</ion-card-title>
+
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-list>
+        <ion-item *ngFor="let user of users" class="user-item">
+          <ion-thumbnail slot="start">
+            <img *ngIf="user.foto" [src]="user.foto" alt="Imagen de {{ user.foto }}" class="media-image" />
+          </ion-thumbnail>
+
+          <ion-label>
+            <strong>Nombre Completo:</strong> {{ user.nombre | titlecase }} {{ user.apellidoPaterno | titlecase }} {{ user.apellidoMaterno | titlecase }}<br />
+            <strong>RUT:</strong> {{ user.rut }}<br />
+            <strong>Rol:</strong> {{ user.rol }}<br />
+            <strong>Estado de la cuenta:</strong> {{ user.estado }}<br />
+          </ion-label>
+
+          <ion-buttons slot="end" class="vertical-buttons">
+            <ion-button (click)="verDetalles(user)" fill="outline" color="secondary">
+              <ion-icon slot="start" name="eye"></ion-icon>
+              Editar
+            </ion-button>
+            <ion-button (click)="verPostulaciones(user)" fill="outline" color="secondary">
+              <ion-icon slot="start" name="eye"></ion-icon>
+              Postulaciones
+            </ion-button>
+          </ion-buttons>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

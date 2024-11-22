@@ -1,0 +1,97 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Editar Actividad</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <!-- Botón para volver a la lista de actividades -->
+  <ion-button expand="full" (click)="goBack()" color="light">
+    Volver a la lista de actividades
+  </ion-button>
+
+  <!-- Card para mostrar la actividad si está disponible -->
+  <ion-card *ngIf="actividadForm">
+    <ion-card-header>
+      <!-- Vista previa de la imagen si está disponible -->
+      <div class="media-previews">
+        <ion-card class="preview-card">
+          <ion-card-content>
+            <img *ngIf="actividadForm.get('image')?.value" [src]="actividadForm.get('image')?.value" alt="Imagen de la actividad" class="media-image" />
+          </ion-card-content>
+        </ion-card>
+      </div>
+
+      <ion-card-title>
+        {{ actividadForm.get('titulo')?.value.charAt(0).toUpperCase() + actividadForm.get('titulo')?.value.slice(1).toLowerCase() }}
+      </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <!-- Formulario de edición de la actividad -->
+      <form [formGroup]="actividadForm" (ngSubmit)="onSubmit()">
+        <!-- Título de la actividad -->
+        <ion-item>
+          <ion-label position="floating">Título</ion-label>
+          <ion-input formControlName="titulo" type="text" required></ion-input>
+        </ion-item>
+        <div *ngIf="actividadForm.get('titulo')?.invalid && (actividadForm.get('titulo')?.touched || actividadForm.get('titulo')?.dirty)">
+          <p class="error-text">El título es obligatorio.</p>
+        </div>
+
+        <!-- Descripción de la actividad -->
+        <ion-item>
+          <ion-label position="floating">Descripción</ion-label>
+          <ion-textarea formControlName="descripcion" required></ion-textarea>
+        </ion-item>
+        <div *ngIf="actividadForm.get('descripcion')?.invalid && (actividadForm.get('descripcion')?.touched || actividadForm.get('descripcion')?.dirty)">
+          <p class="error-text">La descripción es obligatoria.</p>
+        </div>
+
+        <!-- Fecha del Evento -->
+        <ion-item>
+          <ion-label position="floating">Fecha del Evento</ion-label>
+          <ion-input type="date" formControlName="fechaEvento" required></ion-input>
+        </ion-item>
+        <ion-note *ngIf="actividadForm.get('fechaEvento')?.touched && actividadForm.get('fechaEvento')?.hasError('required')" color="danger">
+          La fecha de evento es requerida.
+        </ion-note>
+
+         <!-- hora del Evento -->
+         <ion-item>
+          <ion-label position="floating">Fecha del Evento</ion-label>
+          <ion-input type="time" formControlName="horaEvento" required></ion-input>
+        </ion-item>
+        <ion-note *ngIf="actividadForm.get('horaEvento')?.touched && actividadForm.get('horaEvento')?.hasError('required')" color="danger">
+          La hora de evento es requerida.
+        </ion-note>
+
+        <!-- Cantidad máxima de participantes -->
+        <ion-item>
+          <ion-label position="floating">Cantidad Máxima de Participantes</ion-label>
+          <ion-input formControlName="cantidadMax" type="number" required></ion-input>
+        </ion-item>
+        <div *ngIf="actividadForm.get('cantidadMax')?.invalid && (actividadForm.get('cantidadMax')?.touched || actividadForm.get('cantidadMax')?.dirty)">
+          <p class="error-text">La cantidad máxima de participantes debe ser menor o igual a {{ maxParticipants }}.</p>
+        </div>
+
+        <!-- Imagen de la actividad -->
+        <ion-item>
+          <ion-label position="floating">Seleccionar Imagen</ion-label> <br>
+          <input type="file" (change)="onImageSelected($event)" accept="image/*" />
+        </ion-item>
+
+        <!-- Botón para guardar cambios -->
+        <ion-button expand="full" type="submit" [disabled]="actividadForm.invalid" color="secondary">
+          Guardar cambios
+        </ion-button> <br>
+
+        <ion-button expand="full" color="warning" (click)="goBack()">Cancelar</ion-button>
+
+      </form>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

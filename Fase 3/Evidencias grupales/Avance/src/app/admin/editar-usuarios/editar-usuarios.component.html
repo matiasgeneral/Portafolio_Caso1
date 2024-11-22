@@ -1,0 +1,142 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Editar Usuario</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-card *ngIf="usuarioForm">
+    <ion-card-header>
+      <ion-card-title>
+        Editar Usuario.
+      </ion-card-title>
+    </ion-card-header>
+  
+    <ion-card-content>
+      <!-- Vista previa de la imagen guardada si está disponible -->
+      <div class="media-previews" *ngIf="usuarioForm.get('foto')?.value">
+        <ion-card class="preview-card">
+          <ion-label position="floating">Foto</ion-label>
+          <ion-card-content>
+            <img [src]="usuarioForm.get('foto')?.value" alt="Imagen del usuario" class="media-image" />
+          </ion-card-content>
+        </ion-card>
+      </div>
+
+
+      <div class="media-previews" *ngIf="usuarioForm.get('documento')?.value">
+        <ion-card class="preview-card">
+          <ion-label position="floating">Documento</ion-label>
+          <ion-card-content>
+            <img [src]="usuarioForm.get('documento')?.value" alt="Imagen del usuario" class="media-image" />
+          </ion-card-content>
+        </ion-card>
+      </div>
+  
+  
+      <form [formGroup]="usuarioForm" (ngSubmit)="onSubmit()">
+        <!-- RUT del usuario (solo lectura) -->
+        <ion-item>
+          <ion-label position="floating">RUT</ion-label>
+          <ion-input formControlName="rut" type="text" readonly></ion-input>
+        </ion-item>
+  
+        <!-- Correo electrónico del usuario (solo lectura) -->
+        <ion-item>
+          <ion-label position="floating">Correo Electrónico</ion-label>
+          <ion-input formControlName="email" type="email" readonly></ion-input>
+        </ion-item>
+  
+        <!-- Nombre del usuario -->
+        <ion-item>
+          <ion-label position="floating">Nombre</ion-label>
+          <ion-input formControlName="nombre" type="text" required></ion-input>
+        </ion-item>
+        <div *ngIf="usuarioForm.get('nombre')?.invalid && (usuarioForm.get('nombre')?.touched || usuarioForm.get('nombre')?.dirty)">
+          <p class="error-text">El nombre es obligatorio.</p>
+        </div>
+  
+        <!-- Apellido Paterno -->
+        <ion-item>
+          <ion-label position="floating">Apellido Paterno</ion-label>
+          <ion-input formControlName="apellidoPaterno" type="text" required></ion-input>
+        </ion-item>
+        <div *ngIf="usuarioForm.get('apellidoPaterno')?.invalid && (usuarioForm.get('apellidoPaterno')?.touched || usuarioForm.get('apellidoPaterno')?.dirty)">
+          <p class="error-text">El apellido paterno es obligatorio.</p>
+        </div>
+  
+        <!-- Apellido Materno -->
+        <ion-item>
+          <ion-label position="floating">Apellido Materno</ion-label>
+          <ion-input formControlName="apellidoMaterno" type="text" required></ion-input>
+        </ion-item>
+        <div *ngIf="usuarioForm.get('apellidoMaterno')?.invalid && (usuarioForm.get('apellidoMaterno')?.touched || usuarioForm.get('apellidoMaterno')?.dirty)">
+          <p class="error-text">El apellido materno es obligatorio.</p>
+        </div>
+  
+        <!-- Dirección -->
+        <ion-item>
+          <ion-label position="floating">Dirección</ion-label>
+          <ion-input formControlName="direccion" type="text" required></ion-input>
+        </ion-item>
+        <div *ngIf="usuarioForm.get('direccion')?.invalid && (usuarioForm.get('direccion')?.touched || usuarioForm.get('direccion')?.dirty)">
+          <p class="error-text">La dirección es obligatoria.</p>
+        </div>
+  
+        <!-- Teléfono -->
+        <ion-item>
+          <ion-label position="floating">Teléfono</ion-label>
+          <ion-input formControlName="telefono" type="text" required></ion-input>
+        </ion-item>
+        <div *ngIf="usuarioForm.get('telefono')?.invalid && (usuarioForm.get('telefono')?.touched || usuarioForm.get('telefono')?.dirty)">
+          <p class="error-text">El teléfono es obligatorio.</p>
+        </div>
+  
+        <!-- Rol -->
+        <ion-item>
+          <ion-label position="floating">Rol</ion-label>
+          <ion-select formControlName="rol" required>
+            <ion-select-option *ngFor="let rol of roles" [value]="rol">{{ rol }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <div *ngIf="usuarioForm.get('rol')?.invalid && (usuarioForm.get('rol')?.touched || usuarioForm.get('rol')?.dirty)">
+          <p class="error-text">El rol es obligatorio.</p>
+        </div>
+  
+        <!-- Estado -->
+        <ion-item>
+          <ion-label position="floating">Estado</ion-label>
+          <ion-select formControlName="estado" required>
+            <ion-select-option *ngFor="let estado of estado" [value]="estado">{{ estado }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <div *ngIf="usuarioForm.get('estado')?.invalid && (usuarioForm.get('estado')?.touched || usuarioForm.get('estado')?.dirty)">
+          <p class="error-text">El estado es obligatorio.</p>
+        </div>
+  
+        <!-- Opción para cambiar la imagen -->
+        <ion-item>
+          <ion-label position="floating">Seleccionar foto carnet</ion-label> <br>
+          <input type="file" (change)="onImageSelected($event)" accept="image/*" />
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">Seleccionar Documento</ion-label> <br>
+          <input type="file" (change)="onImageSelected2($event)" accept="image/*" />
+        </ion-item>
+  
+        <!-- Botón para guardar cambios -->
+        <ion-button expand="full" type="submit" [disabled]="usuarioForm.invalid" color="secondary">
+          Guardar cambios
+        </ion-button>
+        
+        <ion-button expand="full" color="warning" (click)="goBack()">Cancelar</ion-button>
+      </form>
+    </ion-card-content>
+    <br><br><br><br>
+  </ion-card>
+  
+</ion-content>

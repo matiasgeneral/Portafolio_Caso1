@@ -1,0 +1,79 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Postular Espacio Público</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="postular-espacioPublico-content" padding>
+  <ion-card *ngIf="espacioPublico">
+    <ion-card-header>
+      <ion-img [src]="espacioPublico.image" *ngIf="espacioPublico.image"></ion-img> <!-- Muestra la imagen -->
+      <ion-card-title>{{ espacioPublico.titulo }}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p><strong>Descripción:</strong> {{ espacioPublico.descripcion }}</p>
+      <p><strong>Ubicación:</strong> <a [href]="espacioPublico.ubicacion" target="_blank">{{ espacioPublico.ubicacion }}</a></p> <!-- Muestra la ubicación como un enlace -->
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Datos del Solicitante</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p><strong>Nombre Completo:</strong> {{ nombreSolicitante }}</p> <!-- Muestra el nombre completo del solicitante -->
+      <p><strong>Fecha de Solicitud:</strong> {{ obtenerFechaActual() }}</p> <!-- Muestra la fecha actual -->
+    </ion-card-content>
+  </ion-card>
+
+  <form [formGroup]="postulacionForm" (ngSubmit)="postular()">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Solicitud de Fecha</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+          <ion-label position="floating">Fecha de Uso</ion-label> <br>
+          <ion-input type="date" formControlName="fechaUso" required></ion-input>
+        </ion-item>
+        <ion-note *ngIf="postulacionForm.get('fechaUso')?.touched && postulacionForm.get('fechaUso')?.hasError('required')" color="danger">
+          La fecha es requerida.
+        </ion-note>
+        <ion-note *ngIf="postulacionForm.get('fechaUso')?.hasError('fechaPasada')" color="danger">
+          La fecha no puede ser anterior a la fecha actual.
+        </ion-note>
+
+        <ion-item>
+          <ion-label position="floating">Hora Inicio</ion-label>
+          <ion-select formControlName="horaInicio" required>
+            <ion-select-option *ngFor="let hora of horasDisponibles" [value]="hora">{{ hora }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-note *ngIf="postulacionForm.get('horaInicio')?.touched && postulacionForm.get('horaInicio')?.hasError('required')" color="danger">
+          La hora de inicio es requerida.
+        </ion-note>
+
+        <ion-item>
+          <ion-label position="floating">Hora Fin</ion-label>
+          <ion-select formControlName="horaFin" required>
+            <ion-select-option *ngFor="let hora of horasDisponibles" [value]="hora">{{ hora }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-note *ngIf="postulacionForm.get('horaFin')?.touched && postulacionForm.get('horaFin')?.hasError('required')" color="danger">
+          La hora de fin es requerida.
+        </ion-note>
+
+        <!-- Mensaje de disponibilidad -->
+        <ion-item *ngIf="!disponible">
+          <ion-label color="danger">La fecha y hora ya están ocupadas.</ion-label>
+        </ion-item>
+
+        <ion-button expand="full" type="submit" class="postular-espacioPublico-button" [disabled]="!postulacionForm.valid || !disponible">
+          Postular
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+    <ion-button expand="full" color="primary" (click)="goBack()">Volver</ion-button> <!-- Botón para volver -->
+
+  </form>
+</ion-content>

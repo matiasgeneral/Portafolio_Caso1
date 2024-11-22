@@ -1,0 +1,74 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Crear proyecto</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="crear-proyecto-content" padding>
+  <form [formGroup]="proyectoForm" (ngSubmit)="onSubmit()">
+    <!-- Título -->
+    <ion-item>
+      <ion-label position="floating">Título</ion-label>
+      <ion-input formControlName="titulo" required></ion-input>
+    </ion-item>
+    <ion-note *ngIf="proyectoForm.get('titulo')?.touched && proyectoForm.get('titulo')?.hasError('required')" color="danger">
+      El título es requerido.
+    </ion-note>
+
+    <!-- Descripción -->
+    <ion-item>
+      <ion-label position="floating">Descripción</ion-label>
+      <ion-textarea formControlName="descripcion" required></ion-textarea>
+    </ion-item>
+    <ion-note *ngIf="proyectoForm.get('descripcion')?.touched && proyectoForm.get('descripcion')?.hasError('required')" color="danger">
+      La descripción es requerida.
+    </ion-note>
+
+    <!-- Fecha de inicio del proyecto -->
+    <ion-item>
+      <ion-label position="floating">Fecha de inicio del proyecto</ion-label>
+      <ion-input type="date" formControlName="fechaInicio" required></ion-input>
+    </ion-item>
+    <ion-note *ngIf="proyectoForm.get('fechaInicio')?.touched && proyectoForm.get('fechaInicio')?.hasError('required')" color="danger">
+      La fecha de inicio es requerida.
+    </ion-note>
+
+    <!-- Fecha de término del proyecto -->
+    <ion-item>
+      <ion-label position="floating">Fecha de término del proyecto</ion-label>
+      <ion-input type="date" formControlName="fechaFin" required></ion-input>
+    </ion-item>
+    <ion-note *ngIf="proyectoForm.get('fechaFin')?.touched && proyectoForm.get('fechaFin')?.hasError('required')" color="danger">
+      La fecha de término es requerida.
+    </ion-note>
+
+    <!-- Imagen -->
+    <ion-item>
+      <ion-label>Seleccionar Imagen</ion-label>
+      <input type="file" (change)="onImageSelected($event)" accept="image/*" />
+    </ion-item>
+    <ion-note *ngIf="!selectedFile" color="danger">
+      Debes seleccionar una imagen.
+    </ion-note>
+
+    <!-- Documentos solicitados -->
+    <div>
+      <h4>Documentos solicitados</h4>
+      <ion-button (click)="agregarDocumento()" expand="block">+</ion-button>
+      <div formArrayName="documentosRequeridos">
+        <div *ngFor="let doc of documentosRequeridos.controls; let i = index" [formGroupName]="i" class="documento-item">
+          <ion-item>
+            <ion-label position="floating">Nombre del documento</ion-label>
+            <ion-input formControlName="nombre" placeholder="Nombre del documento" required></ion-input>
+            <ion-button color="danger" (click)="eliminarDocumento(i)">-</ion-button>
+          </ion-item>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botón para crear el proyecto -->
+    <ion-button expand="full" type="submit" class="crear-proyecto-button" [disabled]="!proyectoForm.valid || !selectedFile">
+      Crear proyecto
+    </ion-button>
+  </form>
+</ion-content>

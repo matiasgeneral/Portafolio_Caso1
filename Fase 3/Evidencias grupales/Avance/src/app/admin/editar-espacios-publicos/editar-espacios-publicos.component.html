@@ -1,0 +1,80 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Editar Noticia</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <!-- Botón para volver a la lista de noticias -->
+  <ion-button expand="full" (click)="goBack()" color="light">
+    Volver a la lista de noticias
+  </ion-button>
+
+  <!-- Card para mostrar la noticia si está disponible -->
+  <ion-card *ngIf="espaciosPublicosadForm">
+    <ion-card-header>
+      <ion-card-title>
+        Editar Noticia
+      </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <!-- Vista previa de la imagen guardada si está disponible -->
+      <div class="media-previews" *ngIf="espaciosPublicosadForm.get('image')?.value">
+        <ion-card class="preview-card">
+          <ion-card-content>
+            <img [src]="espaciosPublicosadForm.get('image')?.value" alt="Imagen del espacio publico" class="media-image" />
+          </ion-card-content>
+        </ion-card>
+      </div>
+
+      <!-- Formulario de edición -->
+      <form [formGroup]="espaciosPublicosadForm" (ngSubmit)="onSubmit()">
+        <!-- Título  -->
+        <ion-item>
+          <ion-label position="floating">Título</ion-label>
+          <ion-input formControlName="titulo" type="text" required></ion-input>
+        </ion-item>
+        <div *ngIf="espaciosPublicosadForm.get('titulo')?.invalid && (espaciosPublicosadForm.get('titulo')?.touched || espaciosPublicosadForm.get('titulo')?.dirty)">
+          <p class="error-text">El título es obligatorio.</p>
+        </div>
+
+
+
+        <!-- Descripcion -->
+        <ion-item>
+          <ion-label position="floating">Descripción</ion-label>
+          <ion-textarea formControlName="descripcion" required></ion-textarea>
+        </ion-item>
+        <div *ngIf="espaciosPublicosadForm.get('descripcion')?.invalid && (espaciosPublicosadForm.get('descripcion')?.touched || espaciosPublicosadForm.get('descripcion')?.dirty)">
+          <p class="error-text">La descripción es obligatoria.</p>
+        </div>
+
+            <!-- Descripcion -->
+            <ion-item>
+              <ion-label position="floating">Ubicación</ion-label>
+              <ion-textarea formControlName="ubicacion" required></ion-textarea>
+            </ion-item>
+            <div *ngIf="espaciosPublicosadForm.get('ubicacion')?.invalid && (espaciosPublicosadForm.get('descripcion')?.touched || espaciosPublicosadForm.get('ubicacion')?.dirty)">
+              <p class="error-text">La ubicación es obligatoria.</p>
+            </div>
+
+        <!-- Opción para cambiar la imagen -->
+        <ion-item>
+          <ion-label position="floating">Seleccionar Imagen</ion-label> <br>
+          <input type="file" (change)="onImageSelected($event)" accept="image/*" />
+        </ion-item>
+
+        <!-- Botón para guardar cambios -->
+        <ion-button expand="full" type="submit" [disabled]="espaciosPublicosadForm.invalid" color="secondary">
+          Guardar cambios
+        </ion-button>
+        
+        <ion-button expand="full" color="warning" (click)="goBack()">Cancelar</ion-button>
+      </form>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

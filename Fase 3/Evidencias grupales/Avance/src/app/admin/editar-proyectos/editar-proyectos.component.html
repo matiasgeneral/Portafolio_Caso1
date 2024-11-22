@@ -1,0 +1,112 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Editar Proyecto</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <!-- Botón para volver a la lista de proyectos -->
+  <ion-button expand="full" (click)="goBack()" color="light">
+    Volver a la lista de proyectos
+  </ion-button>
+
+  <!-- Card para mostrar el proyecto si está disponible -->
+  <ion-card *ngIf="proyectoForm">
+    <ion-card-header>
+      <!-- Vista previa de la imagen si está disponible -->
+      <div class="media-previews">
+        <ion-card class="preview-card">
+          <ion-card-content>
+            <img *ngIf="proyectoForm.get('image')?.value" [src]="proyectoForm.get('image')?.value"
+              alt="Imagen del proyecto" class="media-image" />
+          </ion-card-content>
+        </ion-card>
+      </div>
+
+      <ion-card-title>
+        {{ proyectoForm.get('titulo')?.value.charAt(0).toUpperCase() +
+        proyectoForm.get('titulo')?.value.slice(1).toLowerCase() }}
+      </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <!-- Formulario de edición del proyecto -->
+      <form [formGroup]="proyectoForm" (ngSubmit)="onSubmit()">
+        <!-- Título del proyecto -->
+        <ion-item>
+          <ion-label position="floating">Título</ion-label>
+          <ion-input formControlName="titulo" type="text" required></ion-input>
+        </ion-item>
+        <div
+          *ngIf="proyectoForm.get('titulo')?.invalid && (proyectoForm.get('titulo')?.touched || proyectoForm.get('titulo')?.dirty)">
+          <p class="error-text">El título es obligatorio.</p>
+        </div>
+
+        <!-- Descripción del proyecto -->
+        <ion-item>
+          <ion-label position="floating">Descripción</ion-label>
+          <ion-textarea formControlName="descripcion" required></ion-textarea>
+        </ion-item>
+        <div
+          *ngIf="proyectoForm.get('descripcion')?.invalid && (proyectoForm.get('descripcion')?.touched || proyectoForm.get('descripcion')?.dirty)">
+          <p class="error-text">La descripción es obligatoria.</p>
+        </div>
+
+        <!-- Fechas del proyecto -->
+        <ion-item>
+          <ion-label position="floating">Fecha de inicio</ion-label>
+          <ion-input formControlName="fechaInicio" type="date" required>
+          </ion-input>
+        </ion-item>
+        <div
+          *ngIf="proyectoForm.get('fechaInicio')?.invalid && (proyectoForm.get('fechaInicio')?.touched || proyectoForm.get('fechaInicio')?.dirty)">
+          <p class="error-text">La fecha de inicio es obligatoria.</p>
+        </div>
+
+        <ion-item>
+          <ion-label position="floating">Fecha de Fin</ion-label>
+          <ion-input formControlName="fechaFin" type="date" required>
+          </ion-input>
+        </ion-item>
+        <div
+          *ngIf="proyectoForm.get('fechaFin')?.invalid && (proyectoForm.get('fechaFin')?.touched || proyectoForm.get('fechaFin')?.dirty)">
+          <p class="error-text">La fecha de fin es obligatoria.</p>
+        </div>
+
+        <!-- Sección para seleccionar la imagen -->
+        <ion-item>
+          <ion-label position="floating">Seleccionar Imagen</ion-label><br>
+          <input type="file" (change)="onImageSelected($event)" accept="image/*" />
+        </ion-item>
+
+        <!-- Documentos requeridos -->
+        <div formArrayName="documentosRequeridos">
+          <div *ngFor="let documento of documentosRequeridos.controls; let i = index" [formGroupName]="i">
+            <ion-item>
+              <ion-label position="floating">Nombre del Documento</ion-label>
+              <ion-input formControlName="nombre" type="text" required></ion-input>
+              <ion-buttons slot="end">
+                <ion-button (click)="eliminarDocumento(i)">
+                  <ion-icon slot="icon-only" name="trash"></ion-icon>
+                </ion-button>
+              </ion-buttons>
+            </ion-item>
+            <div
+              *ngIf="documento.get('nombre')?.invalid && (documento.get('nombre')?.touched || documento.get('nombre')?.dirty)">
+              <p class="error-text">El nombre del documento es obligatorio.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Botón para agregar un nuevo documento -->
+        <ion-button expand="full" (click)="agregarDocumento()">Agregar Documento</ion-button>
+
+        <!-- Botón de guardar -->
+        <ion-button expand="full" type="submit" [disabled]="proyectoForm.invalid">Guardar</ion-button>
+      </form>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

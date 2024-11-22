@@ -1,0 +1,7 @@
+{
+  "name": "sistema-unidad-territorial",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
