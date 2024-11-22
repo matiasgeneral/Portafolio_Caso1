@@ -77,6 +77,41 @@ export class SolicitudCertificadoResidenciaComponent implements OnInit {
     }
   }
 
+  async generarPdfSinPago() {
+    if (this.userData) {
+      try {
+        this.isProcessing = true;
+
+        // Generar PDF sin realizar el pago
+        const pdfBase64 = await this.pdfService.generateCertificate(this.userData);
+        if (pdfBase64) {
+          await this.pdfService.downloadPDF(pdfBase64, this.userData);
+          this.pdfGenerationStatus = {
+            success: true,
+            message: 'PDF generado correctamente sin necesidad de pago.'
+          };
+        } else {
+          throw new Error('No se pudo generar el PDF.');
+        }
+        this.showAlert('Éxito', this.pdfGenerationStatus.message);
+      } catch (error) {
+        this.pdfGenerationStatus = {
+          success: false,
+          message: 'Error al generar el PDF: ' + (error as Error).message
+        };
+        this.showAlert('Error', this.pdfGenerationStatus.message);
+      } finally {
+        this.isProcessing = false;
+      }
+    } else {
+      this.pdfGenerationStatus = {
+        success: false,
+        message: 'No se encontraron datos del usuario.'
+      };
+      this.showAlert('Error', this.pdfGenerationStatus.message);
+    }
+  }
+
   async showAlert(header: string, message: string) {
     const alert = await this.alertController.create({
       header,
