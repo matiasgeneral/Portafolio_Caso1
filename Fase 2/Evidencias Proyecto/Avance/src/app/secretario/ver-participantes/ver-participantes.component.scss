@@ -1,0 +1,75 @@
+ion-card {
+    margin: 16px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  ion-card-header {
+
+    padding: 16px;
+    border-radius: 8px 8px 0 0;
+  }
+  
+  ion-card-title {
+    font-size: 1.5em;
+    font-weight: bold;
+  }
+  
+  ion-card-subtitle {
+    font-size: 1.2em;
+    color: #666;
+  }
+  
+  ion-list {
+    margin: 16px;
+  }
+  
+  ion-item {
+    border-bottom: 1px solid #e0e0e0;
+    padding: 16px;
+  }
+  
+  ion-label {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  h2 {
+    font-size: 1.3em;
+    margin: 0;
+  }
+  
+  h3 {
+    font-size: 1.5em;
+    margin: 0;
+    color: #444;
+  }
+  
+  .documento-subido {
+    display: flex;
+    align-items: center;
+    font-size: 0.9em;
+    margin-top: 4px;
+  }
+  
+  .documento-subido a {
+
+    text-decoration: none; /* Eliminar el subrayado del enlace */
+    
+    border-bottom: 1px solid #1a73e8; /* Agregar una línea inferior para simular un enlace */
+    padding-bottom: 2px; /* Espacio debajo del texto */
+    transition: color 0.3s, border-color 0.3s; /* Transición para un efecto suave al pasar el ratón */
+  }
+  
+  .documento-subido a:hover {
+    color: #0b5ed7; /* Color al pasar el mouse sobre el enlace */
+    border-color: #0b5ed7; /* Cambiar el color de la línea inferior al pasar el mouse */
+  }
+  
+  .documento-subido::before {
+    content: '•'; /* Agregar un punto antes del nombre del documento */
+
+    font-size: 1.2em;
+    margin-right: 6px;
+  }
+  

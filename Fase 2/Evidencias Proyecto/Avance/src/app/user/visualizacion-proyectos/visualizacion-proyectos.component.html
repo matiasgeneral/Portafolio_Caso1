@@ -1,0 +1,59 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Listado de Proyectos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <h2 style="text-align: center;">Proyectos Vecinales</h2>
+  <br />
+
+  <ng-container *ngIf="proyectos && proyectos.length; else noProyectos">
+    <ion-card *ngFor="let proyecto of proyectos" style="max-width: 500px; margin: 0 auto; padding: 20px;">
+      <!-- Imagen del proyecto -->
+      <img
+        *ngIf="proyecto.image"
+        [src]="proyecto.image"
+        style="width: 100%; height: auto; object-fit: cover;"
+      />
+
+      <!-- Título del proyecto -->
+      <ion-card-header>
+        <ion-card-title>{{ proyecto.titulo | titlecase }}</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <!-- Descripción del proyecto -->
+        <p><strong>Descripción:</strong> {{ proyecto.descripcion }}</p>   <br>
+
+        <!-- Fechas del proyecto -->
+        <p><strong>Fecha de inicio del proyecto:</strong> {{ formatDate(proyecto.fechaInicio) }}</p>
+        <p><strong>Fecha término del proyecto:</strong> {{ formatDate(proyecto.fechaFin) }}</p> <br>
+
+        <!-- Documentos requeridos -->
+        <div *ngIf="proyecto.documentosRequeridos?.length > 0">
+          <p><strong>Documentos Requeridos:</strong></p>
+          <ul>
+            <li *ngFor="let documento of proyecto.documentosRequeridos">{{ documento.nombre }}</li>
+          </ul>
+        </div>
+      </ion-card-content>
+
+      <!-- Botón de información detallada -->
+      <ion-button expand="block" [routerLink]="['/postulacion-proyectos', proyecto.id]">
+        Postular al proyecto
+      </ion-button>
+    </ion-card>
+  </ng-container> 
+
+  <ng-template #noProyectos>
+    <ion-card style="max-width: 500px; margin: 0 auto; padding: 20px;">
+      <ion-card-content>
+        <h3>No hay proyectos disponibles.</h3>
+      </ion-card-content>
+    </ion-card>
+  </ng-template>
+</ion-content>

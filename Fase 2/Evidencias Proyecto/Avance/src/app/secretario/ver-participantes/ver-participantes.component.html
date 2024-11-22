@@ -1,0 +1,61 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>Ver Participantes</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-button expand="full" (click)="goBack()" color="light">
+    Volver a la lista de proyectos
+  </ion-button>
+  
+  <ion-card *ngIf="proyecto">
+    <ion-card-header>
+      <ion-card-title>{{ proyecto.titulo }}</ion-card-title>
+      <ion-card-subtitle>
+        {{ proyecto.fechaInicio }} - {{ proyecto.fechaFin }}
+      </ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <p><strong>Descripción:</strong> {{ proyecto.descripcion }}</p>
+      <p><strong>Cantidad de Participantes:</strong> {{ proyecto.postulantes?.length || 0 }}</p>
+      
+      <!-- Mostrar documentos requeridos -->
+      <div *ngIf="proyecto.documentosRequeridos?.length > 0">
+        <p><strong>Documentos Requeridos:</strong></p>
+        <ul>
+          <li *ngFor="let documento of proyecto.documentosRequeridos">
+            {{ documento.nombre }}
+          </li>
+        </ul>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-list *ngIf="participantes.length > 0; else noParticipantes">
+    <ion-item *ngFor="let participante of participantes; let i = index">
+      <ion-label>
+        <h2>{{ participante.nombre }}</h2>
+        <p>RUT: {{ participante.rut }}</p>
+        <p>Email: {{ participante.email }}</p>
+        <p>Teléfono: {{ participante.telefono }}</p>
+        <p>Fecha de Postulación: {{ participante.fechaSolicitud }}</p>
+        <p>Documentos subidos:</p>
+        <div *ngFor="let documento of participante.documentosSubidos">
+          <p>• <a style="text-decoration: none; color: #4a90e2;" [href]="documento.url" target="_blank">{{ documento.nombre }}</a></p>
+        </div>
+      </ion-label>
+      <ion-button color="danger" (click)="eliminarParticipante(participante.uid, i)">
+        Eliminar
+      </ion-button>
+    </ion-item>
+  </ion-list>
+
+  <ng-template #noParticipantes>
+    <ion-card>
+      <ion-card-content>
+        <h3>No hay participantes en este proyecto.</h3>
+      </ion-card-content>
+    </ion-card>
+  </ng-template>
+</ion-content>

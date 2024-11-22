@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "110154609263",
+    "project_id": "sistema-unidad-terrritorial",
+    "storage_bucket": "sistema-unidad-terrritorial.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:110154609263:android:a363c55662deee19ca539a",
+        "android_client_info": {
+          "package_name": "com.sistema.juntadevecinos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "110154609263-mogqu4alagamt11pqojpnq646b3flr7e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBeh67w4wlWkZML39OrvcgBXQjhu8FXV-U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "110154609263-mogqu4alagamt11pqojpnq646b3flr7e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

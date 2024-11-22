@@ -1,0 +1,46 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Detalles del proyectp</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-button expand="full" (click)="goBack()" color="light">
+    Volver a la lista proyecto
+  </ion-button>
+
+  <ion-card *ngIf="proyectoDetails">
+    <ion-card-header>
+      <div class="media-previews">
+        <ion-card class="preview-card">
+          <ion-card-content>
+            <img *ngIf="proyectoDetails.image" [src]="proyectoDetails.image" alt="Imagen de la noticia" class="media-image"/>
+          </ion-card-content>
+        </ion-card>
+      </div>
+
+      <ion-card-title>
+        {{ proyectoDetails.titulo.charAt(0).toUpperCase() + proyectoDetails.titulo.slice(1).toLowerCase() }} 
+      </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <strong>Título:</strong> {{ proyectoDetails.titulo | titlecase }}<br />
+      <strong>Fecha de proyecto:</strong> {{ proyectoDetails.fechaInicio}} - {{proyectoDetails.fechaFin}}<br />
+      <strong>Fecha de creación:</strong> {{ proyectoDetails.fechaCreacion }}<br />
+      <p><strong>Detalles:</strong> {{ proyectoDetails.descripcion }}</p>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-button expand="full" color="danger" (click)="deleteDoc()">
+    Borrar Proyecto
+  </ion-button>
+<!--  <ion-button expand="full" color="warning" (click)="deshabilitarDoc()">
+    Deshabilitar Proyecto
+  </ion-button>-->
+  <ion-button  expand="full" color="secondary" (click)="verDetalles(proyectoDetails)">Editar Proyecto</ion-button>
+  <br><br><br>
+</ion-content>

@@ -1,0 +1,46 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Buscador de actividades</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card class="custom-card">
+    <ion-card-header>
+      <ion-card-title>Lista de actividades</ion-card-title>
+      <div class="ion-text-end">
+        <ion-button expand="full" routerLink="/visualizacion-eventos" class="ver-noticias-button">
+          Ver Actividades
+        </ion-button>
+      </div>
+    </ion-card-header>
+    
+    <ion-card-content>
+      <ion-list>
+        <!-- Mostrar las actividades -->
+        <ion-item *ngFor="let actividad of actividades">
+          <ion-thumbnail slot="start">
+            <img *ngIf="actividad.image" [src]="actividad.image" alt="Imagen de la actividad" class="media-image"/>
+          </ion-thumbnail>
+
+          <ion-label>
+            <strong>Fecha de Creación:</strong> {{ actividad.fechaCreacion }}<br />
+            <strong>Título:</strong> {{ actividad.titulo | titlecase }}<br />
+            <strong>Cantidad Máxima:</strong> {{ actividad.cantidadMax }}<br />
+            <strong>Fecha del Evento:</strong> {{ actividad.fechaEvento }}<br />
+            <strong>Hora del Evento:</strong> {{ actividad.horaEvento }}<br />
+           
+          </ion-label>
+
+          <ion-button (click)="administrarActividades(actividad)" fill="outline" color="secondary" slot="end">
+            <ion-icon slot="start" name="settings"></ion-icon>
+            Editar
+          </ion-button>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

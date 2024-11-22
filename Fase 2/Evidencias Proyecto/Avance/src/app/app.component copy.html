@@ -1,0 +1,85 @@
+<ion-app>
+  <ion-split-pane contentId="main-content">
+    <!-- Menú lateral -->
+    <ion-menu contentId="main-content" type="overlay">
+      <ion-header>
+        <ion-toolbar color="tertiary">
+          <ion-title>Sistema de Unidad Territorial</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <ion-list id="inbox-list">
+          <ion-note>Bienvenido</ion-note>
+
+          <!-- Menú principal, visible para todos los usuarios -->
+          <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages">
+            <ion-item routerLink="{{ p.url }}" lines="none" routerLinkActive="selected">
+              <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
+              <ion-label>{{ p.title }}</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+
+          <!-- Mostrar Login y Register si NO está logueado -->
+          <ion-list *ngIf="!isLoggedIn">
+            <ion-item button (click)="toggleAccountMenu()">
+              <ion-icon slot="start" name="person-circle-outline"></ion-icon>
+              <ion-label>Cuenta</ion-label>
+              <ion-icon slot="end" [name]="accountMenuOpen ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
+            </ion-item>
+            <div *ngIf="accountMenuOpen">
+              <ion-menu-toggle auto-hide="false">
+                <ion-item routerLink="/login" lines="none">
+                  <ion-icon slot="start" ios="log-in-outline" md="log-in-sharp"></ion-icon>
+                  <ion-label>Iniciar sesión</ion-label>
+                </ion-item>
+                <ion-item routerLink="/register" lines="none">
+                  <ion-icon slot="start" ios="person-add-outline" md="person-add-sharp"></ion-icon>
+                  <ion-label>Registrar cuenta</ion-label>
+                </ion-item>
+              </ion-menu-toggle>
+            </div>
+          </ion-list>
+
+          <!-- Mostrar menú solo para usuarios activos -->
+          <ion-list *ngIf="isLoggedIn && userStatus === 'Activo'">
+            <ion-menu-toggle auto-hide="false">
+              <ion-item button (click)="logout()" lines="none">
+                <ion-icon slot="start" ios="log-out-outline" md="log-out-sharp"></ion-icon>
+                <ion-label>Cerrar sesión</ion-label>
+              </ion-item>
+            </ion-menu-toggle>
+          </ion-list>
+
+          <!-- Mostrar Logout si el usuario está en estado 'pendiente' -->
+          <ion-list *ngIf="isLoggedIn && userStatus === 'Pendiente'">
+            <ion-menu-toggle auto-hide="false">
+              <ion-item button (click)="logout()" lines="none">
+                <ion-icon slot="start" ios="log-out-outline" md="log-out-sharp"></ion-icon>
+                <ion-label>Cerrar sesión</ion-label>
+              </ion-item>
+            </ion-menu-toggle>
+          </ion-list>
+
+        </ion-list>
+
+        <ion-note><br>Capstone 2024 DuocUC</ion-note>
+      </ion-content>
+    </ion-menu>
+
+    <!-- Contenedor principal -->
+    <div class="ion-page" id="main-content">
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+          </ion-buttons>
+          <ion-title>Menu</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <!-- Aquí irá el contenido de tu componente -->
+        <router-outlet></router-outlet>
+      </ion-content>
+    </div>
+  </ion-split-pane>
+</ion-app>
