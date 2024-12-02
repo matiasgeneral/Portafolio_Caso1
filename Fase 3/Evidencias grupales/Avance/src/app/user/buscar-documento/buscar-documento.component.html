@@ -1,0 +1,69 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Validar Documento</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title class="ion-text-center" color="primary">
+        Validación de Certificado de Residencia
+      </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-item>
+        <ion-label position="stacked">Número de Documento</ion-label>
+        <ion-input [(ngModel)]="numeroDocumento" placeholder="CR-AAAAMMDD-XXXXX"></ion-input>
+      </ion-item>
+
+      <ion-button expand="block" (click)="buscarDocumento()" [disabled]="isLoading" class="ion-margin-top">
+        <ion-icon name="search-outline" slot="start"></ion-icon>
+        BUSCAR DOCUMENTO
+      </ion-button>
+
+      <div *ngIf="documentoEncontrado" class="ion-margin-top">
+        <h2>Información del Documento</h2>
+        
+        <ion-item>
+          <ion-label>
+            <h3>Nombre Completo</h3>
+            <p>{{documentoEncontrado.userData.nombre}} {{documentoEncontrado.userData.apellidoPaterno}} {{documentoEncontrado.userData.apellidoMaterno}}</p>
+          </ion-label>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>
+            <h3>RUT</h3>
+            <p>{{documentoEncontrado.userData.rut}}</p>
+          </ion-label>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>
+            <h3>Dirección</h3>
+            <p>{{documentoEncontrado.userData.direccion}}</p>
+          </ion-label>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>
+            <h3>Fecha de Emisión</h3>
+            <p>{{getFechaFormateada(documentoEncontrado.fechaEmision)}}</p>
+          </ion-label>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>
+            <h3>Validación del documento</h3>
+            <p>El Certificado es válido</p>
+          </ion-label>
+        </ion-item>
+      </div>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

@@ -11,25 +11,24 @@ const routes: Routes = [
     redirectTo: '/login',
     pathMatch: 'full'
   },
-
   {
     path: '',
     loadChildren: () => import('./auth/auth.module').then( m => m.AuthModule)
   },
-  
- 
-  
-  { path: 'administrar-usuarios/:rut', component: AdministrarUsuariosComponent }, // Cambia a minúscula
+  {
+    path: 'pagos',
+    loadChildren: () => import('./pagos/pagos.module').then(m => m.PagosModule)
+  },
+  { path: 'administrar-usuarios/:rut', component: AdministrarUsuariosComponent },
   { path: 'buscador', component: BuscadorUsuariosComponent },
-  { path: 'editar-usuarios/:rut', component: EditarUsuariosComponent },
-
-
-
+  { path: 'editar-usuarios/:rut', component: EditarUsuariosComponent }
 ];
+
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
+    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules }),
+    
   ],
   exports: [RouterModule]
 })

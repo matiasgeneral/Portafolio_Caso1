@@ -5,17 +5,19 @@ import { TDocumentDefinitions } from 'pdfmake/interfaces';
 import { AlertController } from '@ionic/angular';
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+import { DocumentoService } from './documento.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PdfService {
-  generarPdf(userData: any) {
-    throw new Error('Method not implemented.');
-  }
+  private readonly DOCUMENT_PREFIX = 'CR';
+  private readonly STORAGE_KEY = 'last_document_number';
+
   constructor(
     private platform: Platform,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private documentoService: DocumentoService
   ) {
     try {
       (pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
@@ -25,21 +27,62 @@ export class PdfService {
     }
   }
 
-  /**
-   * Genera el PDF sin descargarlo, solo retorna el base64
-   */
-  async generateCertificate(userData: any): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const fullName = `${userData.nombre} ${userData.apellidoPaterno} ${userData.apellidoMaterno}`;
-      const currentDate = new Date();
-      const formattedDate = this.formatDate(currentDate);
-      const formattedTime = this.formatTime(currentDate);
+  private async generateDocumentNumber(): Promise<string> {
+    const lastNumber = localStorage.getItem(this.STORAGE_KEY) || '0';
+    const nextNumber = parseInt(lastNumber) + 1;
+    localStorage.setItem(this.STORAGE_KEY, nextNumber.toString());
+    
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const sequence = String(nextNumber).padStart(5, '0');
+    
+    return `${this.DOCUMENT_PREFIX}-${year}${month}${day}-${sequence}`;
+  }
 
+  public validateDocumentNumber(documentNumber: string): boolean {
+    const regex = /^CR-\d{8}-\d{5}$/;
+    if (!regex.test(documentNumber)) {
+      return false;
+    }
+
+    const datePart = documentNumber.split('-')[1];
+    const year = parseInt(datePart.substring(0, 4));
+    const month = parseInt(datePart.substring(4, 6)) - 1;
+    const day = parseInt(datePart.substring(6, 8));
+
+    const date = new Date(year, month, day);
+    return date instanceof Date && !isNaN(date.getTime());
+  }
+
+  async generateCertificate(userData: any): Promise<string> {
+    const documentNumber = await this.generateDocumentNumber();
+    const fullName = `${userData.nombre} ${userData.apellidoPaterno} ${userData.apellidoMaterno}`;
+    const currentDate = new Date();
+    const formattedDate = this.formatDate(currentDate);
+    const formattedTime = this.formatTime(currentDate);
+
+    // Guardar la información del documento
+    await this.documentoService.guardarDocumento({
+      numeroDocumento: documentNumber,
+      fechaEmision: currentDate,
+      userData: {
+        nombre: userData.nombre,
+        apellidoPaterno: userData.apellidoPaterno,
+        apellidoMaterno: userData.apellidoMaterno,
+        direccion: userData.direccion,
+        rut: userData.rut
+      }
+    });
+
+    return new Promise((resolve, reject) => {
       const documentDefinition: TDocumentDefinitions = {
         content: [
           { text: 'Certificado de Residencia', style: 'header' },
-          { text: 'Junta de Vecinos San Bernardo', style: 'subheader', margin: [0, 10, 0, 20] },
-          { text: `\nNombre completo: ${fullName}`, style: 'details' },
+          { text: 'Junta de Vecinos San Bernardo', style: 'subheader', margin: [0, 10, 0, 10] },
+          { text: `Número de Documento: ${documentNumber}`, style: 'documentNumber', margin: [0, 0, 0, 5] },
+          { text: `Nombre completo: ${fullName}`, style: 'details' },
           { text: `Dirección: ${userData.direccion}`, style: 'details' },
           { text: `RUT: ${userData.rut}`, style: 'details' },
           { text: `Fecha de emisión: ${formattedDate}`, style: 'details', margin: [0, 10, 0, 10] },
@@ -68,6 +111,10 @@ export class PdfService {
             alignment: 'center',
             margin: [0, 0, 0, 10],
           },
+          documentNumber: {
+            fontSize: 12,
+            color: '#444444',
+          },
           details: {
             fontSize: 14,
             margin: [0, 5, 0, 5],
@@ -83,9 +130,6 @@ export class PdfService {
     });
   }
 
-  /**
-   * Descarga o guarda el PDF después del pago exitoso
-   */
   async downloadPDF(pdfBase64: string, userData: any) {
     const currentDate = new Date();
     const formattedDate = this.formatDate(currentDate);
@@ -109,9 +153,6 @@ export class PdfService {
     }
   }
 
-  /**
-   * Guarda el PDF en el dispositivo móvil
-   */
   private async savePdfToDevice(pdfData: string, fileName: string) {
     try {
       const result = await Filesystem.writeFile({
@@ -127,9 +168,6 @@ export class PdfService {
     }
   }
 
-  /**
-   * Muestra alerta de descarga completada
-   */
   private async showDownloadAlert() {
     const alert = await this.alertController.create({
       header: 'PDF Guardado',
@@ -139,9 +177,6 @@ export class PdfService {
     await alert.present();
   }
 
-  /**
-   * Formatea la fecha a dd-mm-yyyy
-   */
   private formatDate(date: Date): string {
     const day = String(date.getDate()).padStart(2, '0');
     const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -149,9 +184,6 @@ export class PdfService {
     return `${day}-${month}-${year}`;
   }
 
-  /**
-   * Formatea la hora a hh-mm
-   */
   private formatTime(date: Date): string {
     const hours = String(date.getHours()).padStart(2, '0');
     const minutes = String(date.getMinutes()).padStart(2, '0');

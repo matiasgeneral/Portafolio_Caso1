@@ -1,33 +1,31 @@
-// src/app/pagos/services/pago-certificado.service.ts
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 
+/**
+ * Interfaz para el registro de certificados
+ */
 interface RegistroCertificado {
-  uid: string;
-  nombreCompleto: string;
-  rut: string;
-  direccion: string;
-  fechaSolicitud: Date;
-  fechaPago: Date | null;
-  pdfDocumento: string;
-  estado: 'pendiente' | 'pagado' | 'cancelado';
-  precio: number;
-  paymentId?: string; // ID del pago de Mercado Pago
-  mercadoPagoData?: any; // Datos recibidos de Mercado Pago
-}
-
-interface MercadoPagoStatus {
-  status: string;
-  auto_return: string;
+  uid: string; // ID del usuario
+  nombreCompleto: string; // Nombre completo del solicitante
+  rut: string; // RUT del solicitante
+  direccion: string; // Dirección del solicitante
+  fechaSolicitud: Date; // Fecha de solicitud del certificado
+  fechaPago: Date | null; // Fecha en que se realizó el pago
+  pdfDocumento: string; // Documento PDF en base64
+  estado: 'pendiente' | 'pagado' | 'cancelado'; // Estado del certificado
+  precio: number; // Precio del certificado
+  paymentId: string; // ID de referencia del pago MercadoPago
+  mercadoPagoData?: any; // Datos adicionales de MercadoPago
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class PagoCertificadoService {
-  private accessToken = environment.mercadoPagoToken; // Reemplazar con tu Access Token de Mercado Pago
+  private accessToken = environment.mercadoPagoToken;
+  private appUrlWithHash = `${environment.appUrl}/#`;
 
   constructor(
     private firestore: AngularFirestore,
@@ -35,43 +33,51 @@ export class PagoCertificadoService {
   ) {}
 
   /**
-   * Inicia el proceso de pago y registro del certificado (sin generar el PDF)
-   * @param usuario Datos del usuario solicitante
+   * Inicia el proceso de pago y registra el certificado en Firestore
+   * @param usuario Datos del usuario que solicita el certificado
+   * @returns URL para redirigir al pago
    */
-  async iniciarPago(usuario: any) {
+  async iniciarPago(usuario: any): Promise<string> {
     const datosPago = {
-      titulo: "Certificado de Residencia",
+      titulo: 'Certificado de Residencia',
       precio: 1000,
-      cantidad: 1
+      cantidad: 1,
     };
 
     try {
       const headers = new HttpHeaders({
-        'Authorization': `Bearer ${this.accessToken}`,
-        'Content-Type': 'application/json'
+        Authorization: `Bearer ${this.accessToken}`,
+        'Content-Type': 'application/json',
       });
 
-      const response = await this.http.post<any>(
-        'https://api.mercadopago.com/checkout/preferences',
-        {
-          items: [{
-            title: datosPago.titulo,
-            unit_price: datosPago.precio,
-            quantity: datosPago.cantidad,
-            currency_id: 'CLP'
-          }],
-          back_urls: {
-            success: `${environment.appUrl}/pagos/verificacion`,
-            failure: `${environment.appUrl}/pagos/fallido`,
-            pending: `${environment.appUrl}/pagos/pendiente`
-          },
-          auto_return: "approved"
-        },
-        { headers }
-      ).toPromise();
+      const appUrl = window.location.hostname === 'localhost'
+        ? 'http://localhost:8100'  // Para entorno local
+        : 'https://sistema-unidad-terrritorial.web.app';  // Para producción
 
-      if (response && response.init_point && response.id) {
-        // Registro del certificado
+      const response = await this.http
+        .post<any>(
+          'https://api.mercadopago.com/checkout/preferences',
+          {
+            items: [
+              {
+                title: datosPago.titulo,
+                unit_price: datosPago.precio,
+                quantity: datosPago.cantidad,
+                currency_id: 'CLP',
+              },
+            ],
+            back_urls: {
+              failure: `${appUrl}/#/pagos/fallido`,
+              pending: `${appUrl}/#/pagos/pendiente`,
+              success: `${appUrl}/#/pagos/verificacion`,
+            },
+            auto_return: 'approved',
+          },
+          { headers }
+        )
+        .toPromise();
+
+      if (response?.init_point && response?.id) {
         const registro: RegistroCertificado = {
           uid: usuario.uid,
           nombreCompleto: `${usuario.nombre} ${usuario.apellidoPaterno} ${usuario.apellidoMaterno}`,
@@ -81,142 +87,132 @@ export class PagoCertificadoService {
           fechaPago: null,
           pdfDocumento: '',
           estado: 'pendiente',
-          precio: 1000,
+          precio: datosPago.precio,
           paymentId: response.id,
-          mercadoPagoData: response // Guardar todos los datos recibidos de Mercado Pago
+          mercadoPagoData: response,
         };
 
         await this.guardarRegistroCertificado(registro);
         return response.init_point;
       } else {
-        throw new Error('Error al crear el enlace de pago: estructura de respuesta no esperada');
+        throw new Error('No se pudo generar el enlace de pago');
       }
     } catch (error) {
-      console.error('Error en el proceso de iniciar pago:', error);
+      console.error('Error al iniciar el pago:', error);
       throw error;
     }
   }
 
   /**
-   * Guarda el registro del certificado
+   * Guarda el certificado en Firestore
    * @param registro Datos del certificado a guardar
+   * @returns Promesa con el resultado de la operación
    */
-  private async guardarRegistroCertificado(registro: RegistroCertificado) {
-    return this.firestore.collection('certificados').add(registro);
+  private async guardarRegistroCertificado(
+    registro: RegistroCertificado
+  ): Promise<void> {
+    await this.firestore.collection('certificados').add(registro);
   }
 
   /**
-   * Verificar el estado del pago en Mercado Pago
-   * @param paymentId ID del pago generado por Mercado Pago
+   * Obtiene un certificado por su ID de preferencia
+   * @param preferenceId ID de preferencia de MercadoPago
+   * @returns Certificado encontrado o null
    */
-  async verificarEstadoPago(paymentId: string): Promise<MercadoPagoStatus> {
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${this.accessToken}`
-    });
-
-    try {
-      const response = await this.http.get<any>(
-        `https://api.mercadopago.com/v1/payments/${paymentId}`,
-        { headers }
-      ).toPromise();
-
-      console.log('Respuesta completa de Mercado Pago al verificar estado:', response);
-
-      if (!response || !response.status) {
-        throw new Error('No se pudo obtener el estado del pago');
-      }
-      return { status: response.status, auto_return: response.auto_return };
-    } catch (error) {
-      console.error('Error al verificar el estado del pago:', error);
-      throw error;
-    }
-  }
-
-  /**
-   * Manejar notificación de Mercado Pago
-   * @param paymentId ID del pago de Mercado Pago
-   */
-  async manejarNotificacionPago(paymentId: string) {
-    try {
-      const pagoStatus = await this.verificarEstadoPago(paymentId);
-
-      if (pagoStatus.auto_return === 'approved') {
-        const certificados = await this.obtenerCertificadoPorPaymentId(paymentId);
-        if (certificados.length > 0) {
-          await this.actualizarEstadoPago(certificados[0].id, 'pagado');
-          // Generar el PDF del certificado aquí
-          await this.actualizarDocumentoCertificado(certificados[0].id, { pdfDocumento: 'URL_DEL_PDF_GENERADO' });
-        }
-      }
-    } catch (error) {
-      console.error('Error al manejar la notificación de pago:', error);
-    }
-  }
-
-  /**
-   * Obtener certificado por ID del pago
-   * @param paymentId ID del pago de Mercado Pago
-   */
-  async obtenerCertificadoPorPaymentId(paymentId: string) {
-    try {
-      const snapshot = await this.firestore.collection('certificados', ref => ref.where('paymentId', '==', paymentId)).get().toPromise();
-      if (snapshot && !snapshot.empty) {
-        return snapshot.docs.map(doc => ({ id: doc.id, ...(doc.data() as Record<string, unknown>) }));
-      } else {
-        throw new Error('No se pudo obtener el certificado: no se encontraron documentos con el paymentId proporcionado');
-      }
-    } catch (error) {
-      console.error('Error al obtener el certificado por paymentId:', error);
-      throw error;
-    }
-  }
-
-  /**
-   * Actualiza estado del pago
-   * @param certificadoId ID del certificado
-   * @param estado Nuevo estado
-   */
-  async actualizarEstadoPago(certificadoId: string, estado: 'pagado' | 'cancelado') {
-    return this.firestore
+  async obtenerCertificadoPorPreferenceId(preferenceId: string): Promise<any> {
+    const snapshot = await this.firestore
       .collection('certificados')
-      .doc(certificadoId)
-      .update({
-        estado,
-        fechaPago: estado === 'pagado' ? new Date() : null
-      });
+      .ref.where('paymentId', '==', preferenceId)
+      .get();
+
+    if (!snapshot.empty) {
+      const doc = snapshot.docs[0];
+      return {
+        id: doc.id,
+        ...(doc.data() as object),
+      };
+    }
+    return null;
   }
 
   /**
-   * Actualizar el documento del certificado
-   * @param certificadoId ID del certificado
-   * @param data Datos a actualizar (por ejemplo, PDF generado)
+   * Actualiza el estado de un certificado
+   * @param preferenceId ID de preferencia
+   * @param estado Estado nuevo ('pendiente', 'pagado', 'cancelado')
    */
-  async actualizarDocumentoCertificado(certificadoId: string, data: any) {
+  async actualizarEstadoPago(preferenceId: string, estado: 'pendiente' | 'pagado' | 'cancelado'): Promise<void> {
     try {
-      return this.firestore.collection('certificados').doc(certificadoId).update(data);
+      const snapshot = await this.firestore
+        .collection('certificados')
+        .ref.where('paymentId', '==', preferenceId)
+        .get();
+
+      if (!snapshot.empty) {
+        const doc = snapshot.docs[0];
+        await this.firestore.collection('certificados').doc(doc.id).update({
+          estado,
+          fechaPago: estado === 'pagado' ? new Date() : null,
+        });
+        console.log('Estado actualizado en Firestore.');
+      } else {
+        throw new Error('No se encontró el certificado asociado al preferenceId proporcionado.');
+      }
     } catch (error) {
-      console.error('Error al actualizar el documento del certificado:', error);
+      console.error('Error al actualizar el estado en Firestore:', error);
       throw error;
     }
   }
-  async actualizarEstadoPagoPorPreferenceId(preferenceId: string, estado: 'pagado' | 'cancelado') {
+
+  /**
+   * Verifica si el pago fue exitoso según la URL de retorno
+   * @param url URL de retorno de MercadoPago
+   */
+  verificarPagoExitoso(url: string): boolean {
+    const urlParams = new URLSearchParams(url.split('?')[1]);
+    const collectionStatus = urlParams.get('collection_status');
+    return collectionStatus === 'approved';
+  }
+
+  /**
+   * Actualiza el estado del pago basándose en la URL de retorno
+   * @param url URL de retorno de MercadoPago
+   */
+  async actualizarEstadoPagoDesdeUrl(url: string): Promise<void> {
+    const urlParams = new URLSearchParams(url.split('?')[1]);
+    const paymentId = urlParams.get('payment_id') || urlParams.get('preference_id');
+    const collectionStatus = urlParams.get('collection_status');
+
+    if (paymentId) {
+      const estado = collectionStatus === 'approved' ? 'pagado' : 'pendiente';
+      await this.actualizarEstadoPago(paymentId, estado);
+    } else {
+      throw new Error('No se pudo encontrar el paymentId o preferenceId en la URL proporcionada.');
+    }
+  }
+
+  /**
+   * Obtiene el estado de un pago según su paymentId
+   * @param paymentId ID del pago en Mercado Pago
+   * @returns Estado del pago ('pending', 'approved', 'cancelled', etc.) o null si no se encuentra
+   */
+  async obtenerEstadoPago(paymentId: string): Promise<string | null> {
     try {
-      const snapshot = await this.firestore.collection('certificados', ref => ref.where('paymentId', '==', preferenceId)).get().toPromise();
-      if (!snapshot || snapshot.empty) {
-        throw new Error('No se encontró el certificado asociado al paymentId proporcionado.');
-      }
-  
-      const certificadoId = snapshot.docs[0].id;
-      return this.firestore
+      const snapshot = await this.firestore
         .collection('certificados')
-        .doc(certificadoId)
-        .update({
-          estado,
-          fechaPago: estado === 'pagado' ? new Date() : null
-        });
+        .ref.where('paymentId', '==', paymentId)
+        .get();
+
+      if (!snapshot.empty) {
+        const doc = snapshot.docs[0];
+        const data = doc.data() as RegistroCertificado;
+        return data.estado || null;
+      } else {
+        console.warn(`No se encontró un certificado con el paymentId: ${paymentId}`);
+        return null;
+      }
     } catch (error) {
-      console.error('Error al actualizar el estado del pago:', error);
-      throw error;
+      console.error('Error al obtener el estado del pago:', error);
+      throw new Error('Error al consultar el estado del pago en Firestore.');
     }
   }
 }

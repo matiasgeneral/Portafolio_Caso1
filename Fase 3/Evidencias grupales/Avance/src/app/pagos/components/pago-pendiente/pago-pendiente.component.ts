@@ -10,6 +10,6 @@ export class PagoPendienteComponent {
   constructor(private router: Router) {}
 
   volver() {
-    this.router.navigate(['/']);
+    this.router.navigate(['/solicitud-certificado-residencia']);
   }
 }

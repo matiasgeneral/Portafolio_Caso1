@@ -4,7 +4,7 @@ Se ha realizado una actualización a la base de datos, por lo cual se debe utili
 
 https://sistema-unidad-terrritorial.web.app/#/login
 
-ultima apk( app-debug-21-11-2024.apk)
+ultima apk( app-debug-02-12-2024.apk)
 
 -la api de mercadopago solo está funcionando con la aplicación de escritorio. Para poder hacer el uso de la api no tiene que estar la sesión iniciada con el mismo navegador
 
@@ -13,6 +13,12 @@ ultima apk( app-debug-21-11-2024.apk)
 -Recordar que la creación de usuarios o registro después de completarse debe ser aprobada por un rol de administrador, coordinador o secretario para que pueda acceder a las funcionalidades correspondientes.
 
 -Se habilitaron las notificaciones push para sistema android, cada vez que se crea un proyecto, noticia, actividad o espacio publico, llegará una notifiación directamente a la aplicación.
+
+-02/12/2024
+-Se habilitó el pago de certificados, no obstante no está redirigiendo al modulo para descargarlo, por lo mismo dejamos habilitado un botón para que se realice la descarga sin el pago.
+
+-Se habilitó un módulo para comprobar si el documento de residencia es verídico o no.
+
 ejemplo:
 usuario ya aceptado previamente, puede acceder a las funciones del usuario registrado
 usuario@usuairo.cl

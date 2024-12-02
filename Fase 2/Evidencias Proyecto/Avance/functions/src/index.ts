@@ -5,8 +5,13 @@ import * as cors from 'cors';
 
 admin.initializeApp();
 
-// Configurar CORS
-const corsHandler = cors({ origin: true });
+// Configurar CORS para aceptar solo tus dominios
+const corsHandler = cors({
+  origin: ['https://sistema-unidad-terrritorial.web.app', 'https://sistema-unidad-terrritorial.firebaseapp.com'], // Dominios permitidos
+  methods: ['GET', 'POST'], // Métodos permitidos
+  allowedHeaders: ['Content-Type', 'Authorization'], // Encabezados necesarios
+  credentials: true, // Habilitar envío de cookies si es necesario
+});
 
 interface TopicData {
   token: string;
@@ -17,16 +22,22 @@ interface NotificationData {
   title: string;
   body: string;
   topic: string;
+  url?: string; // URL opcional para redirección
 }
 
+// Suscribirse a un tema
 export const subscribeToTopic = functions.https.onRequest((req, res) => {
   corsHandler(req, res, async () => {
+    if (req.method !== 'POST') {
+      res.setHeader('Allow', 'POST');
+      return res.status(405).send('Método no permitido.');
+    }
+
     try {
-      const { token, topic } = req.body;
+      const { token, topic }: TopicData = req.body;
 
       if (!token || !topic) {
-        res.status(400).send('El token y el topic son requeridos.');
-        return;
+        return res.status(400).send('El token y el topic son requeridos.');
       }
 
       const response = await admin.messaging().subscribeToTopic(token, topic);
@@ -39,14 +50,19 @@ export const subscribeToTopic = functions.https.onRequest((req, res) => {
   });
 });
 
+// Desuscribirse de un tema
 export const unsubscribeFromTopic = functions.https.onRequest((req, res) => {
   corsHandler(req, res, async () => {
+    if (req.method !== 'POST') {
+      res.setHeader('Allow', 'POST');
+      return res.status(405).send('Método no permitido.');
+    }
+
     try {
-      const { token, topic } = req.body;
+      const { token, topic }: TopicData = req.body;
 
       if (!token || !topic) {
-        res.status(400).send('El token y el topic son requeridos.');
-        return;
+        return res.status(400).send('El token y el topic son requeridos.');
       }
 
       const response = await admin.messaging().unsubscribeFromTopic(token, topic);
@@ -59,43 +75,49 @@ export const unsubscribeFromTopic = functions.https.onRequest((req, res) => {
   });
 });
 
+// Enviar notificación
 export const sendNotification = functions.https.onRequest((req, res) => {
   corsHandler(req, res, async () => {
+    if (req.method !== 'POST') {
+      res.setHeader('Allow', 'POST');
+      return res.status(405).send('Método no permitido.');
+    }
+
     try {
-      const { title, body, topic } = req.body;
+      const { title, body, topic, url }: NotificationData = req.body;
 
       if (!title || !body || !topic) {
-        res.status(400).send('El título, cuerpo y topic son requeridos.');
-        return;
+        return res.status(400).send('El título, cuerpo y topic son requeridos.');
       }
 
       const message = {
         notification: {
-          title: title,
-          body: body,
+          title,
+          body,
+        },
+        data: {
+          url: url || '/', // URL opcional para redirección
         },
         android: {
-          priority: "high" as const,
+          priority: 'high' as const,
           notification: {
             channelId: 'default',
-            sound: 'default'
-          }
+            sound: 'default',
+          },
         },
         webpush: {
           headers: {
-            Urgency: "high"
+            Urgency: 'high',
           },
           notification: {
-            requireInteraction: true
+            requireInteraction: true,
           },
           fcm_options: {
-            link: "/"
-          }
+            link: url || '/',
+          },
         },
-        topic: topic
+        topic,
       };
-
-      console.log('Preparando para enviar la notificación:', message);
 
       const response = await admin.messaging().send(message);
       console.log('Notificación enviada exitosamente:', response);
@@ -107,172 +129,170 @@ export const sendNotification = functions.https.onRequest((req, res) => {
   });
 });
 
+// Función para manejar la creación de noticias en Firestore
 export const notifyNewNews = onDocumentCreated('noticias/{newsId}', async (event) => {
-  const newsId = event.params.newsId;
-  console.log(`Se ha creado una nueva noticia con ID: ${newsId}`);
+  const newsData = event.data?.data();
+  if (!newsData?.title) {
+    console.error('No se encontró el título de la noticia.');
+    return;
+  }
+
+  const message = {
+    notification: {
+      title: 'Nueva Noticia disponible',
+      body: `Se ha publicado una nueva noticia: ${newsData.title}`,
+    },
+    data: {
+      url: './visualizacion-noticias', // Ruta correspondiente a Noticias
+    },
+    android: {
+      priority: 'high' as const,
+      notification: {
+        channelId: 'default',
+        sound: 'default',
+      },
+    },
+    webpush: {
+      headers: {
+        Urgency: 'high',
+      },
+      notification: {
+        requireInteraction: true,
+      },
+    },
+    topic: 'usuariosLogueados',
+  };
 
   try {
-    const newsData = event.data;
-
-    if (!newsData) {
-      console.error(`No se encontró data en el documento de noticias con ID: ${newsId}`);
-      return;
-    }
-
-    const title = newsData.data().title;
-    if (!title) {
-      console.error(`El campo "title" está ausente en la noticia con ID: ${newsId}`);
-      return;
-    }
-
-    const message = {
-      notification: {
-        title: 'Nueva Noticia disponible',
-        body: `Se ha publicado una nueva noticia: ${title}`,
-      },
-      android: {
-        priority: 'high' as const,
-        notification: {
-          channelId: 'default',
-          sound: 'default'
-        }
-      },
-      webpush: {
-        headers: {
-          Urgency: "high"
-        },
-        notification: {
-          requireInteraction: true
-        }
-      },
-      topic: 'usuariosLogueados',
-    };
-
     const response = await admin.messaging().send(message);
-    console.log(`Notificación enviada exitosamente con ID: ${response}`);
+    console.log('Notificación enviada exitosamente:', response);
   } catch (error) {
-    console.error(`Error al enviar la notificación para la noticia con ID: ${newsId}`, error);
+    console.error('Error al enviar la notificación:', error);
   }
 });
 
+// Función para manejar la creación de actividades en Firestore
 export const notifyNewActivity = onDocumentCreated('actividades/{activityId}', async (event) => {
-  try {
-    console.log(`Activación de trigger para actividad con ID: ${event.params.activityId}`);
-    
-    const activityData = event.data?.data();
-    console.log('Datos de la actividad:', activityData);
-    
-    if (!activityData?.titulo) {
-      console.error('No se encontró título en la actividad');
-      return;
-    }
+  const activityData = event.data?.data();
+  if (!activityData?.titulo) {
+    console.error('No se encontró el título de la actividad.');
+    return;
+  }
 
-    const message = {
+  const message = {
+    notification: {
+      title: 'Nueva Actividad disponible',
+      body: `Se ha publicado una nueva actividad: ${activityData.titulo}`,
+    },
+    data: {
+      url: './visualizacion-eventos', // Ruta correspondiente a Actividades
+    },
+    android: {
+      priority: 'high' as const,
       notification: {
-        title: 'Nueva Actividad disponible',
-        body: `Se ha publicado una nueva actividad: ${activityData.titulo}`,
+        channelId: 'default',
+        sound: 'default',
       },
-      android: {
-        priority: 'high' as const,
-        notification: {
-          channelId: 'default',
-          sound: 'default'
-        }
+    },
+    webpush: {
+      headers: {
+        Urgency: 'high',
       },
-      webpush: {
-        headers: {
-          Urgency: "high"
-        },
-        notification: {
-          requireInteraction: true
-        }
+      notification: {
+        requireInteraction: true,
       },
-      topic: 'usuariosLogueados',
-    };
+    },
+    topic: 'usuariosLogueados',
+  };
 
+  try {
     const response = await admin.messaging().send(message);
-    console.log('Notificación de actividad enviada:', response);
+    console.log('Notificación enviada exitosamente:', response);
   } catch (error) {
-    console.error('Error en notificación de actividad:', error);
+    console.error('Error al enviar la notificación:', error);
   }
 });
 
+// Función para manejar la creación de espacios públicos en Firestore
 export const notifyNewSpace = onDocumentCreated('espaciosPublicos/{spaceId}', async (event) => {
-  try {
-    const spaceData = event.data?.data();
-    if (!spaceData?.titulo) {
-      console.error('No se encontró título en el espacio público');
-      return;
-    }
+  const spaceData = event.data?.data();
+  if (!spaceData?.titulo) {
+    console.error('No se encontró el título del espacio público.');
+    return;
+  }
 
-    const message = {
+  const message = {
+    notification: {
+      title: 'Nuevo Espacio Público disponible',
+      body: `Se ha publicado un nuevo espacio público: ${spaceData.titulo}`,
+    },
+    data: {
+      url: './visualizacion-espacios-publicos', // Ruta correspondiente a Espacios Públicos
+    },
+    android: {
+      priority: 'high' as const,
       notification: {
-        title: 'Nuevo Espacio Público disponible',
-        body: `Se ha publicado un nuevo espacio público: ${spaceData.titulo}`,
+        channelId: 'default',
+        sound: 'default',
       },
-      android: {
-        priority: 'high' as const,
-        notification: {
-          channelId: 'default',
-          sound: 'default'
-        }
+    },
+    webpush: {
+      headers: {
+        Urgency: 'high',
       },
-      webpush: {
-        headers: {
-          Urgency: "high"
-        },
-        notification: {
-          requireInteraction: true
-        }
+      notification: {
+        requireInteraction: true,
       },
-      topic: 'usuariosLogueados',
-    };
+    },
+    topic: 'usuariosLogueados',
+  };
 
+  try {
     const response = await admin.messaging().send(message);
-    console.log('Notificación de espacio público enviada:', response);
+    console.log('Notificación enviada exitosamente:', response);
   } catch (error) {
-    console.error('Error en notificación de espacio público:', error);
+    console.error('Error al enviar la notificación:', error);
   }
 });
 
+// Función para manejar la creación de proyectos en Firestore
 export const notifyNewProject = onDocumentCreated('proyectos/{projectId}', async (event) => {
-  try {
-    console.log(`Activación de trigger para proyecto con ID: ${event.params.projectId}`);
-    
-    const projectData = event.data?.data();
-    console.log('Datos del proyecto:', projectData);
-    
-    if (!projectData?.titulo) {
-      console.error('No se encontró título en el proyecto');
-      return;
-    }
+  const projectData = event.data?.data();
+  if (!projectData?.titulo) {
+    console.error('No se encontró el título del proyecto.');
+    return;
+  }
 
-    const message = {
+  const message = {
+    notification: {
+      title: 'Nuevo Proyecto disponible',
+      body: `Se ha publicado un nuevo proyecto: ${projectData.titulo}`,
+    },
+    data: {
+      url: './visualizacion-proyectos', // Ruta correspondiente a Proyectos
+    },
+    android: {
+      priority: 'high' as const,
       notification: {
-        title: 'Nuevo Proyecto disponible',
-        body: `Se ha publicado un nuevo proyecto: ${projectData.titulo}`,
+        channelId: 'default',
+        sound: 'default',
       },
-      android: {
-        priority: 'high' as const,
-        notification: {
-          channelId: 'default',
-          sound: 'default'
-        }
+    },
+    webpush: {
+      headers: {
+        Urgency: 'high',
       },
-      webpush: {
-        headers: {
-          Urgency: "high"
-        },
-        notification: {
-          requireInteraction: true
-        }
+      notification: {
+        requireInteraction: true,
       },
-      topic: 'usuariosLogueados',
-    };
+    },
+    topic: 'usuariosLogueados',
+  };
 
+  try {
     const response = await admin.messaging().send(message);
-    console.log('Notificación de proyecto enviada:', response);
+    console.log('Notificación enviada exitosamente:', response);
   } catch (error) {
-    console.error('Error en notificación de proyecto:', error);
+    console.error('Error al enviar la notificación:', error);
   }
 });

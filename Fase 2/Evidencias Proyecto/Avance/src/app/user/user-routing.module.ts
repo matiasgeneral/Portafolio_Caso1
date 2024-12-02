@@ -14,6 +14,7 @@ import { PostulacionProyectosComponent } from './postulacion-proyectos/postulaci
 import { VisualizacionNoticiasComponent } from './visualizacion-noticias/visualizacion-noticias.component';
 import { NoticiaComponent } from './noticia/noticia.component';
 import { PerfilComponent } from './perfil/perfil.component';
+import { BuscarDocumentoComponent } from './buscar-documento/buscar-documento.component';
 
 const routes: Routes = [
   {
@@ -56,6 +57,10 @@ const routes: Routes = [
     path: 'perfil',
     component: PerfilComponent,
 
+  },
+  {
+    path: 'buscar-documento',
+    component: BuscarDocumentoComponent,
   }
 
 ];

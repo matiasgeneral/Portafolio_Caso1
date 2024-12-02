@@ -12,10 +12,12 @@ import { VisualizacionProyectosComponent } from './visualizacion-proyectos/visua
 import { PostulacionProyectosComponent } from './postulacion-proyectos/postulacion-proyectos.component';
 import { VisualizacionNoticiasComponent } from './visualizacion-noticias/visualizacion-noticias.component';
 import { NoticiaComponent } from './noticia/noticia.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PerfilComponent } from './perfil/perfil.component';
 import { PdfService } from '../service/pdf.service';
 import { FcmService } from '../service/Fcm.Service';
+import { BuscarDocumentoComponent } from './buscar-documento/buscar-documento.component';
+
 
 
 
@@ -31,6 +33,7 @@ import { FcmService } from '../service/Fcm.Service';
     VisualizacionNoticiasComponent,
     NoticiaComponent,
     PerfilComponent,
+    BuscarDocumentoComponent,
  
     
     
@@ -40,7 +43,8 @@ import { FcmService } from '../service/Fcm.Service';
     CommonModule,
     UserRoutingModule,
     IonicModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FormsModule
   ],
   providers: [
     PdfService,

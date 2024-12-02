@@ -10,6 +10,6 @@ export class PagoFallidoComponent {
   constructor(private router: Router) {}
 
   volver() {
-    this.router.navigate(['/solicitar-certificado']);
+    this.router.navigate(['/solicitud-certificado-residencia']);
   }
 }

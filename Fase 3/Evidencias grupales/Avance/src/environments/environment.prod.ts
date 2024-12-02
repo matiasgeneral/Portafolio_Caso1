@@ -10,6 +10,6 @@ export const environment = {
   },
   mercadoPagoToken: 'TEST-5657629847525687-112112-7b52261d4929d83fb1433b4bed625d05-689743348', // Access Token de Prueba
   mercadoPagoPublicKey: 'TEST-f814e750-e255-4354-bd0b-a08aae611b10', // Public Key de Prueba
-  appUrl: 'https://sistema-unidad-terrritorial.web.app', // URL de producción fija
+  appUrl: 'https://sistema-unidad-terrritorial.web.app', // URL para producción
   integrationModel: 'Marketplace' // Nuevo modelo de integración
 };

@@ -15,7 +15,7 @@ export class AppComponent implements OnInit {
   isLoggedIn: boolean = false;
   userRole: string = '';
   userStatus: string = '';
-  public appPages: { title: string; url: string; icon: string }[] = [];
+  public appPages: ({ title: string; url: string; icon: string } | { type: string; title: string; url?: string; icon?: string })[] = [];
   public accountPages = [
     { title: 'Registrar cuenta', url: '/register', icon: 'person-add' },
     { title: 'Iniciar sesión', url: '/login', icon: 'log-in' },
@@ -102,57 +102,99 @@ export class AppComponent implements OnInit {
 
   getAdminPages() {
     return [
+      // Inicio
       { title: 'Home', url: './home', icon: 'home' },
+  
+      // Sección de Visualización
+      { type: 'divider', title: 'VISUALIZACIÓN' },
       { title: 'Noticias', url: './visualizacion-noticias', icon: 'newspaper' },
       { title: 'Espacios públicos', url: './visualizacion-espacios-publicos', icon: 'basketball' },
-      { title: 'Actividades', url: './visualizacion-eventos', icon: 'star' },
-      { title: 'Proyectos', url: './visualizacion-proyectos', icon: 'star' },
-      { title: 'Solicitud Certificado Residencia', url: './solicitud-certificado-residencia', icon: 'reader' },
-      { title: 'Crear noticia', url: './crear-noticias', icon: 'newspaper' },
-      { title: 'Crear actividades', url: './crear-actividades', icon: 'heart' },
-      { title: 'Crear Espacios públicos', url: './crear-espacios-publicos', icon: 'flower' },
-      { title: 'Crear Proyectos', url: './crear-proyectos', icon: 'star' },
-      { title: 'Buscar usuarios', url: './buscador-usuarios', icon: 'id-card' },
-      { title: 'Buscar noticias', url: './buscador-noticias', icon: 'file-tray-full' },
-      { title: 'Buscar actividades', url: './buscador-actividades', icon: 'search' },
-      { title: 'Buscar espacios públicos', url: './buscador-espacios-publicos', icon: 'search' },
-      { title: 'Buscar proyectos', url: './buscador-proyectos', icon: 'search' },
+      { title: 'Actividades', url: './visualizacion-eventos', icon: 'calendar' },
+      { title: 'Proyectos', url: './visualizacion-proyectos', icon: 'folder-open' },
+  
+      // Sección de Creación
+      { type: 'divider', title: 'CREACIÓN' },
+      { title: 'Crear noticia', url: './crear-noticias', icon: 'create' },
+      { title: 'Crear actividades', url: './crear-actividades', icon: 'add-circle' },
+      { title: 'Crear Espacios públicos', url: './crear-espacios-publicos', icon: 'add-circle' },
+      { title: 'Crear Proyectos', url: './crear-proyectos', icon: 'add-circle' },
+  
+      // Sección de Búsqueda
+      { type: 'divider', title: 'BÚSQUEDA' },
+      { title: 'Buscar usuarios', url: './buscador-usuarios', icon: 'people' },
+      { title: 'Buscar noticias', url: './buscador-noticias', icon: 'newspaper' },
+      { title: 'Buscar actividades', url: './buscador-actividades', icon: 'calendar' },
+      { title: 'Buscar espacios públicos', url: './buscador-espacios-publicos', icon: 'location' },
+      { title: 'Buscar proyectos', url: './buscador-proyectos', icon: 'folder' },
+  
+      // Sección de Usuario y Documentos
+      { type: 'divider', title: 'PERFIL Y DOCUMENTOS' },
       { title: 'Perfil', url: './perfil', icon: 'person-circle' },
+      { title: 'Solicitud Certificado Residencia', url: './solicitud-certificado-residencia', icon: 'document-text' },
+      { title: 'Buscar Documento', url: './buscar-documento', icon: 'search' }
     ];
   }
 
   getCoordinadorPages() {
     return [
+      // Inicio
       { title: 'Home', url: './home', icon: 'home' },
+  
+      // Sección de Visualización
+      { type: 'divider', title: 'VISUALIZACIÓN' },
       { title: 'Noticias', url: './visualizacion-noticias', icon: 'newspaper' },
       { title: 'Espacios públicos', url: './visualizacion-espacios-publicos', icon: 'basketball' },
-      { title: 'Actividades', url: './visualizacion-eventos', icon: 'star' },
-      { title: 'Proyectos', url: './visualizacion-proyectos', icon: 'star' },
-      { title: 'Crear noticia', url: './crear-noticias', icon: 'newspaper' },
-      { title: 'Crear actividades', url: './crear-actividades', icon: 'heart' },
-      { title: 'Crear Espacios públicos', url: './crear-espacios-publicos', icon: 'flower' },
-      { title: 'Crear Proyectos', url: './crear-proyectos', icon: 'star' },
-      { title: 'Buscar usuarios', url: './buscador-usuarios', icon: 'id-card' },
-      { title: 'Buscar noticias', url: './buscador-noticias', icon: 'file-tray-full' },
-      { title: 'Buscar actividades', url: './buscador-actividades', icon: 'search' },
-      { title: 'Buscar espacios públicos', url: './buscador-espacios-publicos', icon: 'search' },
-      { title: 'Buscar proyectos', url: './buscador-proyectos', icon: 'search' },
+      { title: 'Actividades', url: './visualizacion-eventos', icon: 'calendar' },
+      { title: 'Proyectos', url: './visualizacion-proyectos', icon: 'folder-open' },
+  
+      // Sección de Creación
+      { type: 'divider', title: 'CREACIÓN' },
+      { title: 'Crear noticia', url: './crear-noticias', icon: 'create' },
+      { title: 'Crear actividades', url: './crear-actividades', icon: 'add-circle' },
+      { title: 'Crear Espacios públicos', url: './crear-espacios-publicos', icon: 'add-circle' },
+      { title: 'Crear Proyectos', url: './crear-proyectos', icon: 'add-circle' },
+  
+      // Sección de Solicitudes
+      { type: 'divider', title: 'Solicitudes' },
+      { title: 'Solicitudes de registros usuarios nuevos', url: './lista-registros-usuarios', icon: 'person-add' },
+      { title: 'Solicitudes de proyectos', url: './lista-solicitudes-proyectos', icon: 'list' },
+     
+      // Sección de Búsqueda
+      { type: 'divider', title: 'BÚSQUEDA' },
+      { title: 'Buscar usuarios', url: './buscador-usuarios', icon: 'people' },
+      { title: 'Buscar noticias', url: './buscador-noticias', icon: 'newspaper' },
+      { title: 'Buscar actividades', url: './buscador-actividades', icon: 'calendar' },
+      { title: 'Buscar espacios públicos', url: './buscador-espacios-publicos', icon: 'location' },
+      { title: 'Buscar proyectos', url: './buscador-proyectos', icon: 'folder' },
+  
+      // Sección de Usuario y Documentos
+      { type: 'divider', title: 'PERFIL Y DOCUMENTOS' },
       { title: 'Perfil', url: './perfil', icon: 'person-circle' },
+      { title: 'Solicitud Certificado Residencia', url: './solicitud-certificado-residencia', icon: 'document-text' },
+      { title: 'Buscar Documento', url: './buscar-documento', icon: 'search' }
     ];
   }
 
   getSecretaryPages() {
     return [
+      // Inicio
       { title: 'Home', url: './home', icon: 'home' },
+  
+      // Sección de Visualización
+      { type: 'divider', title: 'VISUALIZACIÓN' },
       { title: 'Noticias', url: './visualizacion-noticias', icon: 'newspaper' },
       { title: 'Espacios públicos', url: './visualizacion-espacios-publicos', icon: 'basketball' },
-      { title: 'Actividades', url: './visualizacion-eventos', icon: 'star' },
-      { title: 'Proyectos', url: './visualizacion-proyectos', icon: 'star' },
+      { title: 'Actividades', url: './visualizacion-eventos', icon: 'calendar' },
+      { title: 'Proyectos', url: './visualizacion-proyectos', icon: 'folder-open' },
+
+      { type: 'divider', title: 'Solicitudes' },
       { title: 'Solicitudes de registros usuarios nuevos', url: './lista-registros-usuarios', icon: 'person-add' },
-      { title: 'Solicitudes de espacios públicos', url: './lista-solicitudes-espacios-publicos', icon: 'list' },
       { title: 'Solicitudes de proyectos', url: './lista-solicitudes-proyectos', icon: 'list' },
+     
+      { type: 'divider', title: 'PERFIL Y DOCUMENTOS' },
       { title: 'Solicitud Certificado Residencia', url: './solicitud-certificado-residencia', icon: 'reader' },
       { title: 'Perfil', url: './perfil', icon: 'person-circle' },
+      {title: 'Buscar Documento', url: './buscar-documento', icon: 'search'}
     ];
   }
 
@@ -163,8 +205,10 @@ export class AppComponent implements OnInit {
       { title: 'Espacios públicos', url: './visualizacion-espacios-publicos', icon: 'basketball' },
       { title: 'Actividades', url: './visualizacion-eventos', icon: 'star' },
       { title: 'Proyectos', url: './visualizacion-proyectos', icon: 'star' },
+      { type: 'divider', title: 'PERFIL Y DOCUMENTOS' },
       { title: 'Solicitud Certificado Residencia', url: './solicitud-certificado-residencia', icon: 'reader' },
       { title: 'Perfil', url: './perfil', icon: 'person-circle' },
+      {title: 'Buscar Documento', url: './buscar-documento', icon: 'search'}
     ];
   }
 
@@ -173,6 +217,7 @@ export class AppComponent implements OnInit {
       { title: 'Home', url: './home', icon: 'home' },
       { title: 'Noticias', url: './visualizacion-noticias', icon: 'newspaper' },
       { title: 'Perfil', url: './perfil', icon: 'person-circle' },
+      {title: 'Buscar Documento', url: './buscar-documento', icon: 'search'}
     ];
   }
 
@@ -180,6 +225,7 @@ export class AppComponent implements OnInit {
     return [
       { title: 'Home', url: './home', icon: 'home' },
       { title: 'Noticias', url: './visualizacion-noticias', icon: 'newspaper' },
+      {title: 'Buscar Documento', url: './buscar-documento', icon: 'search'}
     ];
   }
 
